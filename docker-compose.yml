@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        DOCKER_BUILD: "true"
+    ports:
+      - "3060:3060"
+    environment:
+      - NODE_ENV=production
+      - DOCKER_BUILD=true
+      - DATABASE_URL=${DATABASE_URL}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - FROM_EMAIL=${FROM_EMAIL}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3060}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3060/api}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_NAME=${ADMIN_NAME}
+      - MODERATOR_EMAIL=${MODERATOR_EMAIL}
+      - MODERATOR_PASSWORD=${MODERATOR_PASSWORD}
+      - MODERATOR_NAME=${MODERATOR_NAME}
+      - NEXT_PUBLIC_GOOGLE_VERIFICATION=${NEXT_PUBLIC_GOOGLE_VERIFICATION:-}
+      - NEXT_PUBLIC_GA_MEASUREMENT_ID=${NEXT_PUBLIC_GA_MEASUREMENT_ID:-}
+      - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID:-}
+    restart: unless-stopped

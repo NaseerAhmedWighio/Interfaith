@@ -1,0 +1,431 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tradition {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String
+  description         String
+  coreValues          String[]             @default([]) @map("core_values")
+  status              String?              @default("published")
+  createdBy           String?              @map("created_by") @db.Uuid
+  lastModifiedBy      String?              @map("last_modified_by") @db.Uuid
+  approvedBy          String?              @map("approved_by") @db.Uuid
+  approvedAt          DateTime?            @map("approved_at") @db.Timestamptz(6)
+  rejectionReason     String?              @map("rejection_reason")
+  createdAt           DateTime?            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime?            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  misconceptions      Misconception[]
+  sacredTexts         SacredText[]
+  similarityTeachings SimilarityTeaching[]
+  teachings           Teaching[]
+  creator             User?                @relation("TraditionCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier            User?                @relation("TraditionModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver            User?                @relation("TraditionApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status], map: "idx_traditions_status")
+  @@index([createdBy], map: "idx_traditions_created_by")
+  @@map("traditions")
+}
+
+model Teaching {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String
+  content          String
+  source           String
+  traditionId      String?    @map("tradition_id") @db.Uuid
+  category         String     @default("peace")
+  status           String?    @default("published")
+  createdBy        String?    @map("created_by") @db.Uuid
+  lastModifiedBy   String?    @map("last_modified_by") @db.Uuid
+  approvedBy       String?    @map("approved_by") @db.Uuid
+  approvedAt       DateTime?  @map("approved_at") @db.Timestamptz(6)
+  rejectionReason  String?    @map("rejection_reason")
+  createdAt        DateTime?  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime?  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  tradition        Tradition? @relation(fields: [traditionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creator          User?      @relation("TeachingCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier         User?      @relation("TeachingModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver         User?      @relation("TeachingApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status], map: "idx_teachings_status")
+  @@index([createdBy], map: "idx_teachings_created_by")
+  @@map("teachings")
+}
+
+model Misconception {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  traditionId     String    @map("tradition_id") @db.Uuid
+  misconception   String
+  truth           String
+  category        String?   @default("general")
+  status          String?   @default("published")
+  createdBy       String?   @map("created_by") @db.Uuid
+  lastModifiedBy  String?   @map("last_modified_by") @db.Uuid
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  approvedAt      DateTime? @map("approved_at") @db.Timestamptz(6)
+  rejectionReason String?   @map("rejection_reason")
+  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  tradition       Tradition @relation(fields: [traditionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creator         User?     @relation("MisconceptionCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier        User?     @relation("MisconceptionModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver        User?     @relation("MisconceptionApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status], map: "idx_misconceptions_status")
+  @@index([createdBy], map: "idx_misconceptions_created_by")
+  @@map("misconceptions")
+}
+
+model PeaceInitiative {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String
+  description     String
+  impact          String
+  status          String?   @default("published")
+  createdBy       String?   @map("created_by") @db.Uuid
+  lastModifiedBy  String?   @map("last_modified_by") @db.Uuid
+  approvedBy      String?   @map("approved_by") @db.Uuid
+  approvedAt      DateTime? @map("approved_at") @db.Timestamptz(6)
+  rejectionReason String?   @map("rejection_reason")
+  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  creator         User?     @relation("PeaceInitiativeCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier        User?     @relation("PeaceInitiativeModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver        User?     @relation("PeaceInitiativeApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status], map: "idx_peace_initiatives_status")
+  @@index([createdBy], map: "idx_peace_initiatives_created_by")
+  @@map("peace_initiatives")
+}
+
+model SimilarityTheme {
+  id              String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String
+  description     String
+  icon            String
+  slug            String               @unique
+  orderIndex      Int                  @default(0) @map("order_index")
+  status          String?              @default("published")
+  createdBy       String?              @map("created_by") @db.Uuid
+  lastModifiedBy  String?              @map("last_modified_by") @db.Uuid
+  approvedBy      String?              @map("approved_by") @db.Uuid
+  approvedAt      DateTime?            @map("approved_at") @db.Timestamptz(6)
+  rejectionReason String?              @map("rejection_reason")
+  createdAt       DateTime?            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime?            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  teachings       SimilarityTeaching[]
+  creator         User?                @relation("SimilarityThemeCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier        User?                @relation("SimilarityThemeModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver        User?                @relation("SimilarityThemeApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([slug], map: "idx_similarity_themes_slug")
+  @@index([status], map: "idx_similarity_themes_status")
+  @@index([createdBy], map: "idx_similarity_themes_created_by")
+  @@map("similarity_themes")
+}
+
+model SimilarityTeaching {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  themeId     String          @map("theme_id") @db.Uuid
+  traditionId String          @map("tradition_id") @db.Uuid
+  teaching    String
+  source      String
+  context     String?
+  createdAt   DateTime?       @default(now()) @map("created_at") @db.Timestamptz(6)
+  theme       SimilarityTheme @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tradition   Tradition       @relation(fields: [traditionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([themeId], map: "idx_similarity_teachings_theme")
+  @@index([traditionId], map: "idx_similarity_teachings_tradition")
+  @@map("similarity_teachings")
+}
+
+model AssessmentQuestion {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionText String    @map("question_text")
+  category     String
+  orderIndex   Int       @map("order_index")
+  createdAt    DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("assessment_questions")
+}
+
+model AssessmentResult {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId          String    @map("session_id") @db.Uuid
+  peaceScore         Int?      @default(0) @map("peace_score")
+  toleranceScore     Int?      @default(0) @map("tolerance_score")
+  compassionScore    Int?      @default(0) @map("compassion_score")
+  understandingScore Int?      @default(0) @map("understanding_score")
+  overallScore       Int?      @default(0) @map("overall_score")
+  resultCategory     String?   @map("result_category")
+  answers            Json?
+  createdAt          DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  userId             String?   @map("user_id") @db.Uuid
+  user               User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([userId], map: "idx_assessment_results_user_id")
+  @@map("assessment_results")
+}
+
+model MovementMember {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                String    @unique
+  fullName             String    @map("full_name")
+  country              String?
+  interests            String[]  @default([])
+  traditionAffiliation String?   @map("tradition_affiliation")
+  howHeard             String?   @map("how_heard")
+  message              String?
+  wantsNewsletter      Boolean?  @default(true) @map("wants_newsletter")
+  wantsVolunteer       Boolean?  @default(false) @map("wants_volunteer")
+  status               String?   @default("active")
+  createdAt            DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime? @default(now()) @map("updated_at") @db.Timestamptz(6)
+  userId               String?   @map("user_id") @db.Uuid
+  user                 User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([createdAt(sort: Desc)], map: "idx_movement_members_created_at")
+  @@index([email], map: "idx_movement_members_email")
+  @@index([status], map: "idx_movement_members_status")
+  @@index([userId], map: "idx_movement_members_user_id")
+  @@map("movement_members")
+}
+
+model NewsletterSubscriber {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String    @unique
+  name               String?
+  subscriptionTopics String[]  @default([]) @map("subscription_topics")
+  frequency          String?   @default("weekly")
+  subscribedAt       DateTime? @default(now()) @map("subscribed_at") @db.Timestamptz(6)
+  isActive           Boolean?  @default(true) @map("is_active")
+  unsubscribeToken   String?   @default(dbgenerated("gen_random_uuid()")) @map("unsubscribe_token") @db.Uuid
+  source             String?
+  confirmedAt        DateTime? @map("confirmed_at") @db.Timestamptz(6)
+  lastEmailSent      DateTime? @map("last_email_sent") @db.Timestamptz(6)
+  updatedAt          DateTime? @default(now()) @map("updated_at") @db.Timestamptz(6)
+  userId             String?   @map("user_id") @db.Uuid
+  user               User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([email], map: "idx_newsletter_email")
+  @@index([subscribedAt(sort: Desc)], map: "idx_newsletter_subscribed_at")
+  @@index([unsubscribeToken], map: "idx_newsletter_token")
+  @@index([userId], map: "idx_newsletter_subscribers_user_id")
+  @@map("newsletter_subscribers")
+}
+
+model SacredText {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  traditionId     String?          @map("tradition_id") @db.Uuid
+  title           String
+  source          String
+  textContent     String           @map("text_content")
+  theme           String
+  context         String?          @default("")
+  translation     String?          @default("")
+  status          String?          @default("published")
+  createdBy       String?          @map("created_by") @db.Uuid
+  lastModifiedBy  String?          @map("last_modified_by") @db.Uuid
+  approvedBy      String?          @map("approved_by") @db.Uuid
+  approvedAt      DateTime?        @map("approved_at") @db.Timestamptz(6)
+  rejectionReason String?          @map("rejection_reason")
+  createdAt       DateTime?        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime?        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  comparisonTexts ComparisonText[]
+  tradition       Tradition?       @relation(fields: [traditionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  shareableQuotes ShareableQuote[]
+  creator         User?            @relation("SacredTextCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier        User?            @relation("SacredTextModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver        User?            @relation("SacredTextApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([theme], map: "idx_sacred_texts_theme")
+  @@index([traditionId], map: "idx_sacred_texts_tradition")
+  @@index([status], map: "idx_sacred_texts_status")
+  @@index([createdBy], map: "idx_sacred_texts_created_by")
+  @@map("sacred_texts")
+}
+
+model TextComparison {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  theme           String
+  title           String
+  description     String
+  createdAt       DateTime?        @default(now()) @map("created_at") @db.Timestamptz(6)
+  comparisonTexts ComparisonText[]
+
+  @@index([theme], map: "idx_text_comparisons_theme")
+  @@map("text_comparisons")
+}
+
+model ComparisonText {
+  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  comparisonId String?         @map("comparison_id") @db.Uuid
+  sacredTextId String?         @map("sacred_text_id") @db.Uuid
+  displayOrder Int?            @default(0) @map("display_order")
+  createdAt    DateTime?       @default(now()) @map("created_at") @db.Timestamptz(6)
+  comparison   TextComparison? @relation(fields: [comparisonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sacredText   SacredText?     @relation(fields: [sacredTextId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([comparisonId], map: "idx_comparison_texts_comparison")
+  @@map("comparison_texts")
+}
+
+model ShareableQuote {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sacredTextId    String?     @map("sacred_text_id") @db.Uuid
+  quoteText       String      @map("quote_text")
+  backgroundStyle String?     @default("gradient-1") @map("background_style")
+  shareCount      Int?        @default(0) @map("share_count")
+  status          String?     @default("published")
+  createdBy       String?     @map("created_by") @db.Uuid
+  lastModifiedBy  String?     @map("last_modified_by") @db.Uuid
+  approvedBy      String?     @map("approved_by") @db.Uuid
+  approvedAt      DateTime?   @map("approved_at") @db.Timestamptz(6)
+  rejectionReason String?     @map("rejection_reason")
+  createdAt       DateTime?   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime?   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  sacredText      SacredText? @relation(fields: [sacredTextId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  creator         User?       @relation("ShareableQuoteCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier        User?       @relation("ShareableQuoteModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  approver        User?       @relation("ShareableQuoteApprover", fields: [approvedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([shareCount(sort: Desc)], map: "idx_shareable_quotes_share_count")
+  @@index([status], map: "idx_shareable_quotes_status")
+  @@index([createdBy], map: "idx_shareable_quotes_created_by")
+  @@map("shareable_quotes")
+}
+
+model User {
+  id                          String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                       String              @unique
+  passwordHash                String              @map("password_hash")
+  fullName                    String              @map("full_name")
+  role                        String?             @default("user")
+  profileImage                String?             @map("profile_image")
+  emailVerified               Boolean?            @default(false) @map("email_verified")
+  emailVerificationToken      String?             @unique @map("email_verification_token")
+  emailVerificationExpires    DateTime?           @map("email_verification_expires") @db.Timestamptz(6)
+  passwordResetToken          String?             @unique @map("password_reset_token")
+  passwordResetExpires        DateTime?           @map("password_reset_expires") @db.Timestamptz(6)
+  isActive                    Boolean?            @default(true) @map("is_active")
+  lastLogin                   DateTime?           @map("last_login") @db.Timestamptz(6)
+  createdAt                   DateTime?           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                   DateTime?           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  assessmentResults           AssessmentResult[]
+  movementMembers             MovementMember[]
+  newsletterSubscribers       NewsletterSubscriber[]
+  reviewedRoleRequests        RoleRequest[]       @relation("ReviewedBy")
+  roleRequests                RoleRequest[]
+  sessions                    Session[]
+  permissions                 UserPermission[]
+  createdTeachings            Teaching[]          @relation("TeachingCreator")
+  modifiedTeachings           Teaching[]          @relation("TeachingModifier")
+  approvedTeachings           Teaching[]          @relation("TeachingApprover")
+  createdMisconceptions       Misconception[]     @relation("MisconceptionCreator")
+  modifiedMisconceptions      Misconception[]     @relation("MisconceptionModifier")
+  approvedMisconceptions      Misconception[]     @relation("MisconceptionApprover")
+  createdSacredTexts          SacredText[]        @relation("SacredTextCreator")
+  modifiedSacredTexts         SacredText[]        @relation("SacredTextModifier")
+  approvedSacredTexts         SacredText[]        @relation("SacredTextApprover")
+  createdPeaceInitiatives     PeaceInitiative[]   @relation("PeaceInitiativeCreator")
+  modifiedPeaceInitiatives    PeaceInitiative[]   @relation("PeaceInitiativeModifier")
+  approvedPeaceInitiatives    PeaceInitiative[]   @relation("PeaceInitiativeApprover")
+  createdSimilarityThemes     SimilarityTheme[]   @relation("SimilarityThemeCreator")
+  modifiedSimilarityThemes    SimilarityTheme[]   @relation("SimilarityThemeModifier")
+  approvedSimilarityThemes    SimilarityTheme[]   @relation("SimilarityThemeApprover")
+  createdShareableQuotes      ShareableQuote[]    @relation("ShareableQuoteCreator")
+  modifiedShareableQuotes     ShareableQuote[]    @relation("ShareableQuoteModifier")
+  approvedShareableQuotes     ShareableQuote[]    @relation("ShareableQuoteApprover")
+  createdPendingEdits         PendingEdit[]       @relation("PendingEditCreator")
+  moderatedPendingEdits       PendingEdit[]       @relation("PendingEditModeratorApprover")
+  approvedPendingEdits        PendingEdit[]       @relation("PendingEditAdminApprover")
+  createdTraditions           Tradition[]         @relation("TraditionCreator")
+  modifiedTraditions          Tradition[]         @relation("TraditionModifier")
+  approvedTraditions          Tradition[]         @relation("TraditionApprover")
+
+  @@index([email], map: "idx_users_email")
+  @@index([emailVerificationToken], map: "idx_users_email_verification_token")
+  @@index([passwordResetToken], map: "idx_users_password_reset_token")
+  @@index([role], map: "idx_users_role")
+  @@index([isActive], map: "idx_users_is_active")
+  @@map("users")
+}
+
+model Session {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  token     String    @unique
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(6)
+  ipAddress String?   @map("ip_address")
+  userAgent String?   @map("user_agent")
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([token], map: "idx_sessions_token")
+  @@index([userId], map: "idx_sessions_user_id")
+  @@index([expiresAt], map: "idx_sessions_expires_at")
+  @@map("sessions")
+}
+
+model RoleRequest {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  requestedRole String    @map("requested_role")
+  reason        String?
+  status        String?   @default("pending")
+  reviewedBy    String?   @map("reviewed_by") @db.Uuid
+  reviewedAt    DateTime? @map("reviewed_at") @db.Timestamptz(6)
+  adminNotes    String?   @map("admin_notes")
+  createdAt     DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  reviewer      User?     @relation("ReviewedBy", fields: [reviewedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([userId], map: "idx_role_requests_user_id")
+  @@index([status], map: "idx_role_requests_status")
+  @@index([createdAt(sort: Desc)], map: "idx_role_requests_created_at")
+  @@map("role_requests")
+}
+
+model PendingEdit {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  contentType         String    @map("content_type")
+  contentId           String    @map("content_id") @db.Uuid
+  changes             Json
+  status              String?   @default("pending_moderator")
+  rejectionReason     String?   @map("rejection_reason")
+  createdBy           String?   @map("created_by") @db.Uuid
+  moderatorApprovedBy String?   @map("moderator_approved_by") @db.Uuid
+  adminApprovedBy     String?   @map("admin_approved_by") @db.Uuid
+  appliedAt           DateTime? @map("applied_at") @db.Timestamptz(6)
+  createdAt           DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  creator             User?     @relation("PendingEditCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  moderatorApprover   User?     @relation("PendingEditModeratorApprover", fields: [moderatorApprovedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  adminApprover       User?     @relation("PendingEditAdminApprover", fields: [adminApprovedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status], map: "idx_pending_edits_status")
+  @@index([contentType, contentId], map: "idx_pending_edits_content")
+  @@map("pending_edits")
+}
+
+model UserPermission {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  resource  String
+  actions   String[]  @default([])
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([userId, resource])
+  @@index([userId], map: "idx_user_permissions_user_id")
+  @@index([resource], map: "idx_user_permissions_resource")
+  @@map("user_permissions")
+}

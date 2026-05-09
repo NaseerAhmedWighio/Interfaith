@@ -1,0 +1,374 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import {
+  Database,
+  BookOpen,
+  Users,
+  Mail,
+  Heart,
+  MessageSquare,
+  FileText,
+  Share2,
+  TrendingUp,
+  BarChart3,
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  Activity,
+  Clock
+} from 'lucide-react'
+
+interface DashboardStats {
+  traditions: number
+  teachings: number
+  misconceptions: number
+  sacredTexts: number
+  peaceInitiatives: number
+  movementMembers: number
+  newsletterSubscribers: number
+  assessmentResults: number
+  shareableQuotes: number
+  similarityThemes: number
+  roleRequests: number
+  users: number
+}
+
+interface StatCard {
+  title: string
+  count: number
+  icon: any
+  color: string
+  href: string
+  description: string
+}
+
+export default function AdminDashboard() {
+  const router = useRouter()
+  const [user, setUser] = useState<any>(null)
+  const [authLoading, setAuthLoading] = useState(true)
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
+
+  // Validate session and check admin role
+  useEffect(() => {
+    async function validateSession() {
+      try {
+        const response = await fetch('/api/auth/me')
+        if (!response.ok) {
+          // Not authenticated - redirect to login
+          router.push('/login?redirect=/admin')
+          return
+        }
+
+        const data = await response.json()
+
+        // Check if user has admin role
+        if (data.user.role !== 'admin') {
+          // Not an admin - redirect to home
+          alert('Access denied. Admin privileges required.')
+          router.push('/')
+          return
+        }
+
+        setUser(data.user)
+      } catch (error) {
+        console.error('Session validation error:', error)
+        router.push('/login?redirect=/admin')
+      } finally {
+        setAuthLoading(false)
+      }
+    }
+    validateSession()
+  }, [router])
+
+  useEffect(() => {
+    if (!user) return
+    loadStats()
+  }, [user])
+
+  async function loadStats() {
+    try {
+      const response = await fetch('/api/admin/stats')
+      const data = await response.json()
+      setStats(data)
+    } catch (error) {
+      console.error('Error loading stats:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <div className="relative w-16 h-16 mx-auto mb-4">
+            <div className="absolute inset-0 border-4 border-[#c8a75e]/20 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-transparent border-t-[#c8a75e] rounded-full animate-spin"></div>
+          </div>
+          <p className="text-lg text-premium-light">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  const statCards: StatCard[] = [
+    {
+      title: 'Traditions',
+      count: stats?.traditions || 0,
+      icon: Database,
+      color: 'from-blue-500 to-blue-600',
+      href: '/admin/traditions',
+      description: 'Faith traditions and religions'
+    },
+    {
+      title: 'Teachings',
+      count: stats?.teachings || 0,
+      icon: BookOpen,
+      color: 'from-purple-500 to-purple-600',
+      href: '/admin/teachings',
+      description: 'Sacred teachings and wisdom'
+    },
+    {
+      title: 'Users',
+      count: stats?.users || 0,
+      icon: Users,
+      color: 'from-indigo-500 to-indigo-600',
+      href: '/admin/users',
+      description: 'Registered user accounts'
+    },
+    {
+      title: 'Role Requests',
+      count: stats?.roleRequests || 0,
+      icon: Clock,
+      color: 'from-yellow-500 to-yellow-600',
+      href: '/admin/role-requests',
+      description: 'Pending role upgrade requests'
+    },
+    {
+      title: 'Misconceptions',
+      count: stats?.misconceptions || 0,
+      icon: MessageSquare,
+      color: 'from-orange-500 to-orange-600',
+      href: '/admin/misconceptions',
+      description: 'Common misconceptions addressed'
+    },
+    {
+      title: 'Sacred Texts',
+      count: stats?.sacredTexts || 0,
+      icon: FileText,
+      color: 'from-green-500 to-green-600',
+      href: '/admin/sacred-texts',
+      description: 'Sacred text passages'
+    },
+    {
+      title: 'Peace Initiatives',
+      count: stats?.peaceInitiatives || 0,
+      icon: Heart,
+      color: 'from-pink-500 to-pink-600',
+      href: '/admin/peace-initiatives',
+      description: 'Peace-building initiatives'
+    },
+    {
+      title: 'Movement Members',
+      count: stats?.movementMembers || 0,
+      icon: Activity,
+      color: 'from-indigo-500 to-indigo-600',
+      href: '/admin/movement-members',
+      description: 'Registered movement members'
+    },
+    {
+      title: 'Newsletter Subscribers',
+      count: stats?.newsletterSubscribers || 0,
+      icon: Mail,
+      color: 'from-teal-500 to-teal-600',
+      href: '/admin/newsletter-subscribers',
+      description: 'Active newsletter subscribers'
+    },
+    {
+      title: 'Shareable Quotes',
+      count: stats?.shareableQuotes || 0,
+      icon: Share2,
+      color: 'from-yellow-500 to-yellow-600',
+      href: '/admin/shareable-quotes',
+      description: 'Social media quote cards'
+    },
+    {
+      title: 'Similarity Themes',
+      count: stats?.similarityThemes || 0,
+      icon: TrendingUp,
+      color: 'from-red-500 to-red-600',
+      href: '/admin/similarity-themes',
+      description: 'Interfaith similarity themes'
+    },
+    {
+      title: 'Assessment Results',
+      count: stats?.assessmentResults || 0,
+      icon: BarChart3,
+      color: 'from-cyan-500 to-cyan-600',
+      href: '/admin/assessment-results',
+      description: 'Completed faith assessments'
+    }
+  ]
+
+  const totalContent = (stats?.traditions || 0) + (stats?.teachings || 0) + (stats?.sacredTexts || 0)
+  const totalUsers = (stats?.movementMembers || 0) + (stats?.newsletterSubscribers || 0)
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#c8a75e] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-premium">Verifying access...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Don't render if user is not authenticated (will be redirected)
+  if (!user) {
+    return null
+  }
+
+  return (
+    <div className="space-y-6 lg:space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-right md:text-center text-2xl md:text-3xl lg:text-4xl font-bold text-[#f5f3ee] mb-2">Dashboard Overview</h1>
+        <p className="text-premium-light text-center mt-3 md:mt-0 text-xs md:text-sm lg:text-base">Welcome back! Here's what's happening with your interfaith platform.</p>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] rounded-xl">
+              <Activity className="w-6 h-6 text-[#0b0f2a]" />
+            </div>
+            <span className="text-xs text-premium-light">Total Content</span>
+          </div>
+          <div className="text-3xl font-bold text-[#f5f3ee] mb-1">{totalContent}</div>
+          <p className="text-sm text-premium-light">Traditions, Teachings & Texts</p>
+        </div>
+
+        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
+              <Users className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xs text-premium-light">Community</span>
+          </div>
+          <div className="text-3xl font-bold text-[#f5f3ee] mb-1">{totalUsers}</div>
+          <p className="text-sm text-premium-light">Members & Subscribers</p>
+        </div>
+
+        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl">
+              <Clock className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xs text-premium-light">Last Updated</span>
+          </div>
+          <div className="text-3xl font-bold text-[#f5f3ee] mb-1">Today</div>
+          <p className="text-sm text-premium-light">{new Date().toLocaleDateString()}</p>
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        {statCards.map((card) => {
+          const Icon = card.icon
+          const isExpanded = expandedCard === card.title
+
+          return (
+            <div
+              key={card.title}
+              className="glass-effect rounded-2xl overflow-hidden border border-[#c8a75e]/10 hover:border-[#c8a75e]/30 transition-all duration-300"
+            >
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`p-3 rounded-xl bg-gradient-to-br ${card.color}`}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <button
+                    onClick={() => setExpandedCard(isExpanded ? null : card.title)}
+                    className="p-2 hover:bg-[#c8a75e]/10 rounded-xl transition-colors"
+                  >
+
+                  </button>
+                </div>
+
+                <div className="mb-4">
+                  <div className="text-3xl font-bold text-[#f5f3ee] mb-1">{card.count}</div>
+                  <h3 className="text-lg font-semibold text-[#f5f3ee]">{card.title}</h3>
+                  <p className="text-sm text-premium-light mt-1">{card.description}</p>
+                </div>
+
+                  <div className="flex w-full justify-between items-center space-y-3 pt-4 border-t border-[#c8a75e]/10 animate-fadeIn">
+                   <Link
+                  href={card.href}
+                  className="block px-6 py-3 bg-[#0b0f2a]/20 hover:bg-[#c8a75e]/10 transition-colors text-center"
+                >
+                  <span className="text-sm text-[#c8a75e] font-medium">Manage →</span>
+                </Link>
+                    <Link
+                      href={`${card.href}/new`}
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#c8a75e] to-[#d4b56d] text-[#f5f3ee] rounded-xl hover:shadow-premium transition-all"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span className="text-sm font-medium">Add New</span>
+                    </Link>
+                  </div>
+              </div>
+
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="glass-effect rounded-2xl p-4 lg:p-6 border border-[#c8a75e]/20">
+        <h2 className="text-xl lg:text-2xl font-bold text-[#f5f3ee] mb-4 lg:mb-6">Quick Actions</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+          <Link
+            href="/admin/traditions/new"
+            className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-500/30 rounded-xl hover:shadow-premium transition-all group"
+          >
+            <Database className="w-5 h-5 text-blue-400" />
+            <div>
+              <div className="text-[#f5f3ee] font-medium group-hover:text-blue-400 transition-colors">Add Tradition</div>
+              <div className="text-xs text-premium-light">Create new faith tradition</div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/teachings/new"
+            className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500/20 to-purple-600/20 border border-purple-500/30 rounded-xl hover:shadow-premium transition-all group"
+          >
+            <BookOpen className="w-5 h-5 text-purple-400" />
+            <div>
+              <div className="text-[#f5f3ee] font-medium group-hover:text-purple-400 transition-colors">Add Teaching</div>
+              <div className="text-xs text-premium-light">Create sacred teaching</div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/sacred-texts/new"
+            className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-xl hover:shadow-premium transition-all group"
+          >
+            <FileText className="w-5 h-5 text-green-400" />
+            <div>
+              <div className="text-[#f5f3ee] font-medium group-hover:text-green-400 transition-colors">Add Sacred Text</div>
+              <div className="text-xs text-premium-light">Create text passage</div>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
