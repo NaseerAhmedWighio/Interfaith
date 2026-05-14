@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { User, LogOut, Settings } from 'lucide-react'
@@ -18,6 +18,8 @@ export default function AuthButton() {
   const [user, setUser] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [imgError, setImgError] = useState(false)
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const pathname = usePathname()
   const router = useRouter()
 
@@ -53,6 +55,20 @@ export default function AuthButton() {
     }
   }
 
+  function showDropdownWithDelay() {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current)
+      hideTimeoutRef.current = null
+    }
+    setShowDropdown(true)
+  }
+
+  function hideDropdownWithDelay() {
+    hideTimeoutRef.current = setTimeout(() => {
+      setShowDropdown(false)
+    }, 200)
+  }
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -67,6 +83,12 @@ export default function AuthButton() {
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [showDropdown])
+
+  useEffect(() => {
+    return () => {
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -93,20 +115,21 @@ export default function AuthButton() {
     .toUpperCase()
     .slice(0, 2)
 
+  const showImage = user.profileImage && !imgError
+
   return (
-    <div className={!user ? '' : 'mt-2'}>
     <div
-      className="relative profile-dropdown"
-      onMouseEnter={() => setShowDropdown(true)}
-      onMouseLeave={() => setShowDropdown(false)}
+      className="relative profile-dropdown flex items-center justify-center"
+      onMouseEnter={showDropdownWithDelay}
+      onMouseLeave={hideDropdownWithDelay}
     >
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="hover:opacity-80 transition-opacity"
+        className="flex items-center justify-center hover:opacity-80 transition-opacity"
       >
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] flex items-center justify-center text-[#0b0f2a] font-bold text-sm overflow-hidden">
-          {user.profileImage ? (
-            <img src={user.profileImage} alt={user.fullName} className="w-full h-full object-cover" />
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] flex items-center justify-center text-[#0b0f2a] font-bold text-sm overflow-hidden shrink-0">
+          {showImage ? (
+            <img src={user.profileImage} alt={user.fullName} className="w-full h-full object-cover" onError={() => setImgError(true)} />
           ) : (
             initials
           )}
@@ -114,13 +137,17 @@ export default function AuthButton() {
       </button>
 
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-64 bg-[#1a1f3a] border border-[#c8a75e]/20 rounded-xl shadow-xl overflow-hidden z-50">
+        <div
+          className="absolute right-0 top-full mt-2 w-64 bg-[#1a1f3a] border border-[#c8a75e]/20 rounded-xl shadow-xl overflow-hidden z-50"
+          onMouseEnter={showDropdownWithDelay}
+          onMouseLeave={hideDropdownWithDelay}
+        >
           {/* User Info */}
           <div className="p-4 border-b border-[#c8a75e]/10">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] flex items-center justify-center text-[#0b0f2a] font-bold overflow-hidden">
-                {user.profileImage ? (
-                  <img src={user.profileImage} alt={user.fullName} className="w-full h-full object-cover" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] flex items-center justify-center text-[#0b0f2a] font-bold overflow-hidden shrink-0">
+                {showImage ? (
+                  <img src={user.profileImage} alt={user.fullName} className="w-full h-full object-cover" onError={() => setImgError(true)} />
                 ) : (
                   initials
                 )}
@@ -169,7 +196,6 @@ export default function AuthButton() {
           </div>
         </div>
       )}
-    </div>
     </div>
   )
 }

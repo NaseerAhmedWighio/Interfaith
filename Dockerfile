@@ -1,45 +1,62 @@
-# Stage 1: Build
-FROM node:20-slim AS builder
+# ============================================================
+# Interfaith Peace Bridge - Dockerfile
+# ============================================================
+
+# ---------- Base Stage ----------
+FROM node:20-bookworm-slim AS base
+
 WORKDIR /app
 
-RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && \
+    apt-get install -y openssl --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY package.json package-lock.json ./
-COPY prisma/ ./prisma/
-RUN npm ci && ./node_modules/.bin/prisma generate
+COPY package.json package-lock.json* ./
 
-COPY tsconfig.json next.config.js postcss.config.js tailwind.config.js ./
-COPY src/ ./src/
-COPY public/ ./public/
+RUN npm ci
+
+COPY prisma/ prisma/
+RUN npx prisma generate
+
+# ---------- Migrate Stage ----------
+FROM base AS migrate
+
+RUN apt-get update -y && \
+    apt-get install -y postgresql-client --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY data/migrations/ /app/data/migrations/
+
+# ---------- Builder Stage ----------
+FROM base AS builder
 
 ENV DOCKER_BUILD=true
+
+COPY tsconfig.json next.config.js postcss.config.js tailwind.config.js eslint.config.js ./
+COPY public/ public/
+COPY src/ src/
+
 RUN npm run build
 
-# Stage 2: Production runner
-FROM node:20-slim AS runner
+# ---------- Runner Stage ----------
+FROM node:20-bookworm-slim AS runner
+
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN apt-get update -y && \
+    apt-get install -y openssl wget --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
-RUN npm prune --omit=dev
-
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
-USER nextjs
+RUN mkdir -p /app/public/uploads/profiles && chown -R node:node /app/public/uploads
 
 EXPOSE 3060
-ENV PORT=3060
-ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

@@ -158,44 +158,97 @@ export default function Traditions() {
 //     </div>
 //   )
 // }
-
 function TraditionCard({ tradition }: { tradition: Tradition }) {
+  const hasCoreValues = tradition.coreValues?.length > 0
+
   return (
-    <div className="tradition-card p-4 sm:p-5 md:p-6 group flex flex-col h-full">
-
+    <div
+      className="
+        tradition-card
+        p-4 sm:p-5 md:p-6
+        group
+        flex flex-col
+        h-full
+      "
+    >
       {/* TOP CONTENT */}
-      <div className="mb-4 sm:mb-5 md:mb-6">
-
-        {/* ✅ FIXED TITLE HEIGHT */}
-        <h3 className="text-2xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 
-        group-hover:text-[#c8a75e] transition-colors 
-        min-h-[3.5rem] flex items-start">
+      <div>
+        {/* TITLE */}
+        <h3
+          className="
+            text-2xl sm:text-2xl md:text-3xl
+            heading-premium
+            text-[#f5f3ee]
+            mb-4
+            group-hover:text-[#c8a75e]
+            transition-colors
+            break-words
+            min-h-[72px]
+          "
+        >
           {tradition.name}
         </h3>
 
-        {/* ✅ FIXED DESCRIPTION HEIGHT */}
-        <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed 
-        min-h-[4.5rem] line-clamp-3">
+        {/* DESCRIPTION */}
+        <p
+          className="
+            text-sm sm:text-base md:text-lg
+            text-premium
+            leading-relaxed
+            break-words
+            whitespace-pre-line
+            min-h-[140px]
+          "
+        >
           {tradition.description}
         </p>
       </div>
 
-      {/* ✅ PUSH THIS TO BOTTOM */}
-      <div className="pt-4 sm:pt-5 md:pt-6 border-t border-gray-100 mt-auto">
-        <p className="text-xs font-bold text-[#aab0d6]/70 uppercase tracking-wider mb-2 sm:mb-3">
-          Core Values
-        </p>
+      {/* FIXED CORE VALUES POSITION */}
+      <div className="mt-8">
+        {hasCoreValues && (
+          <>
+            {/* Divider always same position */}
+            <div className="border-t border-gray-100 pt-4 sm:pt-5 md:pt-6">
+              <p
+                className="
+                  text-xs
+                  font-bold
+                  text-[#aab0d6]/70
+                  uppercase
+                  tracking-wider
+                  mb-3
+                "
+              >
+                Core Values
+              </p>
 
-        <div className="flex flex-wrap gap-2">
-          {tradition.coreValues.map((value, idx) => (
-            <span
-              key={idx}
-              className="px-2 sm:px-3 py-1 sm:py-1.5 bg-[#141A3A] text-[#C8A75E] rounded-xl text-[7px] sm:text-[10px] font-semibold border border-[#C8A75E]/30 hover:border-[#C8A75E] hover:shadow-md transition-all"
-            >
-              {value}
-            </span>
-          ))}
-        </div>
+              {/* Core values start from first line */}
+              <div className="flex flex-wrap items-start gap-2 content-start">
+                {tradition.coreValues.map((value, idx) => (
+                  <span
+                    key={idx}
+                    className="
+                      px-3 py-1.5
+                      bg-[#141A3A]
+                      text-[#C8A75E]
+                      rounded-xl
+                      text-[10px] sm:text-xs
+                      font-semibold
+                      border border-[#C8A75E]/30
+                      hover:border-[#C8A75E]
+                      hover:shadow-md
+                      transition-all
+                      whitespace-nowrap
+                    "
+                  >
+                    {value}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

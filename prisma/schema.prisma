@@ -429,3 +429,13 @@ model UserPermission {
   @@index([resource], map: "idx_user_permissions_resource")
   @@map("user_permissions")
 }
+
+model SiteSetting {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([key], map: "idx_site_settings_key")
+  @@map("site_settings")
+}

@@ -20,43 +20,6 @@ services:
     networks:
       - interfaith-network
 
-  migrate:
-    image: ${DOCKERHUB_USERNAME}/interfaith-migrate:latest
-    container_name: interfaith-migrate
-    working_dir: /app
-    entrypoint: sh
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-interfaith_db}?schema=public
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      ADMIN_NAME: ${ADMIN_NAME}
-      MODERATOR_EMAIL: ${MODERATOR_EMAIL}
-      MODERATOR_PASSWORD: ${MODERATOR_PASSWORD}
-      MODERATOR_NAME: ${MODERATOR_NAME}
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - interfaith-network
-    command: >
-      -c "
-        echo '⏳ Waiting for database...' &&
-        sleep 3 &&
-        echo '📦 Running content seed SQL files...' &&
-        for f in /app/data/migrations/*.sql; do
-          echo \"   Running $$(basename $$f)...\";
-          PGPASSWORD=\"${POSTGRES_PASSWORD}\" psql -h db -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-interfaith_db} -f \"$$f\" 2>&1 || true;
-        done &&
-        echo '✅ Content data seeded!' &&
-        echo '📋 Syncing Prisma schema...' &&
-        npx prisma db push --accept-data-loss &&
-        echo '✅ Schema synced!' &&
-        echo '🌱 Seeding admin accounts...' &&
-        npx prisma db seed &&
-        echo '✅ All migrations and seeds complete!'
-      "
-    restart: "no"
-
   app:
     image: ${DOCKERHUB_USERNAME}/interfaith-app:latest
     container_name: interfaith-app
@@ -80,8 +43,8 @@ services:
     volumes:
       - uploads:/app/public/uploads
     depends_on:
-      migrate:
-        condition: service_completed_successfully
+      db:
+        condition: service_healthy
     networks:
       - interfaith-network
     healthcheck:

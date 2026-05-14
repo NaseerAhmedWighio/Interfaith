@@ -59,3 +59,9 @@ lerna-debug.log*
 
 # Prisma seed test file (not production)
 /prisma/seed-test-users.ts
+
+# User uploaded files
+public/uploads/
+
+# Prisma managed migrations (raw SQL is in data/migrations/)
+/prisma/migrations/

@@ -2,12 +2,30 @@
 
 import { prisma } from '@/lib/prisma'
 
+type SortOrder = 'asc' | 'desc'
+
+async function getSortSetting(key: string): Promise<{ field: string; order: SortOrder } | null> {
+  try {
+    const setting = await prisma.siteSetting.findUnique({ where: { key } })
+    return setting?.value as any ?? null
+  } catch {
+    return null
+  }
+}
+
+function buildOrderBy(field: string, order: SortOrder, nameField: string, dateField: string): any {
+  if (field === 'name') return { [nameField]: order }
+  return { [dateField]: order }
+}
+
 // Traditions
 export async function getTraditions() {
   try {
+    const saved = await getSortSetting('sort_traditions')
+    const orderBy = buildOrderBy(saved?.field || 'name', saved?.order || 'asc', 'name', 'createdAt')
     const traditions = await prisma.tradition.findMany({
       where: { status: 'published' },
-      orderBy: { name: 'asc' },
+      orderBy,
       select: {
         id: true,
         name: true,
@@ -41,10 +59,12 @@ export async function getTraditionById(id: string) {
 // Teachings
 export async function getTeachings(limit?: number) {
   try {
+    const saved = await getSortSetting('sort_teachings')
+    const orderBy = buildOrderBy(saved?.field || 'date', saved?.order || 'desc', 'title', 'createdAt')
     const teachings = await prisma.teaching.findMany({
       take: limit,
       where: { status: 'published' },
-      orderBy: { createdAt: 'desc' },
+      orderBy,
       select: {
         id: true,
         title: true,
@@ -62,6 +82,8 @@ export async function getTeachings(limit?: number) {
 
 export async function getTeachingsByCategory(category: string) {
   try {
+    const saved = await getSortSetting('sort_teachings')
+    const orderBy = buildOrderBy(saved?.field || 'date', saved?.order || 'desc', 'title', 'createdAt')
     const teachings = await prisma.teaching.findMany({
       where: { category, status: 'published' },
       include: {
@@ -72,7 +94,7 @@ export async function getTeachingsByCategory(category: string) {
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy
     })
     return { data: teachings, error: null }
   } catch (error) {
@@ -84,6 +106,8 @@ export async function getTeachingsByCategory(category: string) {
 // Misconceptions
 export async function getMisconceptions() {
   try {
+    const saved = await getSortSetting('sort_misconceptions')
+    const orderBy = buildOrderBy(saved?.field || 'date', saved?.order || 'desc', 'misconception', 'createdAt')
     const misconceptions = await prisma.misconception.findMany({
       where: { status: 'published' },
       include: {
@@ -94,7 +118,7 @@ export async function getMisconceptions() {
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy
     })
     return { data: misconceptions, error: null }
   } catch (error) {
@@ -106,9 +130,11 @@ export async function getMisconceptions() {
 // Peace Initiatives
 export async function getPeaceInitiatives() {
   try {
+    const saved = await getSortSetting('sort_peace_initiatives')
+    const orderBy = buildOrderBy(saved?.field || 'date', saved?.order || 'desc', 'title', 'createdAt')
     const initiatives = await prisma.peaceInitiative.findMany({
       where: { status: 'published' },
-      orderBy: { createdAt: 'desc' }
+      orderBy
     })
     return { data: initiatives, error: null }
   } catch (error) {
@@ -120,9 +146,11 @@ export async function getPeaceInitiatives() {
 // Similarity Themes
 export async function getSimilarityThemes() {
   try {
+    const saved = await getSortSetting('sort_similarity_themes')
+    const orderBy = saved ? buildOrderBy(saved.field, saved.order, 'title', 'createdAt') : { orderIndex: 'asc' as const }
     const themes = await prisma.similarityTheme.findMany({
       where: { status: 'published' },
-      orderBy: { orderIndex: 'asc' },
+      orderBy,
       select: {
         id: true,
         title: true,
@@ -244,6 +272,8 @@ export async function createNewsletterSubscriber(data: {
 // Sacred Texts
 export async function getSacredTexts(theme?: string) {
   try {
+    const saved = await getSortSetting('sort_sacred_texts')
+    const orderBy = buildOrderBy(saved?.field || 'date', saved?.order || 'desc', 'title', 'createdAt')
     const texts = await prisma.sacredText.findMany({
       where: { status: 'published', ...(theme ? { theme } : {}) },
       include: {
@@ -254,7 +284,7 @@ export async function getSacredTexts(theme?: string) {
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy
     })
     return { data: texts, error: null }
   } catch (error) {

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { TrendingUp, Plus, Edit, Trash2 } from 'lucide-react'
+import { TrendingUp, Plus, Edit, Trash2, Search } from 'lucide-react'
+import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
 
 interface SimilarityTheme {
   id: string
@@ -17,6 +18,12 @@ interface SimilarityTheme {
 export default function SimilarityThemesManagement() {
   const [themes, setThemes] = useState<SimilarityTheme[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'date', order: 'desc' })
+
+  useEffect(() => {
+    loadSortSetting('sort_similarity_themes').then(setSortConfig)
+  }, [])
 
   useEffect(() => {
     loadThemes()
@@ -56,6 +63,13 @@ export default function SimilarityThemesManagement() {
     }
   }
 
+  const filteredThemes = themes.filter(t =>
+    t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.description.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const sortedThemes = applySort(filteredThemes, sortConfig, 'title', 'created_at')
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -87,9 +101,26 @@ export default function SimilarityThemesManagement() {
         </Link>
       </div>
 
+      {/* Search & Sort */}
+      <div className="glass-effect rounded-xl p-4 border border-[#c8a75e]/20">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
+            <input
+              type="text"
+              placeholder="Search similarity themes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/20 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
+            />
+          </div>
+          <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_similarity_themes" />
+        </div>
+      </div>
+
       {/* Themes Grid */}
       <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
-        {themes.map((theme) => (
+        {sortedThemes.map((theme) => (
           <div key={theme.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex flex-col items-start gap-4 flex-1">
@@ -124,7 +155,7 @@ export default function SimilarityThemesManagement() {
           ))}
         </div>
 
-        {themes.length === 0 && (
+        {sortedThemes.length === 0 && (
           <div className="glass-effect rounded-2xl p-12 text-center">
             <TrendingUp className="w-16 h-16 text-premium-light mx-auto mb-4" />
             <p className="text-premium-light">No similarity themes found</p>
@@ -132,7 +163,7 @@ export default function SimilarityThemesManagement() {
         )}
 
         <div className="mt-6 text-center text-premium-light">
-          Total Themes: {themes.length}
+          Showing {sortedThemes.length} of {themes.length} themes
         </div>
     </div>
   )

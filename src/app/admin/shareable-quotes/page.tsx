@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Share2, Plus, Edit, Trash2, TrendingUp } from 'lucide-react'
+import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
 
 interface ShareableQuote {
   id: string
@@ -22,6 +23,11 @@ interface ShareableQuote {
 export default function ShareableQuotesManagement() {
   const [quotes, setQuotes] = useState<ShareableQuote[]>([])
   const [loading, setLoading] = useState(true)
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'date', order: 'desc' })
+
+  useEffect(() => {
+    loadSortSetting('sort_shareable_quotes').then(setSortConfig)
+  }, [])
 
   useEffect(() => {
     loadQuotes()
@@ -62,6 +68,8 @@ export default function ShareableQuotesManagement() {
   }
 
   const totalShares = quotes.reduce((sum, q) => sum + q.shareCount, 0)
+
+  const sortedQuotes = applySort(quotes, sortConfig, 'quoteText', 'created_at')
 
   if (loading) {
     return (
@@ -109,8 +117,12 @@ export default function ShareableQuotesManagement() {
           </div>
         </div>
 
+        <div className="flex justify-end">
+          <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_shareable_quotes" />
+        </div>
+
         <div className="grid gap-6">
-          {quotes.map((quote) => (
+          {sortedQuotes.map((quote) => (
             <div key={quote.id} className="glass-effect rounded-2xl p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4 flex-1">
@@ -157,7 +169,7 @@ export default function ShareableQuotesManagement() {
           ))}
         </div>
 
-        {quotes.length === 0 && (
+        {sortedQuotes.length === 0 && (
           <div className="glass-effect rounded-2xl p-12 text-center">
             <Share2 className="w-16 h-16 text-premium-light mx-auto mb-4" />
             <p className="text-premium-light">No shareable quotes found</p>

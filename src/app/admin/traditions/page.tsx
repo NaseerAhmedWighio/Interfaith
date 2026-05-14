@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Search } from 'lucide-react'
+import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
 
 interface Tradition {
   id: string
@@ -18,6 +19,11 @@ export default function TraditionsManagement() {
   const [traditions, setTraditions] = useState<Tradition[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'date', order: 'desc' })
+
+  useEffect(() => {
+    loadSortSetting('sort_traditions').then(setSortConfig)
+  }, [])
 
   useEffect(() => {
     loadTraditions()
@@ -62,6 +68,8 @@ export default function TraditionsManagement() {
     t.description.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const sortedTraditions = applySort(filteredTraditions, sortConfig, 'name', 'created_at')
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -93,17 +101,20 @@ export default function TraditionsManagement() {
         </Link>
       </div>
 
-      {/* Search */}
+      {/* Search & Sort */}
       <div className="glass-effect rounded-xl p-4 border border-[#c8a75e]/20">
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
-          <input
-            type="text"
-            placeholder="Search traditions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/50 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
-          />
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
+            <input
+              type="text"
+              placeholder="Search traditions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/50 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
+            />
+          </div>
+          <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_traditions" />
         </div>
       </div>
 
@@ -121,7 +132,7 @@ export default function TraditionsManagement() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#c8a75e]/10">
-              {filteredTraditions.map((tradition) => (
+              {sortedTraditions.map((tradition) => (
                 <tr key={tradition.id} className="hover:bg-[#c8a75e]/5 transition-colors">
                   {/* <td className="px-6 py-4">
                     <span className="text-3xl">{tradition.symbol}</span>
@@ -175,7 +186,7 @@ export default function TraditionsManagement() {
           </table>
         </div>
 
-        {filteredTraditions.length === 0 && (
+        {sortedTraditions.length === 0 && (
           <div className="text-center py-12">
             <p className="text-premium-light">No traditions found</p>
           </div>
@@ -184,7 +195,7 @@ export default function TraditionsManagement() {
 
       {/* Footer Stats */}
       <div className="text-center text-premium-light text-sm">
-        Showing {filteredTraditions.length} of {traditions.length} traditions
+        Showing {sortedTraditions.length} of {traditions.length} traditions
       </div>
     </div>
   )

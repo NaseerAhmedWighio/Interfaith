@@ -65,7 +65,7 @@ export default function Navigation() {
 
           {/* Mobile: AuthButton + Menu Button */}
           <div className="flex items-center gap-1 lg:hidden">
-            <div className="scale-75 mt-2 md:scale-90 lg:scale-100">
+            <div className="flex items-center justify-center">
               <AuthButton />
             </div>
             <button

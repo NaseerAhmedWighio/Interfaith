@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Search, AlertCircle } from 'lucide-react'
+import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
 
 interface Misconception {
   id: string
@@ -22,6 +23,11 @@ export default function MisconceptionsManagement() {
   const [misconceptions, setMisconceptions] = useState<Misconception[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'date', order: 'desc' })
+
+  useEffect(() => {
+    loadSortSetting('sort_misconceptions').then(setSortConfig)
+  }, [])
 
   useEffect(() => {
     loadMisconceptions()
@@ -67,6 +73,8 @@ export default function MisconceptionsManagement() {
     (m.traditions?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const sortedMisconceptions = applySort(filteredMisconceptions, sortConfig, 'misconception', 'created_at')
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -98,23 +106,26 @@ export default function MisconceptionsManagement() {
         </Link>
       </div>
 
-      {/* Search */}
+      {/* Search & Sort */}
       <div className="glass-effect rounded-xl p-4 border border-[#c8a75e]/20">
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
-          <input
-            type="text"
-            placeholder="Search misconceptions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/50 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
-          />
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
+            <input
+              type="text"
+              placeholder="Search misconceptions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/50 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
+            />
+          </div>
+          <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_misconceptions" />
         </div>
       </div>
 
       {/* Misconceptions Grid */}
       <div className="grid gap-4">
-        {filteredMisconceptions.map((misconception) => (
+        {sortedMisconceptions.map((misconception) => (
           <div key={misconception.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-4 flex-1">
@@ -178,7 +189,7 @@ export default function MisconceptionsManagement() {
         ))}
       </div>
 
-      {filteredMisconceptions.length === 0 && (
+      {sortedMisconceptions.length === 0 && (
         <div className="glass-effect rounded-xl p-12 text-center border border-[#c8a75e]/20">
           <AlertCircle className="w-16 h-16 text-premium-light mx-auto mb-4" />
           <p className="text-premium-light">No misconceptions found</p>
@@ -187,7 +198,7 @@ export default function MisconceptionsManagement() {
 
       {/* Footer Stats */}
       <div className="text-center text-premium-light text-sm">
-        Showing {filteredMisconceptions.length} of {misconceptions.length} misconceptions
+        Showing {sortedMisconceptions.length} of {misconceptions.length} misconceptions
       </div>
     </div>
   )

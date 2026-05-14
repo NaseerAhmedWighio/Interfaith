@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Search, Heart } from 'lucide-react'
+import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
 
 interface PeaceInitiative {
   id: string
@@ -16,6 +17,11 @@ export default function PeaceInitiativesManagement() {
   const [initiatives, setInitiatives] = useState<PeaceInitiative[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'date', order: 'desc' })
+
+  useEffect(() => {
+    loadSortSetting('sort_peace_initiatives').then(setSortConfig)
+  }, [])
 
   useEffect(() => {
     loadInitiatives()
@@ -60,6 +66,8 @@ export default function PeaceInitiativesManagement() {
     i.description.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const sortedInitiatives = applySort(filteredInitiatives, sortConfig, 'title', 'created_at')
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -91,22 +99,25 @@ export default function PeaceInitiativesManagement() {
         </Link>
       </div>
 
-      {/* Search */}
+      {/* Search & Sort */}
       <div className="glass-effect rounded-xl p-4 border border-[#c8a75e]/20">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
-            <input
-              type="text"
-              placeholder="Search peace initiatives..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/20 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
-            />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
+              <input
+                type="text"
+                placeholder="Search peace initiatives..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/20 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
+              />
+            </div>
+            <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_peace_initiatives" />
           </div>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
-          {filteredInitiatives.map((initiative) => (
+          {sortedInitiatives.map((initiative) => (
             <div key={initiative.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4 flex-1">
@@ -135,7 +146,7 @@ export default function PeaceInitiativesManagement() {
           ))}
         </div>
 
-        {filteredInitiatives.length === 0 && (
+        {sortedInitiatives.length === 0 && (
           <div className="glass-effect rounded-2xl p-12 text-center">
             <Heart className="w-16 h-16 text-premium-light mx-auto mb-4" />
             <p className="text-premium-light">No peace initiatives found</p>
@@ -143,7 +154,7 @@ export default function PeaceInitiativesManagement() {
         )}
 
         <div className="mt-6 text-center text-premium-light">
-          Showing {filteredInitiatives.length} of {initiatives.length} peace initiatives
+          Showing {sortedInitiatives.length} of {initiatives.length} peace initiatives
         </div>
     </div>
   )
