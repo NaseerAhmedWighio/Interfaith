@@ -6,8 +6,6 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   APP_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/interfaith-app
   MIGRATE_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/interfaith-migrate
 
@@ -25,8 +23,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ env.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push app image
         uses: docker/build-push-action@v5
@@ -54,7 +52,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /var/www/interfaith
-            echo "${{ env.DOCKERHUB_TOKEN }}" | docker login -u ${{ env.DOCKERHUB_USERNAME }} --password-stdin
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             docker pull ${{ env.APP_IMAGE }}:latest
             docker pull ${{ env.MIGRATE_IMAGE }}:latest
             docker-compose down
