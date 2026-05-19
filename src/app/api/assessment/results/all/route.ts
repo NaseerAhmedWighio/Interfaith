@@ -6,6 +6,15 @@ export async function GET() {
     const results = await prisma.assessmentResult.findMany({
       orderBy: {
         createdAt: 'desc'
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullName: true,
+          }
+        }
       }
     })
 

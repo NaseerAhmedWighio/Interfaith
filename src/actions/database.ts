@@ -133,8 +133,15 @@ export async function getPeaceInitiatives() {
     const saved = await getSortSetting('sort_peace_initiatives')
     const orderBy = buildOrderBy(saved?.field || 'date', saved?.order || 'desc', 'title', 'createdAt')
     const initiatives = await prisma.peaceInitiative.findMany({
-      where: { status: 'published' },
-      orderBy
+      orderBy,
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        impact: true,
+        status: true,
+        createdAt: true,
+      }
     })
     return { data: initiatives, error: null }
   } catch (error) {
@@ -293,30 +300,135 @@ export async function getSacredTexts(theme?: string) {
   }
 }
 
-export async function getTextComparisons() {
+// ── Core Content Models ─────────────────────────────────
+
+export async function getCorePillars() {
   try {
-    const comparisons = await prisma.textComparison.findMany({
-      include: {
-        comparisonTexts: {
-          include: {
-            sacredText: {
-              include: {
-                tradition: {
-                  select: {
-                    id: true,
-                    name: true
-                  }
-                }
-              }
-            }
-          },
-          orderBy: { displayOrder: 'asc' }
-        }
-      }
+    const data = await prisma.corePillar.findMany({
+      where: { status: 'published' },
+      orderBy: { orderIndex: 'asc' },
     })
-    return { data: comparisons, error: null }
+    return { data, error: null }
   } catch (error) {
-    console.error('Error fetching text comparisons:', error)
-    return { data: null, error: 'Failed to fetch text comparisons' }
+    console.error('Error fetching core pillars:', error)
+    return { data: null, error: 'Failed to fetch core pillars' }
+  }
+}
+
+export async function getMissionContent(sectionKey?: string) {
+  try {
+    const where = sectionKey ? { sectionKey } : {}
+    const data = await prisma.missionContent.findMany({
+      where: sectionKey ? { ...where, status: 'published' } : where,
+    })
+    return { data: sectionKey ? data[0] || null : data, error: null }
+  } catch (error) {
+    console.error('Error fetching mission content:', error)
+    return { data: null, error: 'Failed to fetch mission content' }
+  }
+}
+
+export async function getImpactGoals() {
+  try {
+    const data = await prisma.impactGoal.findMany({
+      where: { status: 'published' },
+      orderBy: { orderIndex: 'asc' },
+    })
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error fetching impact goals:', error)
+    return { data: null, error: 'Failed to fetch impact goals' }
+  }
+}
+
+export async function getFeaturedPrograms() {
+  try {
+    const data = await prisma.featuredProgram.findMany({
+      where: { status: 'published' },
+      orderBy: { orderIndex: 'asc' },
+    })
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error fetching featured programs:', error)
+    return { data: null, error: 'Failed to fetch featured programs' }
+  }
+}
+
+export async function getRegionalInitiatives() {
+  try {
+    const data = await prisma.regionalInitiative.findMany({
+      where: { status: 'published' },
+      orderBy: { orderIndex: 'asc' },
+    })
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error fetching regional initiatives:', error)
+    return { data: null, error: 'Failed to fetch regional initiatives' }
+  }
+}
+
+export async function getGetInvolved() {
+  try {
+    const data = await prisma.getInvolved.findMany({
+      where: { status: 'published' },
+      orderBy: { orderIndex: 'asc' },
+    })
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error fetching get involved:', error)
+    return { data: null, error: 'Failed to fetch get involved' }
+  }
+}
+
+export async function getAboutContent(sectionKey?: string) {
+  try {
+    const where = sectionKey ? { sectionKey } : {}
+    const data = await prisma.aboutContent.findMany({
+      where: sectionKey ? { ...where, status: 'published' } : where,
+      orderBy: { orderIndex: 'asc' },
+    })
+    return { data: sectionKey ? data[0] || null : data, error: null }
+  } catch (error) {
+    console.error('Error fetching about content:', error)
+    return { data: null, error: 'Failed to fetch about content' }
+  }
+}
+
+export async function getTeachingSection(sectionKey?: string) {
+  try {
+    const where = sectionKey ? { sectionKey } : {}
+    const data = await prisma.teachingSection.findMany({
+      where: sectionKey ? { ...where, status: 'published' } : where,
+    })
+    return { data: sectionKey ? data[0] || null : data, error: null }
+  } catch (error) {
+    console.error('Error fetching teaching sections:', error)
+    return { data: null, error: 'Failed to fetch teaching sections' }
+  }
+}
+
+export async function getTruthSection(sectionKey?: string) {
+  try {
+    const where = sectionKey ? { sectionKey } : {}
+    const data = await prisma.truthSection.findMany({
+      where: sectionKey ? { ...where, status: 'published' } : where,
+    })
+    return { data: sectionKey ? data[0] || null : data, error: null }
+  } catch (error) {
+    console.error('Error fetching truth sections:', error)
+    return { data: null, error: 'Failed to fetch truth sections' }
+  }
+}
+
+export async function getTraditionSection(sectionKey?: string) {
+  try {
+    const where = sectionKey ? { sectionKey } : {}
+    const data = await prisma.traditionSection.findMany({
+      where: sectionKey ? { ...where, status: 'published' } : where,
+    })
+    return { data: sectionKey ? data[0] || null : data, error: null }
+  } catch (error) {
+    console.error('Error fetching tradition sections:', error)
+    return { data: null, error: 'Failed to fetch tradition sections' }
   }
 }

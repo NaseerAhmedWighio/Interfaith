@@ -27,6 +27,16 @@ export default function AuthButton() {
     checkAuth()
   }, [pathname])
 
+  useEffect(() => {
+    const handleProfileUpdate = () => checkAuth()
+    window.addEventListener('profileUpdated', handleProfileUpdate)
+    return () => window.removeEventListener('profileUpdated', handleProfileUpdate)
+  }, [])
+
+  useEffect(() => {
+    setImgError(false)
+  }, [user?.profileImage])
+
   async function checkAuth() {
     try {
       const response = await fetch('/api/auth/me')

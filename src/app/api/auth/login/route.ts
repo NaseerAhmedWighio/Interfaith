@@ -1,22 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyPassword } from '@/lib/auth'
+import { verifyPassword, validateLoginInput, sanitizeInput } from '@/lib/auth'
 import { createSession, setSessionCookie } from '@/lib/session'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { email, password } = body
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || request.headers.get('x-real-ip')
+      || 'unknown'
 
-    // Validate input
-    if (!email || !password) {
+    const rateCheck = checkRateLimit(`login:${ip}`, 5, 60_000)
+    if (!rateCheck.allowed) {
+      const retryAfter = Math.ceil((rateCheck.resetAt - Date.now()) / 1000)
       return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
+        { error: `Too many login attempts. Try again in ${retryAfter} seconds.` },
+        { status: 429, headers: { 'Retry-After': String(retryAfter) } }
       )
     }
 
-    // Find user
+    const body = await request.json()
+    const email = typeof body.email === 'string' ? sanitizeInput(body.email) : ''
+    const password = typeof body.password === 'string' ? body.password : ''
+
+    const validation = validateLoginInput(email, password)
+    if (!validation.isValid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 })
+    }
+
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
     })
@@ -28,7 +39,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user is active
     if (!user.isActive) {
       return NextResponse.json(
         { error: 'Your account has been deactivated. Please contact support.' },
@@ -36,15 +46,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if email is verified
     if (!user.emailVerified) {
       return NextResponse.json(
-        { error: 'Please verify your email before logging in. Check your inbox for the verification link.' },
+        { error: 'Please verify your email before logging in.' },
         { status: 403 }
       )
     }
 
-    // Verify password
     const isValidPassword = await verifyPassword(password, user.passwordHash)
     if (!isValidPassword) {
       return NextResponse.json(
@@ -53,17 +61,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get IP and user agent
     const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined
     const userAgent = request.headers.get('user-agent') || undefined
 
-    // Create session
     const session = await createSession(user.id, ipAddress, userAgent)
-
-    // Set session cookie
     await setSessionCookie(session.token)
 
-    // Return user data (exclude sensitive fields)
     return NextResponse.json({
       message: 'Login successful',
       user: {
@@ -74,6 +77,7 @@ export async function POST(request: NextRequest) {
         emailVerified: user.emailVerified,
       },
     })
+
   } catch (error) {
     console.error('Login error:', error)
     return NextResponse.json(

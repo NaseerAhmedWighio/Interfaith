@@ -15,7 +15,9 @@ export async function GET() {
       shareableQuotes,
       similarityThemes,
       users,
-      roleRequests
+      roleRequests,
+      corePillars,
+      aboutContent,
     ] = await Promise.all([
       prisma.tradition.count(),
       prisma.teaching.count(),
@@ -28,7 +30,9 @@ export async function GET() {
       prisma.shareableQuote.count(),
       prisma.similarityTheme.count(),
       prisma.user.count(),
-      prisma.roleRequest.count({ where: { status: 'pending' } })
+      prisma.roleRequest.count({ where: { status: 'pending' } }),
+      prisma.corePillar.count(),
+      prisma.aboutContent.count(),
     ])
 
     return NextResponse.json({
@@ -43,7 +47,9 @@ export async function GET() {
       shareableQuotes,
       similarityThemes,
       users,
-      roleRequests
+      roleRequests,
+      corePillars,
+      aboutContent,
     })
   } catch (error) {
     console.error('Error fetching admin stats:', error)

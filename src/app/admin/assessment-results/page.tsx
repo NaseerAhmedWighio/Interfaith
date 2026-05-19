@@ -14,6 +14,12 @@ interface AssessmentResult {
   overall_score: number | null
   result_category: string | null
   created_at: string
+  country: string | null
+  user?: {
+    id: string
+    email: string
+    fullName: string
+  } | null
 }
 
 export default function AssessmentResultsManagement() {
@@ -137,9 +143,11 @@ export default function AssessmentResultsManagement() {
       {/* Results Table */}
       <div className="glass-effect rounded-xl overflow-hidden border border-[#c8a75e]/20">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px]">
+          <table className="w-full min-w-[1200px]">
             <thead className="bg-[#0b0f2a]/50 border-b border-[#c8a75e]/20">
                 <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">User</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Country</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Session ID</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Peace</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Tolerance</th>
@@ -153,6 +161,19 @@ export default function AssessmentResultsManagement() {
               <tbody className="divide-y divide-[#c8a75e]/10">
                 {results.map((result) => (
                   <tr key={result.id} className="hover:bg-[#0b0f2a]/10 transition-colors">
+                    <td className="px-6 py-4">
+                      {result.user ? (
+                        <div>
+                          <div className="text-[#f5f3ee] text-sm font-medium">{result.user.fullName}</div>
+                          <div className="text-premium-light text-xs">{result.user.email}</div>
+                        </div>
+                      ) : (
+                        <div className="text-premium-light text-sm italic">Guest</div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-[#f5f3ee] text-sm">{result.country || <span className="text-premium-light italic">-</span>}</div>
+                    </td>
                     <td className="px-6 py-4">
                       <div className="text-premium-light text-sm font-mono">{result.session_id ? result.session_id.slice(0, 8) + '...' : 'N/A'}</div>
                     </td>

@@ -13,7 +13,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/sacred-texts', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/truth', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/peace', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/peace-initiatives', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/sufi-teachings', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/sacred-texts-explorer', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/share-quotes', priority: 0.6, changeFrequency: 'monthly' as const },

@@ -31,8 +31,8 @@ export default function Navigation() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden lg:flex flex-1 items-center justify-center space-x-1">
             <NavLink href="/mission" active={isActive('/mission')}>
               Our Mission
             </NavLink>
@@ -54,13 +54,15 @@ export default function Navigation() {
             <NavLink href="/share-quotes" active={isActive('/share-quotes')}>
               Share
             </NavLink>
-            <Link href="/join" className="btn-secondarys ml-2 inline-flex items-center text-sm px-5 py-2.5">
+          </div>
+
+          {/* Desktop Right */}
+          <div className="hidden lg:flex items-center space-x-3">
+            <Link href="/join" className="btn-secondarys inline-flex items-center text-sm px-5 py-2.5">
               <Sparkles className="w-4 h-4 mr-2" />
               Join the Movement
             </Link>
-            <div className="ml-5">
-              <AuthButton />
-            </div>
+            <AuthButton />
           </div>
 
           {/* Mobile: AuthButton + Menu Button */}
@@ -100,7 +102,7 @@ export default function Navigation() {
             <MobileNavLink href="/traditions" active={isActive('/traditions')} onClick={closeMobileMenu}>
               Traditions
             </MobileNavLink>
-            <MobileNavLink href="/peace" active={isActive('/peace')} onClick={closeMobileMenu}>
+            <MobileNavLink href="/peace-initiatives" active={isActive('/peace-initiatives')} onClick={closeMobileMenu}>
               Peace Work
             </MobileNavLink>
             <MobileNavLink href="/share-quotes" active={isActive('/share-quotes')} onClick={closeMobileMenu}>

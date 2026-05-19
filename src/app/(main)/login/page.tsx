@@ -3,7 +3,11 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
+
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+}
 
 export default function LoginPage() {
   const router = useRouter()
@@ -17,46 +21,84 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
   const [showResendVerification, setShowResendVerification] = useState(false)
   const [isResending, setIsResending] = useState(false)
   const [resendMessage, setResendMessage] = useState('')
+  const [retryAfter, setRetryAfter] = useState<number | null>(null)
+
+  const validateField = (field: 'email' | 'password', value: string) => {
+    const errors: { email?: string; password?: string } = {}
+    if (field === 'email') {
+      if (value.length > 0 && !validateEmail(value)) {
+        errors.email = 'Please enter a valid email address'
+      }
+      if (value.length > 255) {
+        errors.email = 'Email is too long'
+      }
+    }
+    if (field === 'password') {
+      if (value.length > 128) {
+        errors.password = 'Password is too long'
+      }
+    }
+    return errors
+  }
+
+  const handleChange = (field: 'email' | 'password', value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    const errors = validateField(field, value)
+    setFieldErrors(prev => ({ ...prev, ...errors }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
     setError(null)
+    setShowResendVerification(false)
+    setRetryAfter(null)
+
+    const trimmedEmail = formData.email.trim()
+    const fieldErrors: { email?: string; password?: string } = {}
+
+    if (!trimmedEmail) fieldErrors.email = 'Email is required'
+    else if (!validateEmail(trimmedEmail)) fieldErrors.email = 'Please enter a valid email address'
+    if (!formData.password) fieldErrors.password = 'Password is required'
+
+    if (Object.keys(fieldErrors).length > 0) {
+      setFieldErrors(fieldErrors)
+      return
+    }
+
+    setIsSubmitting(true)
 
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ email: trimmedEmail, password: formData.password }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || 'Login failed')
-
-        // Show resend verification option if email is not verified
-        if (data.error?.includes('verify your email')) {
-          setShowResendVerification(true)
-          // Suggest going to verify page
-          setError(data.error + ' Click below to verify or go to the verification page.')
+        if (response.status === 429) {
+          const retrySeconds = parseInt(response.headers.get('Retry-After') || '60', 10)
+          setRetryAfter(retrySeconds)
+          setError(data.error || 'Too many attempts. Please wait before trying again.')
         } else {
-          setShowResendVerification(false)
+          setError(data.error || 'Login failed')
+          if (data.error?.includes('verify your email')) {
+            setShowResendVerification(true)
+            setError(data.error + ' Click below to verify.')
+          }
         }
-
         setIsSubmitting(false)
         return
       }
 
-      // Redirect based on user role
       if (data.user.role === 'admin') {
-        // Only admins go to admin dashboard
         router.push(redirect.startsWith('/admin') ? redirect : '/admin')
       } else {
-        // Non-admins (user, editor, moderator) go to home or profile
         router.push(redirect.startsWith('/admin') ? '/' : redirect)
       }
       router.refresh()
@@ -67,7 +109,7 @@ export default function LoginPage() {
   }
 
   const handleResendVerification = async () => {
-    if (!formData.email) {
+    if (!formData.email.trim()) {
       setResendMessage('Please enter your email address first')
       return
     }
@@ -79,11 +121,10 @@ export default function LoginPage() {
       const response = await fetch('/api/auth/resend-verification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email }),
+        body: JSON.stringify({ email: formData.email.trim() }),
       })
 
       const data = await response.json()
-
       if (!response.ok) {
         setResendMessage(data.error || 'Failed to resend verification email')
         setIsResending(false)
@@ -112,7 +153,7 @@ export default function LoginPage() {
         </div>
 
         <div className="card-premium p-6 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} noValidate className="space-y-5">
             <div>
               <label className="block text-xs sm:text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
                 Email Address
@@ -122,12 +163,19 @@ export default function LoginPage() {
                 <input
                   type="email"
                   required
+                  maxLength={255}
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) => handleChange('email', e.target.value)}
                   className="w-full pl-11 pr-4 py-3 text-sm sm:text-base rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
                   placeholder="your@email.com"
                 />
               </div>
+              {fieldErrors.email && (
+                <p className="text-[#e74c3c] text-xs mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {fieldErrors.email}
+                </p>
+              )}
             </div>
 
             <div>
@@ -139,8 +187,9 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
+                  maxLength={128}
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) => handleChange('password', e.target.value)}
                   className="w-full pl-11 pr-12 py-3 text-sm sm:text-base rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
                   placeholder="••••••••"
                 />
@@ -152,6 +201,12 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-[#e74c3c] text-xs mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {fieldErrors.password}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center justify-between text-xs sm:text-sm">
@@ -169,7 +224,7 @@ export default function LoginPage() {
                 {showResendVerification && (
                   <div className="mt-3 space-y-2">
                     <Link
-                      href={`/verify-email?email=${encodeURIComponent(formData.email)}`}
+                      href={`/verify-email?email=${encodeURIComponent(formData.email.trim())}`}
                       className="block text-center px-4 py-2 bg-[#c8a75e] hover:bg-[#d4b56d] text-[#0b0f2a] font-semibold rounded-lg transition-colors text-xs sm:text-sm"
                     >
                       Go to Verification Page
@@ -197,10 +252,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || retryAfter !== null}
               className="w-full btn-primary text-sm sm:text-base px-6 py-3.5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Logging in...' : 'Log In'}
+              {isSubmitting ? 'Logging in...' : retryAfter ? `Try again in ${retryAfter}s` : 'Log In'}
             </button>
 
             <p className="text-center text-xs sm:text-sm text-[#aab0d6]">

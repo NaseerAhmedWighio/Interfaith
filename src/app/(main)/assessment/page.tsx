@@ -33,8 +33,9 @@ export default function FaithAssessment() {
   const [showResults, setShowResults] = useState(false)
   const [results, setResults] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [country, setCountry] = useState('')
 
-  // Check if user is logged in
+  // Check if user is logged in — redirect to login if not
   useEffect(() => {
     async function checkAuth() {
       try {
@@ -43,10 +44,18 @@ export default function FaithAssessment() {
           const data = await response.json()
           if (data.user) {
             setUser(data.user)
+          } else {
+            window.location.href = '/login?redirect=/assessment'
+            return
           }
+        } else {
+          window.location.href = '/login?redirect=/assessment'
+          return
         }
       } catch (error) {
         console.error('Error checking auth:', error)
+        window.location.href = '/login?redirect=/assessment'
+        return
       } finally {
         setLoadingAuth(false)
       }
@@ -188,7 +197,8 @@ export default function FaithAssessment() {
           overallScore,
           resultCategory: category,
           answers: allAnswers,
-          userId: user?.id, // Link to user account if logged in
+          country: country || undefined,
+          userId: user?.id,
         })
       })
     } catch (error) {
@@ -390,6 +400,14 @@ export default function FaithAssessment() {
                   </ul>
                 </div>
               </div>
+            </div>
+
+            {/* Country input */}
+            <div className="glass-effect p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl max-w-2xl mx-auto mt-6">
+              <label className="block text-sm font-medium text-[#f5f3ee] mb-2">Your Country / Region (optional)</label>
+              <input type="text" value={country} onChange={e => setCountry(e.target.value)}
+                placeholder="e.g. United States, Pakistan, India..."
+                className="w-full p-3 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
             </div>
 
             {/* Authentication banners */}

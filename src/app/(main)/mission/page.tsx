@@ -1,12 +1,48 @@
-import { Heart, Lightbulb, HandHeart, Flame, Globe as Globe2, BookOpen } from 'lucide-react'
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Our Mission | Interfaith Peace Bridge',
-  description: 'Rooted in the timeless wisdom of Sufism, we dedicate ourselves to building bridges of understanding, eliminating hatred, and revealing the divine unity that connects all hearts.',
+import { useState, useEffect } from 'react'
+import { Heart, Lightbulb, HandHeart, Flame, Globe as Globe2, BookOpen } from 'lucide-react'
+import { getCorePillars, getMissionContent } from '@/actions/database'
+import Pagination from '@/components/Pagination'
+
+const iconMap: Record<string, React.ReactNode> = {
+  Heart: <Heart className="w-8 h-8" />,
+  Lightbulb: <Lightbulb className="w-8 h-8" />,
+  HandHeart: <HandHeart className="w-8 h-8" />,
+  Flame: <Flame className="w-8 h-8" />,
+  Globe: <Globe2 className="w-8 h-8" />,
+  Globe2: <Globe2 className="w-8 h-8" />,
+  BookOpen: <BookOpen className="w-8 h-8" />,
 }
 
 export default function Mission() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [corePillars, setCorePillars] = useState<{ id: string; title: string; description: string; icon: string; color: string }[]>([])
+  const [headerContent, setHeaderContent] = useState<{ title: string; content: string } | null>(null)
+  const [sufiContent, setSufiContent] = useState<{ title: string; content: string } | null>(null)
+  const ITEMS_PER_PAGE = 6
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  async function fetchData() {
+    const [pillars, header, sufi] = await Promise.all([
+      getCorePillars(),
+      getMissionContent('header'),
+      getMissionContent('sufi_path'),
+    ])
+    if (pillars.data) setCorePillars(pillars.data.map((p: any) => ({ id: p.id, title: p.title, description: p.description, icon: p.icon, color: p.color })))
+    if (header.data && !Array.isArray(header.data)) setHeaderContent(header.data)
+    if (sufi.data && !Array.isArray(sufi.data)) setSufiContent(sufi.data)
+  }
+
+  const totalPages = Math.ceil(corePillars.length / ITEMS_PER_PAGE)
+  const paginatedCards = corePillars.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
+
   return (
     <div>
       <section className="section-premium pt-28 md:pt-36 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
@@ -19,13 +55,12 @@ export default function Mission() {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
-            Our Mission for
+            {headerContent?.title || 'Our Mission for'}
             <span className="block text-[#C8A75E] mt-2">Interfaith Harmony</span>
           </h1>
 
           <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed max-w-3xl mx-auto px-4">
-            Rooted in the timeless wisdom of Sufism, we dedicate ourselves to building bridges
-            of understanding, eliminating hatred, and revealing the divine unity that connects all hearts.
+            {headerContent?.content || 'Rooted in the timeless wisdom of Sufism, we dedicate ourselves to building bridges of understanding, eliminating hatred, and revealing the divine unity that connects all hearts.'}
           </p>
         </div>
       </section>
@@ -40,43 +75,22 @@ export default function Mission() {
           </div>
 
           <div className="feature-grid">
-            <MissionCard
-              icon={<Heart className="w-8 h-8" />}
-              title="Eliminate Hatred"
-              description="Through divine love and understanding, we dissolve the barriers of prejudice and fear that separate hearts. We believe that when hearts are purified through spiritual practice, they become mirrors reflecting the Divine Light in all beings."
-              color="#E07070"
-            />
-            <MissionCard
-              icon={<Lightbulb className="w-8 h-8" />}
-              title="Dispel Misconceptions"
-              description="Illuminate truth by addressing falsehoods and revealing the authentic beauty of each tradition. Through education and compassionate dialogue, we replace ignorance with understanding and fear with appreciation."
-              color="#D4A07B"
-            />
-            <MissionCard
-              icon={<HandHeart className="w-8 h-8" />}
-              title="Foster Unity"
-              description="Discover the universal thread of compassion, mercy, and love woven through all spiritual paths. We celebrate both the unique beauty of each tradition and the shared essence that unites all seekers of truth."
-              color="#C8A75E"
-            />
-            <MissionCard
-              icon={<Flame className="w-8 h-8" />}
-              title="Share Sufi Wisdom"
-              description="Share the timeless wisdom of Sufism, the path of divine love that embraces all of humanity. Sufi teachings remind us that all rivers of faith flow toward the same infinite ocean of Divine Truth."
-              color="#D4A07B"
-            />
-            <MissionCard
-              icon={<Globe2 className="w-8 h-8" />}
-              title="Build Global Peace"
-              description="Build bridges of understanding that span cultures, languages, and traditions worldwide. We envision a world where diversity is celebrated as a reflection of divine creativity and unity."
-              color="#27AE60"
-            />
-            <MissionCard
-              icon={<BookOpen className="w-8 h-8" />}
-              title="Preserve Sacred Knowledge"
-              description="Preserve and share the profound wisdom that guides seekers toward truth and enlightenment. We honor the sacred texts, teachings, and practices of all traditions as pathways to the Divine."
-              color="#9B59B6"
-            />
+            {paginatedCards.map((card, index) => (
+              <MissionCard
+                key={card.id || index}
+                icon={iconMap[card.icon] || <Flame className="w-8 h-8" />}
+                title={card.title}
+                description={card.description}
+                color={card.color}
+              />
+            ))}
           </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </section>
 
@@ -84,28 +98,23 @@ export default function Mission() {
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
             <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
-              The Sufi Path to Interfaith Harmony
+              {sufiContent?.title || 'The Sufi Path to Interfaith Harmony'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
-              <p>
-                Sufism teaches that the Divine is infinite and cannot be contained by any single form or expression.
-                Just as the sun's light illuminates countless windows, each with its own unique color and character,
-                the Divine Light manifests through diverse spiritual traditions, each offering a unique window into the infinite.
-              </p>
-              <p>
-                At the heart of Sufism is the principle of Divine Love - a love that sees beyond superficial differences
-                to recognize the sacred essence in every being. This love does not tolerate hatred, because when one truly
-                sees with the eye of the heart, one recognizes that harming another is harming oneself.
-              </p>
-              <p>
-                We carry forward this Sufi wisdom as a torch to light the path toward interfaith understanding. By purifying
-                our hearts of prejudice, seeking knowledge over ignorance, and choosing compassion over judgment, we become
-                living bridges between communities that might otherwise remain divided.
-              </p>
-              <p className="font-semibold text-sm sm:text-base md:text-lg text-[#c8a75e]">
-                Our mission is not to erase the beautiful diversity of spiritual traditions, but to reveal the unity
-                that already exists beneath the surface - the unity of hearts seeking truth, peace, and divine connection.
-              </p>
+              {sufiContent
+                ? sufiContent.content.split('\n\n').filter(Boolean).map((p, i, arr) => (
+                    <p key={i} className={i === arr.length - 1 ? 'font-semibold text-sm sm:text-base md:text-lg text-[#c8a75e]' : ''}>
+                      {p}
+                    </p>
+                  ))
+                : (
+                  <>
+                    <p>Sufism teaches that the Divine is infinite and cannot be contained by any single form or expression. Just as the sun&apos;s light illuminates countless windows, each with its own unique color and character, the Divine Light manifests through diverse spiritual traditions, each offering a unique window into the infinite.</p>
+                    <p>At the heart of Sufism is the principle of Divine Love - a love that sees beyond superficial differences to recognize the sacred essence in every being. This love does not tolerate hatred, because when one truly sees with the eye of the heart, one recognizes that harming another is harming oneself.</p>
+                    <p>We carry forward this Sufi wisdom as a torch to light the path toward interfaith understanding. By purifying our hearts of prejudice, seeking knowledge over ignorance, and choosing compassion over judgment, we become living bridges between communities that might otherwise remain divided.</p>
+                    <p className="font-semibold text-sm sm:text-base md:text-lg text-[#c8a75e]">Our mission is not to erase the beautiful diversity of spiritual traditions, but to reveal the unity that already exists beneath the surface - the unity of hearts seeking truth, peace, and divine connection.</p>
+                  </>
+                )}
             </div>
           </div>
         </div>
@@ -114,7 +123,7 @@ export default function Mission() {
   )
 }
 
-function MissionCard({ icon, title, description, color }: any) {
+function MissionCard({ icon, title, description, color }: { icon: React.ReactNode; title: string; description: string; color: string }) {
   return (
     <div className="tradition-card p-6 sm:p-7 md:p-8">
       <div className='flex flex-row md:flex-col justify-start items-center gap-3 md:gap-0'>

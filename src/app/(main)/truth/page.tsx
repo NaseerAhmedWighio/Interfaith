@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { CheckCircle, Lightbulb, Filter, Search, X } from 'lucide-react'
-import { getTraditions, getMisconceptions } from '@/actions/database'
+import { useState, useEffect, useRef } from 'react'
+import { CheckCircle, Lightbulb, Filter, Search, X, ChevronDown } from 'lucide-react'
+import { getTraditions, getMisconceptions, getTruthSection } from '@/actions/database'
+import Pagination from '@/components/Pagination'
 
 interface Misconception {
   id: string
@@ -20,15 +21,24 @@ interface Tradition {
 export default function Truth() {
   const [misconceptions, setMisconceptions] = useState<Misconception[]>([])
   const [traditions, setTraditions] = useState<Tradition[]>([])
+  const [dispellingSection, setDispellingSection] = useState<{ title: string; content: string } | null>(null)
   const [selectedTradition, setSelectedTradition] = useState<string>('all')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [showFilters, setShowFilters] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 4
 
   useEffect(() => {
     fetchTraditions()
     fetchMisconceptions()
+    fetchDispellingSection()
   }, [])
+
+  async function fetchDispellingSection() {
+    const result = await getTruthSection('dispelling_misconceptions')
+    if (result.data && !Array.isArray(result.data)) setDispellingSection(result.data)
+  }
 
   async function fetchTraditions() {
     const result = await getTraditions()
@@ -54,6 +64,16 @@ export default function Truth() {
 
     return matchesTradition && matchesCategory && matchesSearch
   })
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedTradition, selectedCategory, searchQuery])
+
+  const totalPages = Math.ceil(filteredMisconceptions.length / ITEMS_PER_PAGE)
+  const paginatedMisconceptions = filteredMisconceptions.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
 
   const clearFilters = () => {
     setSelectedTradition('all')
@@ -113,36 +133,35 @@ export default function Truth() {
           </div>
 
           <div className="mb-6 sm:mb-8 space-y-3 sm:space-y-4">
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#aab0d6]/60 w-4 h-4 sm:w-5 sm:h-5" />
-              <input
-                type="text"
-                placeholder="Search misconceptions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base rounded-xl sm:rounded-xl border-2 border-[#aab0d6]/20 focus:border-blue-400 focus:outline-none text-[#aab0d6] bg-[#0b0f2a] shadow-sm transition-all"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-[#aab0d6]/60 hover:text-[#aab0d6]/80"
-                >
-                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-              )}
-            </div>
-
-            <div className="text-center">
+            <div className="flex items-center gap-3 max-w-2xl mx-auto">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#aab0d6]/60 w-4 h-4 sm:w-5 sm:h-5" />
+                <input
+                  type="text"
+                  placeholder="Search misconceptions..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base rounded-xl sm:rounded-xl border-2 border-[#aab0d6]/20 focus:border-blue-400 focus:outline-none text-[#aab0d6] bg-[#0b0f2a] shadow-sm transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-[#aab0d6]/60 hover:text-[#aab0d6]/80"
+                  >
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                )}
+              </div>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center space-x-2 px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-[#0b0f2a] rounded-xl sm:rounded-xl border-2 border-[#aab0d6]/20 hover:border-blue-400 transition-all shadow-sm"
+                className="flex items-center justify-center gap-2 px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base bg-[#0b0f2a] rounded-xl border-2 border-[#aab0d6]/20 hover:border-blue-400 transition-all shadow-sm flex-shrink-0"
               >
                 <Filter className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="font-semibold">
+                <span className="font-semibold hidden sm:inline">
                   {showFilters ? 'Hide Filters' : 'Show Filters'}
                 </span>
                 {hasActiveFilters && (
-                  <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 bg-[#0b0f2a]0 text-[#f5f3ee] text-xs rounded-xl">
+                  <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-500 text-white text-xs rounded-full">
                     {(selectedTradition !== 'all' ? 1 : 0) + (selectedCategory !== 'all' ? 1 : 0)}
                   </span>
                 )}
@@ -150,41 +169,31 @@ export default function Truth() {
             </div>
 
             {showFilters && (
-              <div className="card-premium p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-5 md:space-y-6">
+              <div className="card-premium p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-5 md:space-y-6 overflow-visible z-[1]">
                 <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
                   <div>
                     <label className="block text-xs sm:text-sm font-semibold text-[#aab0d6] mb-2 sm:mb-3">
                       Filter by Tradition
                     </label>
-                    <select
+                    <SelectDropdown
                       value={selectedTradition}
-                      onChange={(e) => setSelectedTradition(e.target.value)}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border-2 border-[#aab0d6]/20 focus:border-blue-400 focus:outline-none bg-[#0b0f2a]"
-                    >
-                      <option value="all">All Traditions</option>
-                      {traditions.map(tradition => (
-                        <option key={tradition.id} value={tradition.name}>
-                          {tradition.name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={setSelectedTradition}
+                      options={[
+                        { value: 'all', label: 'All Traditions' },
+                        ...traditions.map(t => ({ value: t.name, label: t.name })),
+                      ]}
+                    />
                   </div>
 
                   <div>
                     <label className="block text-xs sm:text-sm font-semibold text-[#aab0d6] mb-2 sm:mb-3">
                       Filter by Category
                     </label>
-                    <select
+                    <SelectDropdown
                       value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border-2 border-[#aab0d6]/20 focus:border-blue-400 focus:outline-none bg-[#0b0f2a]"
-                    >
-                      {categories.map(category => (
-                        <option key={category.id} value={category.id}>
-                          {category.label}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={setSelectedCategory}
+                      options={categories.map(c => ({ value: c.id, label: c.label }))}
+                    />
                   </div>
                 </div>
 
@@ -210,7 +219,7 @@ export default function Truth() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-            {filteredMisconceptions.map((item) => (
+            {paginatedMisconceptions.map((item) => (
               <MisconceptionCard key={item.id} item={item} />
             ))}
           </div>
@@ -232,6 +241,12 @@ export default function Truth() {
               <p className="text-sm sm:text-base text-[#aab0d6]/70">Loading truth revelations...</p>
             </div>
           )}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </section>
 
@@ -239,30 +254,29 @@ export default function Truth() {
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
             <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
-              Why Dispelling Misconceptions Matters
+              {dispellingSection?.title || 'Why Dispelling Misconceptions Matters'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
-              <p>
-                Misconceptions are seeds of division. When we believe false narratives about other faiths,
-                we create barriers that prevent genuine connection and understanding. These falsehoods often
-                stem from ignorance, fear, or deliberate distortion rather than authentic knowledge.
-              </p>
-              <p>
-                The Sufi path teaches us to seek knowledge with humility and an open heart. When we approach
-                other traditions with curiosity rather than judgment, we discover profound beauty, wisdom,
-                and shared values that unite rather than divide.
-              </p>
-              <p>
-                By illuminating truth, we don't just correct errors - we create space for authentic dialogue,
-                mutual respect, and the recognition of our common humanity. This is how we transform hatred
-                into understanding and fear into love.
-              </p>
-              <div className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
-                <p className="font-semibold text-sm sm:text-base text-[#f5f3ee] text-center">
-                  "The truth will set you free" - not just as a religious ideal, but as a practical path
-                  toward peace and interfaith harmony.
-                </p>
-              </div>
+              {dispellingSection
+                ? dispellingSection.content.split('\n\n').filter(Boolean).map((p, i, arr) => (
+                    i === arr.length - 1 ? (
+                      <div key={i} className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
+                        <p className="font-semibold text-sm sm:text-base text-[#f5f3ee] text-center">{p}</p>
+                      </div>
+                    ) : (
+                      <p key={i}>{p}</p>
+                    )
+                  ))
+                : (
+                  <>
+                    <p>Misconceptions are seeds of division. When we believe false narratives about other faiths, we create barriers that prevent genuine connection and understanding. These falsehoods often stem from ignorance, fear, or deliberate distortion rather than authentic knowledge.</p>
+                    <p>The Sufi path teaches us to seek knowledge with humility and an open heart. When we approach other traditions with curiosity rather than judgment, we discover profound beauty, wisdom, and shared values that unite rather than divide.</p>
+                    <p>By illuminating truth, we don&apos;t just correct errors - we create space for authentic dialogue, mutual respect, and the recognition of our common humanity. This is how we transform hatred into understanding and fear into love.</p>
+                    <div className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
+                      <p className="font-semibold text-sm sm:text-base text-[#f5f3ee] text-center">&quot;The truth will set you free&quot; - not just as a religious ideal, but as a practical path toward peace and interfaith harmony.</p>
+                    </div>
+                  </>
+                )}
             </div>
           </div>
         </div>
@@ -330,6 +344,55 @@ function MisconceptionCard({ item }: { item: Misconception }) {
           <p className="text-sm sm:text-base text-premium leading-relaxed">{item.truth}</p>
         </div>
       </div>
+    </div>
+  )
+}
+
+function SelectDropdown({ value, onChange, options }: {
+  value: string
+  onChange: (val: string) => void
+  options: { value: string; label: string }[]
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const selected = options.find(o => o.value === value)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  return (
+    <div className="relative z-[9999]" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border-2 border-[#aab0d6]/20 hover:border-blue-400 transition-all bg-[#0b0f2a] text-[#aab0d6] text-left"
+      >
+        <span>{selected?.label || 'Select...'}</span>
+        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 w-full max-h-[240px] overflow-y-auto bg-[#0b0f2a] border-2 border-[#aab0d6]/20 rounded-xl shadow-xl z-[9999] animate-fadeIn custom-scrollbar">
+          {options.map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => { onChange(opt.value); setOpen(false) }}
+              className={`w-full text-left px-3 sm:px-4 py-2.5 text-sm sm:text-base transition-colors ${
+                value === opt.value
+                  ? 'bg-blue-500/20 text-blue-400'
+                  : 'text-[#aab0d6] hover:bg-[#aab0d6]/10'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

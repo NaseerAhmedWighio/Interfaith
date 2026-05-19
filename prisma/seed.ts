@@ -4,7 +4,10 @@ import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Seeding admin and moderator accounts...')
+  console.log('🌱 Seeding database...\n')
+
+  // ── Accounts ──────────────────────────────────────────
+  console.log('--- Accounts ---')
 
   const adminEmail = process.env.ADMIN_EMAIL
   const adminPassword = process.env.ADMIN_PASSWORD
@@ -51,6 +54,718 @@ async function main() {
     })
     console.log(`✅ Moderator account: ${moderatorEmail} (role: moderator)`)
   }
+
+  // ── Helper: seed only when table is empty ──────────────
+  async function seedTable<T>(name: string, fn: () => Promise<T[]>): Promise<number> {
+    // Exclude models that use sectionKey as unique identifier
+    const skipCountModels = ['missionContent', 'aboutContent', 'teachingSection', 'truthSection', 'traditionSection', 'sufiContent', 'approachContent']
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const model = (prisma as any)[name]
+    if (!skipCountModels.includes(name)) {
+      const count = await model.count()
+      if (count > 0) {
+        console.log(`⏭️  ${name}: ${count} existing records — skipping`)
+        return count
+      }
+    }
+    const data = await fn()
+    console.log(`✅ ${name}: ${data.length} records created`)
+    return data.length
+  }
+
+  // ── Core Pillars ───────────────────────────────────────
+  console.log('\n--- Core Pillars ---')
+
+  await seedTable('corePillar', async () => {
+    const pillars = [
+      {
+        title: 'Eliminate Hatred',
+        description: 'Through divine love and understanding, we dissolve the barriers of prejudice and fear that separate hearts. We believe that when hearts are purified through spiritual practice, they become mirrors reflecting the Divine Light in all beings.',
+        icon: 'Heart',
+        color: '#E07070',
+        orderIndex: 0,
+      },
+      {
+        title: 'Dispel Misconceptions',
+        description: 'Illuminate truth by addressing falsehoods and revealing the authentic beauty of each tradition. Through education and compassionate dialogue, we replace ignorance with understanding and fear with appreciation.',
+        icon: 'Lightbulb',
+        color: '#D4A07B',
+        orderIndex: 1,
+      },
+      {
+        title: 'Foster Unity',
+        description: 'Discover the universal thread of compassion, mercy, and love woven through all spiritual paths. We celebrate both the unique beauty of each tradition and the shared essence that unites all seekers of truth.',
+        icon: 'HeartHandshake',
+        color: '#C8A75E',
+        orderIndex: 2,
+      },
+      {
+        title: 'Share Sufi Wisdom',
+        description: 'Share the timeless wisdom of Sufism, the path of divine love that embraces all of humanity. Sufi teachings remind us that all rivers of faith flow toward the same infinite ocean of Divine Truth.',
+        icon: 'Flame',
+        color: '#D4A07B',
+        orderIndex: 3,
+      },
+      {
+        title: 'Build Global Peace',
+        description: 'Build bridges of understanding that span cultures, languages, and traditions worldwide. We envision a world where diversity is celebrated as a reflection of divine creativity and unity.',
+        icon: 'Globe',
+        color: '#27AE60',
+        orderIndex: 4,
+      },
+      {
+        title: 'Preserve Sacred Knowledge',
+        description: 'Preserve and share the profound wisdom that guides seekers toward truth and enlightenment. We honor the sacred texts, teachings, and practices of all traditions as pathways to the Divine.',
+        icon: 'BookOpen',
+        color: '#9B59B6',
+        orderIndex: 5,
+      },
+    ]
+    return await prisma.$transaction(
+      pillars.map(p => prisma.corePillar.create({ data: p }))
+    )
+  })
+
+  // ── Mission Content ────────────────────────────────────
+  console.log('\n--- Mission Content ---')
+
+  const missionSections = [
+    {
+      sectionKey: 'header',
+      title: 'Our Mission for Interfaith Harmony',
+      content: 'Rooted in the timeless wisdom of Sufism, we dedicate ourselves to building bridges of understanding, eliminating hatred, and revealing the divine unity that connects all hearts.',
+    },
+    {
+      sectionKey: 'sufi_path',
+      title: 'The Sufi Path to Interfaith Harmony',
+      content: `Sufism teaches that the Divine is infinite and cannot be contained by any single form or expression. Just as the sun's light illuminates countless windows, each with its own unique color and character, the Divine Light manifests through diverse spiritual traditions, each offering a unique window into the infinite.
+
+At the heart of Sufism is the principle of Divine Love - a love that sees beyond superficial differences to recognize the sacred essence in every being. This love does not tolerate hatred, because when one truly sees with the eye of the heart, one recognizes that harming another is harming oneself.
+
+We carry forward this Sufi wisdom as a torch to light the path toward interfaith understanding. By purifying our hearts of prejudice, seeking knowledge over ignorance, and choosing compassion over judgment, we become living bridges between communities that might otherwise remain divided.
+
+Our mission is not to erase the beautiful diversity of spiritual traditions, but to reveal the unity that already exists beneath the surface - the unity of hearts seeking truth, peace, and divine connection.`,
+    },
+  ]
+
+  for (const section of missionSections) {
+    await prisma.missionContent.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ missionContent: ${missionSections.length} sections`)
+
+  // ── Wisdom to Action ───────────────────────────────────
+  console.log('\n--- Wisdom to Action ---')
+
+  await seedTable('wisdomToAction', async () => {
+    const items = [
+      {
+        title: 'The Path from Wisdom to Action',
+        content: 'Sufi wisdom teaches that spiritual knowledge must be lived, not merely contemplated. True understanding of divine love manifests in service, compassion, and active peacemaking. Our initiatives embody this principle, translating ancient wisdom into modern action.\n\nEach initiative is designed to address a specific barrier to interfaith harmony - whether it\'s lack of personal connection, educational gaps, or absence of collaborative spaces. By creating opportunities for genuine encounter and shared purpose, we help people move beyond abstract tolerance to authentic friendship.\n\nThe impact extends far beyond statistics. When a Christian and a Muslim build a community garden together, when a Hindu and a Jew share their family\'s migration stories, when a Buddhist and a Sufi meditate side by side - these moments transform hearts and ripple outward to transform communities.\n\nPeace is not merely the absence of conflict - it is the active presence of understanding, compassion, and recognition of our shared humanity.',
+      },
+    ]
+    return await prisma.$transaction(
+      items.map(item => prisma.wisdomToAction.create({ data: item }))
+    )
+  })
+
+  // ── Impact Goals ───────────────────────────────────────
+  console.log('\n--- Impact Goals ---')
+
+  await seedTable('impactGoal', async () => {
+    const goals = [
+      { number: '50,000+', label: 'Active Members', orderIndex: 0 },
+      { number: '75', label: 'Countries Reached', orderIndex: 1 },
+      { number: '1,200+', label: 'Dialogue Events', orderIndex: 2 },
+      { number: '500+', label: 'Community Partners', orderIndex: 3 },
+    ]
+    return await prisma.$transaction(
+      goals.map(g => prisma.impactGoal.create({ data: g }))
+    )
+  })
+
+  // ── Featured Programs ──────────────────────────────────
+  console.log('\n--- Featured Programs ---')
+
+  await seedTable('featuredProgram', async () => {
+    const programs = [
+      {
+        title: 'Sacred Text Exploration',
+        description: 'Deep-dive workshops exploring sacred texts from multiple traditions side by side, revealing common themes and unique perspectives that enrich our understanding of the Divine.',
+        details: { features: ['Comparative scripture study', 'Expert scholar facilitation', 'Small group discussion', 'Personal reflection exercises'], duration: '8 weeks', format: 'Online + In-person' },
+        testimonialText: 'This program transformed how I read scripture. I now see the divine thread woven through all holy books.',
+        testimonialAuthor: 'Sarah M., Participant',
+        orderIndex: 0,
+      },
+      {
+        title: 'Interfaith Youth Leadership',
+        description: 'Empowering the next generation of interfaith leaders through mentorship, training, and hands-on peacebuilding projects in their communities.',
+        details: { features: ['Leadership training retreats', 'Peace project incubation', 'Global youth network', 'Mentorship pairing'], duration: '12 months', format: 'Hybrid' },
+        testimonialText: 'I went from being afraid of other religions to leading interfaith dialogues in my university. This program changed my life.',
+        testimonialAuthor: 'Ahmed K., Youth Fellow',
+        orderIndex: 1,
+      },
+      {
+        title: 'Community Peace Circles',
+        description: 'Local facilitated gatherings where people of different faiths share meals, stories, and meaningful dialogue, building trust one conversation at a time.',
+        details: { features: ['Monthly gatherings', 'Shared meals', 'Storytelling circles', 'Collaborative service projects'], duration: 'Ongoing', format: 'In-person local' },
+        testimonialText: 'Our peace circle started with 5 people. Now we have 50 regular attendees from 8 different faith traditions.',
+        testimonialAuthor: 'Priya R., Circle Facilitator',
+        orderIndex: 2,
+      },
+    ]
+    return await prisma.$transaction(
+      programs.map(p => prisma.featuredProgram.create({ data: p }))
+    )
+  })
+
+  // ── Regional Initiatives ───────────────────────────────
+  console.log('\n--- Regional Initiatives ---')
+
+  await seedTable('regionalInitiative', async () => {
+    const regions = [
+      {
+        region: 'South Asia',
+        initiatives: [
+          { name: 'India-Pakistan People-to-People Dialogues', description: 'Cross-border peacebuilding through shared cultural heritage and family connections.', status: 'active' },
+          { name: 'Sufi Shrine Restoration Project', description: 'Restoring historic Sufi shrines as symbols of shared spiritual heritage.', status: 'active' },
+          { name: 'Interfaith Youth Camps', description: 'Week-long camps bringing together youth from Hindu, Muslim, Sikh, Christian, and Buddhist backgrounds.', status: 'active' },
+        ],
+        orderIndex: 0,
+      },
+      {
+        region: 'Middle East & North Africa',
+        initiatives: [
+          { name: 'Abrahamic Family Reunion', description: 'Jewish, Christian, and Muslim leaders collaborating on community peace initiatives.', status: 'active' },
+          { name: 'Sacred Geography Tours', description: 'Educational pilgrimages visiting holy sites of all three Abrahamic faiths.', status: 'pending' },
+        ],
+        orderIndex: 1,
+      },
+      {
+        region: 'Europe',
+        initiatives: [
+          { name: 'Refugee Welcome Networks', description: 'Faith communities sponsoring and supporting refugee families.', status: 'active' },
+          { name: 'Mosque-Synagogue-Church Partnerships', description: 'Tri-faith partnerships for community service and dialogue.', status: 'active' },
+        ],
+        orderIndex: 2,
+      },
+      {
+        region: 'North America',
+        initiatives: [
+          { name: 'Interfaith Campus Network', description: 'University-based interfaith groups collaborating on shared projects.', status: 'active' },
+          { name: 'Indigenous-Faith Solidarity', description: 'Building bridges between Indigenous spiritual traditions and organized religions.', status: 'active' },
+        ],
+        orderIndex: 3,
+      },
+    ]
+    return await prisma.$transaction(
+      regions.map(r => prisma.regionalInitiative.create({ data: r }))
+    )
+  })
+
+  // ── Get Involved ───────────────────────────────────────
+  console.log('\n--- Get Involved ---')
+
+  await seedTable('getInvolved', async () => {
+    const items = [
+      {
+        title: 'Join Our Community',
+        description: 'Become a member of our global interfaith network. Connect with like-minded individuals, participate in events, and contribute to peacebuilding efforts in your region.',
+        orderIndex: 0,
+      },
+      {
+        title: 'Volunteer Your Time',
+        description: 'Share your skills and passion by volunteering with our programs. From event coordination to content creation, there are many ways to make a difference.',
+        orderIndex: 1,
+      },
+      {
+        title: 'Start a Local Circle',
+        description: 'Launch an interfaith peace circle in your community. We provide training, resources, and ongoing support to help you build bridges locally.',
+        orderIndex: 2,
+      },
+    ]
+    return await prisma.$transaction(
+      items.map((item, i) => prisma.getInvolved.create({ data: { ...item, orderIndex: i } }))
+    )
+  })
+
+  // ── Peace Initiatives ────────────────────────────────────
+  console.log('\n--- Peace Initiatives ---')
+
+  await seedTable('peaceInitiative', async () => {
+    const initiatives = [
+      {
+        title: 'Sacred Text Dialogue Circles',
+        description: 'Small facilitated groups that read and discuss sacred texts from different traditions side by side, discovering common themes and shared wisdom.',
+        impact: 'Participants report 70% increase in understanding of other faiths and lasting cross-faith friendships.',
+        status: 'active',
+      },
+      {
+        title: 'Youth Peace Ambassador Program',
+        description: 'Training young leaders from diverse faith backgrounds to facilitate interfaith dialogue and lead peace projects in their communities.',
+        impact: '500+ youth trained across 15 countries, with alumni launching 40+ community peace initiatives.',
+        status: 'active',
+      },
+      {
+        title: 'Community Service Alliance',
+        description: 'Faith communities partnering on local service projects — food drives, shelter support, environmental cleanup — building trust through shared action.',
+        impact: '200+ interfaith service events completed, serving 50,000+ community members.',
+        status: 'active',
+      },
+      {
+        title: 'Interfaith Family Reunions',
+        description: 'Multi-day gatherings where families from different faiths share meals, stories, traditions, and build deep personal connections across religious lines.',
+        impact: '80% of participants maintain connections with new friends from other faiths after 6 months.',
+        status: 'active',
+      },
+      {
+        title: 'Sacred Site Exchange Program',
+        description: 'Guided visits to mosques, churches, temples, synagogues, and gurdwaras with hosted conversations led by community members of each tradition.',
+        impact: '10,000+ participants have visited sacred sites of other faiths for the first time.',
+        status: 'active',
+      },
+      {
+        title: 'Global Peace Summit',
+        description: 'Annual virtual and in-person gathering of interfaith leaders, activists, and scholars to share best practices and coordinate global peace efforts.',
+        impact: 'Last summit drew 3,000+ attendees from 60 countries.',
+        status: 'planned',
+      },
+    ]
+    return await prisma.$transaction(
+      initiatives.map(p => prisma.peaceInitiative.create({ data: p }))
+    )
+  })
+
+  // ── Current Initiatives (from current-initiatives.json) ──
+  console.log('\n--- Current Initiatives ---')
+
+  await seedTable('currentInitiative', async () => {
+    const items = [
+      { category: 'Interfaith Dialogue', title: 'Global Dialogue Series', description: 'Monthly virtual gatherings bringing together faith leaders, scholars, and practitioners from around the world to discuss pressing global issues through an interfaith lens.', stats: '12,000+ participants across 65 countries', event: 'May 15, 2026 - Climate Justice & Sacred Stewardship', iconColor: 'gold', orderIndex: 0 },
+      { category: 'Grassroots Peacebuilding', title: 'Community Peace Circles', description: 'Facilitated small-group dialogues in local communities where neighbors of different faiths share stories, build relationships, and collaborate on community projects.', stats: '450+ active circles in 28 countries', event: 'Weekly circles ongoing - Find one near you', iconColor: 'green', orderIndex: 1 },
+      { category: 'Youth Empowerment', title: 'Interfaith Youth Leadership Program', description: 'Year-long intensive training for young adults (18-30) to become interfaith leaders in their communities, combining theological education, leadership skills, and hands-on peacebuilding.', stats: '200+ graduates serving in 40 countries', event: 'Applications open June 2026 for 2027 cohort', iconColor: 'purple', orderIndex: 2 },
+      { category: 'Community Service', title: 'Sacred Service Days', description: 'Quarterly interfaith volunteer events where people of all faiths work together on community projects - from feeding the hungry to environmental restoration.', stats: '25,000+ volunteers, 150+ projects completed', event: 'June 21, 2026 - Summer Solstice Service Day', iconColor: 'orange', orderIndex: 3 },
+    ]
+    return await prisma.$transaction(
+      items.map(item => prisma.currentInitiative.create({ data: item }))
+    )
+  })
+
+  // ── Shareable Quotes ───────────────────────────────────
+  console.log('\n--- Shareable Quotes ---')
+
+  await seedTable('shareableQuote', async () => {
+    const quotes = [
+      { quoteText: 'Peace is not merely the absence of conflict; it is the active presence of understanding, compassion, and recognition of our shared humanity.', backgroundStyle: 'gradient-1', shareCount: 0, status: 'published' },
+      { quoteText: 'The lamps are different, but the Light is the same. — Rumi', backgroundStyle: 'gradient-2', shareCount: 0, status: 'published' },
+      { quoteText: 'In the garden of humanity, every flower is a different color. It is the variety that makes the garden beautiful.', backgroundStyle: 'gradient-3', shareCount: 0, status: 'published' },
+      { quoteText: 'Love is the bridge between you and everything. — Rumi', backgroundStyle: 'gradient-4', shareCount: 0, status: 'published' },
+      { quoteText: 'When we approach other traditions with curiosity rather than judgment, we discover profound beauty and wisdom that unites rather than divides.', backgroundStyle: 'gradient-5', shareCount: 0, status: 'published' },
+      { quoteText: 'The journey toward peace begins within our own hearts. When we cultivate love and compassion internally, we naturally extend these qualities to others.', backgroundStyle: 'gradient-6', shareCount: 0, status: 'published' },
+    ]
+    return await prisma.$transaction(
+      quotes.map(q => prisma.shareableQuote.create({ data: q }))
+    )
+  })
+
+  // ── Assessment Questions ───────────────────────────────
+  console.log('\n--- Assessment Questions ---')
+
+  await seedTable('assessmentQuestion', async () => {
+    const questions = [
+      { questionText: 'I believe that all religious traditions contain valid paths to spiritual truth.', category: 'tolerance', orderIndex: 0 },
+      { questionText: 'I feel comfortable attending religious ceremonies of traditions other than my own.', category: 'peace', orderIndex: 1 },
+      { questionText: 'When I hear about conflict in the name of religion, I feel motivated to promote understanding.', category: 'compassion', orderIndex: 2 },
+      { questionText: 'I actively seek opportunities to learn about faiths different from my own.', category: 'understanding', orderIndex: 3 },
+      { questionText: 'I believe that interfaith dialogue can lead to meaningful solutions for global problems.', category: 'peace', orderIndex: 4 },
+      { questionText: 'It is possible to respect someone else\'s faith while holding my own beliefs confidently.', category: 'tolerance', orderIndex: 5 },
+      { questionText: 'I feel sadness when I see people being judged or excluded because of their religion.', category: 'compassion', orderIndex: 6 },
+      { questionText: 'I can name at least three core teachings from a religious tradition other than my own.', category: 'understanding', orderIndex: 7 },
+      { questionText: 'I believe that people of different faiths can live together peacefully in the same community.', category: 'peace', orderIndex: 8 },
+      { questionText: 'I would encourage a friend to explore their own spiritual path, even if different from mine.', category: 'tolerance', orderIndex: 9 },
+      { questionText: 'I feel a sense of connection with people of other faiths who are working for peace and justice.', category: 'compassion', orderIndex: 10 },
+      { questionText: 'I understand the basic beliefs and practices of at least two other religious traditions.', category: 'understanding', orderIndex: 11 },
+      { questionText: 'I sometimes feel that people from other religions do not share the same moral values as I do.', category: 'hatred', orderIndex: 12 },
+      { questionText: 'When I hear a different faith\'s perspective, I try to understand it before judging it.', category: 'tolerance', orderIndex: 13 },
+      { questionText: 'I believe that shared spiritual practices (meditation, prayer, service) can unite people across faiths.', category: 'compassion', orderIndex: 14 },
+      { questionText: 'I have read sacred texts or teachings from at least one tradition other than my own.', category: 'understanding', orderIndex: 15 },
+      { questionText: 'I believe that peace between religions is achievable in my lifetime.', category: 'peace', orderIndex: 16 },
+      { questionText: 'I am open to having my own beliefs challenged or expanded through interfaith encounter.', category: 'tolerance', orderIndex: 17 },
+      { questionText: 'I feel inspired when I see people from different faiths working together for common good.', category: 'compassion', orderIndex: 18 },
+      { questionText: 'I can explain at least one way that different religions approach the concept of divine love.', category: 'understanding', orderIndex: 19 },
+    ]
+    return await prisma.$transaction(
+      questions.map(q => prisma.assessmentQuestion.create({ data: q }))
+    )
+  })
+
+  // ── About Content ──────────────────────────────────────
+  console.log('\n--- About Content ---')
+
+  const aboutSections = [
+    {
+      sectionKey: 'story',
+      title: 'Our Story',
+      content: `Founded in 2025, Interfaith Peace Bridge emerged from a simple yet profound vision: to create a world where religious differences become opportunities for dialogue rather than division.
+
+Inspired by the universal teachings of Sufi masters who saw all religions as paths to the same divine truth, we began as a small group of seekers from diverse faith backgrounds meeting in community centers and homes.
+
+Today, we've grown into a global network of over 50,000 members across 40 countries, united in our commitment to peace, understanding, and the recognition of our shared humanity.`,
+      orderIndex: 0,
+    },
+    {
+      sectionKey: 'vision',
+      title: 'Our Vision',
+      content: 'A world where every human being recognizes the divine spark in every other, transcending the boundaries of religion, culture, and nationality to embrace our fundamental interconnectedness.',
+      orderIndex: 1,
+    },
+    {
+      sectionKey: 'values',
+      title: 'Our Core Values',
+      content: 'Universal Love - We believe that love is the essence of all spiritual traditions and the foundation for lasting peace.\n\nInclusivity - Every faith, every tradition, every seeker is welcomed and honored in our community.\n\nSacred Wisdom - We draw from the deep wells of Sufi teachings while honoring the truth in all spiritual paths.\n\nCommunity - Together we are stronger. We build meaningful connections that transcend superficial differences.\n\nTransformation - We commit to inner growth and outer action, becoming agents of positive change in our world.\n\nAuthenticity - We practice what we teach, grounding our mission in genuine spiritual experience and integrity.',
+      orderIndex: 2,
+    },
+  ]
+
+  for (const section of aboutSections) {
+    await prisma.aboutContent.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ aboutContent: ${aboutSections.length} sections`)
+
+  // ── About Values ──────────────────────────────────────
+  console.log('\n--- About Values ---')
+
+  const aboutValues = [
+    { title: 'Universal Love', description: 'We believe that love is the essence of all spiritual traditions and the foundation for lasting peace.', icon: 'Heart', color: '#E07070', orderIndex: 0 },
+    { title: 'Inclusivity', description: 'Every faith, every tradition, every seeker is welcomed and honored in our community.', icon: 'Globe', color: '#C8A75E', orderIndex: 1 },
+    { title: 'Sacred Wisdom', description: 'We draw from the deep wells of Sufi teachings while honoring the truth in all spiritual paths.', icon: 'BookHeart', color: '#D4A07B', orderIndex: 2 },
+    { title: 'Community', description: 'Together we are stronger. We build meaningful connections that transcend superficial differences.', icon: 'Users', color: '#27AE60', orderIndex: 3 },
+    { title: 'Transformation', description: 'We commit to inner growth and outer action, becoming agents of positive change in our world.', icon: 'Sparkles', color: '#9B59B6', orderIndex: 4 },
+    { title: 'Authenticity', description: 'We practice what we teach, grounding our mission in genuine spiritual experience and integrity.', icon: 'Target', color: '#14B8A6', orderIndex: 5 },
+  ]
+
+  await seedTable('aboutValue', async () => {
+    await prisma.aboutValue.createMany({ data: aboutValues })
+    return aboutValues
+  })
+
+  // ── About Leaders ─────────────────────────────────────
+  console.log('\n--- About Leaders ---')
+
+  const aboutLeaders = [
+    { name: 'Dr. Amina Hassan', role: 'Founder & Spiritual Director', description: 'Sufi scholar and interfaith dialogue facilitator with 25 years of experience bridging religious communities.', orderIndex: 0 },
+    { name: 'Rabbi David Cohen', role: 'Director of Interfaith Programs', description: 'Dedicated to Jewish-Muslim dialogue and building coalitions for peace across Abrahamic traditions.', orderIndex: 1 },
+    { name: 'Rev. Maria Santos', role: 'Community Engagement Lead', description: 'Christian mystic and community organizer passionate about grassroots interfaith movements.', orderIndex: 2 },
+  ]
+
+  await seedTable('aboutLeader', async () => {
+    await prisma.aboutLeader.createMany({ data: aboutLeaders })
+    return aboutLeaders
+  })
+
+  // ── Teaching Sections ──────────────────────────────────
+  console.log('\n--- Teaching Sections ---')
+
+  const teachingSections = [
+    {
+      sectionKey: 'universal_message',
+      title: 'The Universal Message',
+      content: `Throughout history, enlightened teachers from every tradition have shared a common message: that love conquers hatred, compassion heals division, and unity underlies all apparent diversity.
+
+These teachings remind us that the path to peace begins within our own hearts. When we cultivate love, understanding, and compassion internally, we naturally extend these qualities to others, regardless of their faith, culture, or background.
+
+May these sacred teachings inspire your journey toward a heart filled with divine love and a life dedicated to peace.`,
+    },
+  ]
+
+  for (const section of teachingSections) {
+    await prisma.teachingSection.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ teachingSection: ${teachingSections.length} sections`)
+
+  // ── Truth Sections ─────────────────────────────────────
+  console.log('\n--- Truth Sections ---')
+
+  const truthSections = [
+    {
+      sectionKey: 'dispelling_misconceptions',
+      title: 'Why Dispelling Misconceptions Matters',
+      content: `Misconceptions are seeds of division. When we believe false narratives about other faiths, we create barriers that prevent genuine connection and understanding. These falsehoods often stem from ignorance, fear, or deliberate distortion rather than authentic knowledge.
+
+The Sufi path teaches us to seek knowledge with humility and an open heart. When we approach other traditions with curiosity rather than judgment, we discover profound beauty, wisdom, and shared values that unite rather than divide.
+
+By illuminating truth, we don't just correct errors — we create space for authentic dialogue, mutual respect, and the recognition of our common humanity. This is how we transform hatred into understanding and fear into love.
+
+"The truth will set you free" — not just as a religious ideal, but as a practical path toward peace and interfaith harmony.`,
+    },
+  ]
+
+  for (const section of truthSections) {
+    await prisma.truthSection.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ truthSection: ${truthSections.length} sections`)
+
+  // ── Tradition Sections ─────────────────────────────────
+  console.log('\n--- Tradition Sections ---')
+
+  const traditionSections = [
+    {
+      sectionKey: 'unity_in_diversity',
+      title: 'Unity in Diversity',
+      content: `The Sufi masters teach us a profound truth: the Divine is infinite and manifests in countless forms. Just as white light passing through a prism creates a rainbow of colors, the One Truth expresses itself through the beautiful diversity of world religions.
+
+This diversity is not a problem to solve but a gift to celebrate. Each tradition offers unique insights, practices, and perspectives that enrich our collective understanding of the sacred. When we honor these differences with respect and curiosity, we discover that beneath surface variations lies a deep unity.
+
+All authentic spiritual paths share core values: compassion, justice, truth, love, and service to others. They may express these values through different languages, rituals, and stories, but the essence remains the same — the call to transcend ego, serve others, and connect with the Divine.
+
+"The lamps are different, but the Light is the same." — Rumi`,
+    },
+  ]
+
+  for (const section of traditionSections) {
+    await prisma.traditionSection.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ traditionSection: ${traditionSections.length} sections`)
+
+  // ── Sufi Content ──────────────────────────────────────
+  console.log('\n--- Sufi Content ---')
+
+  const sufiSections = [
+    {
+      sectionKey: 'what_is_sufism',
+      title: 'What is Sufism?',
+      content: `Sufism, known as Tasawwuf in Arabic, is the inner, mystical dimension of Islam. It is the path of purifying the heart, transcending the ego, and experiencing direct communion with the Divine.
+
+While rooted in Islamic tradition, Sufi wisdom speaks to universal truths found in all spiritual paths: the primacy of love, the unity of all existence, and the journey from separation to union with the Beloved.
+
+Sufi masters have taught that all religions are rays of the same sun, different languages expressing the same divine truth. This makes Sufism a natural bridge for interfaith understanding and dialogue.`,
+      orderIndex: 0,
+    },
+    {
+      sectionKey: 'core_principles',
+      title: 'Core Principles',
+      content: `Ishq (Divine Love) — The path of divine love transforms the seeker from separation to union. Love is not just an emotion but the very fabric of existence and the ultimate path to the Divine.
+
+Marifah (Gnosis) — Direct experiential knowledge of God that transcends intellectual understanding. Through spiritual practice and divine grace, the heart comes to know what the mind cannot grasp.
+
+Fana (Annihilation) — The dissolution of the ego and the experience of unity with the Divine Beloved. In this state, the seeker's individual self is consumed by the ocean of divine consciousness.
+
+Baqa (Subsistence) — Eternal existence in God after the annihilation of the false self. Having died to ego, the soul lives permanently in awareness of divine unity.`,
+      orderIndex: 1,
+    },
+    {
+      sectionKey: 'sufi_path',
+      title: 'The Sufi Path',
+      content: `The journey of the soul from separation to union follows three sacred stages: Shariah establishes ethical conduct and ritual practice as the foundation. Tariqah engages spiritual practices, purifying the heart and cultivating divine attributes. Haqiqah unveils direct experience of divine reality and ultimate truth.
+
+Shariah (The Law) — The foundation: living according to divine guidance, establishing ethical conduct and ritual practice.
+
+Tariqah (The Way) — The journey: engaging in spiritual practices, purifying the heart, and cultivating divine attributes.
+
+Haqiqah (The Truth) — The realization: direct experience of divine reality and the unveiling of ultimate truth.`,
+      orderIndex: 2,
+    },
+    {
+      sectionKey: 'key_practices',
+      title: 'Key Practices',
+      content: `Dhikr (Remembrance) — The repetition of divine names and sacred phrases to maintain constant awareness of God's presence. Through rhythmic breathing and vocalization, dhikr purifies the heart and brings the seeker into the present moment.
+
+Muraqaba (Meditation) — Contemplative practice involving deep introspection, visualization, and spiritual observation. The seeker watches the movements of the heart while remaining in the presence of the Divine.
+
+Sama (Sacred Music) — Spiritual listening and devotional music that induces ecstatic states and opens the heart to divine love. The whirling dance of the Mevlevi order is perhaps the most famous example.
+
+Sohbet (Spiritual Discourse) — Heart-to-heart conversations with a spiritual teacher or fellow seekers. Through storytelling, poetry, and dialogue, wisdom is transmitted from heart to heart.`,
+      orderIndex: 3,
+    },
+    {
+      sectionKey: 'great_masters',
+      title: 'Great Sufi Masters',
+      content: `Jalal ad-Din Muhammad Rumi (1207-1273 CE) — Persian poet and mystic whose works transcend cultural and religious boundaries, inspiring millions worldwide. His timeless quote: "Let yourself be silently drawn by the strange pull of what you really love. It will not lead you astray."
+
+Muhyiddin Ibn Arabi (1165-1240 CE) — Andalusian philosopher and mystic who articulated the doctrine of the Unity of Being (Wahdat al-Wujud). His timeless quote: "My heart has become capable of every form: it is a pasture for gazelles and a convent for Christian monks."
+
+Rabia al-Adawiyya (717-801 CE) — One of the first Sufi saints and the first to articulate the principle of divine love without expectation of reward. Her timeless prayer: "O God! If I worship You for fear of Hell, burn me in Hell. If I worship You in hope of Paradise, exclude me from Paradise. But if I worship You for Your Own sake, grudge me not Your everlasting Beauty."`,
+      orderIndex: 4,
+    },
+    {
+      sectionKey: 'closing_quote',
+      title: 'Closing Quote',
+      content: `You are not a drop in the ocean. You are the entire ocean in a drop. — Rumi
+
+Begin your journey into the timeless wisdom of Sufism, where divine love illuminates the path to unity and peace.`,
+      orderIndex: 5,
+    },
+  ]
+
+  for (const section of sufiSections) {
+    await prisma.sufiContent.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ sufiContent: ${sufiSections.length} sections`)
+
+  // ── Approach Content ──────────────────────────────────
+  console.log('\n--- Approach Content ---')
+
+  const approachSections = [
+    {
+      sectionKey: 'four_pillars',
+      title: 'Four Pillars of Our Work',
+      content: `Education & Learning — We believe understanding comes before unity. Our educational programs demystify religious traditions, correct misconceptions, and highlight shared values across faiths. Features: Interfaith study circles, Sacred text exploration workshops, Online courses on world religions, Scholar-led seminars and webinars.
+
+Dialogue & Exchange — Creating safe, sacred spaces where people of different faiths can speak from the heart, listen deeply, and discover our common humanity. Features: Facilitated interfaith dialogues, Community conversation circles, Virtual global gatherings, One-on-one faith pairing programs.
+
+Service & Action — Faith without action is incomplete. We unite diverse communities through collaborative service projects that address real needs. Features: Interfaith volunteer initiatives, Community development projects, Disaster relief partnerships, Social justice advocacy.
+
+Spiritual Practice — Shared contemplative practices create heart connections that transcend intellectual understanding and theological differences. Features: Interfaith meditation gatherings, Peace prayer ceremonies, Sufi-inspired spiritual retreats, Contemplative practice workshops.`,
+      orderIndex: 0,
+    },
+    {
+      sectionKey: 'philosophy',
+      title: 'Our Philosophy',
+      content: `We don't seek to create a new religion or minimize differences. Instead, we honor the unique beauty of each tradition while recognizing that all authentic spiritual paths lead to the same Source. Unity in diversity, not uniformity.`,
+      orderIndex: 1,
+    },
+    {
+      sectionKey: 'methodology',
+      title: 'Our Methodology in Action',
+      content: `Connect — Bring people together in welcoming, inclusive spaces.
+
+Learn — Share knowledge about different faith traditions authentically.
+
+Relate — Find common ground through shared values and experiences.
+
+Serve — Work together on meaningful projects that benefit communities.
+
+Transform — Become ambassadors of peace in your own circles.`,
+      orderIndex: 2,
+    },
+    {
+      sectionKey: 'core_principles',
+      title: 'Core Principles',
+      content: `Mutual Respect — We honor each tradition's integrity, authenticity, and sacred teachings. No faith is superior or inferior; each is a valid path to the Divine.
+
+Deep Listening — We create spaces for genuine dialogue where people feel truly heard. Understanding precedes agreement, and connection transcends conversion.
+
+Heart-Centered Approach — We engage from the heart, not just the head. Spiritual connection and lived experience complement intellectual understanding.
+
+Collaborative Spirit — We work with, not for, communities. Local leaders and participants co-create programs that reflect their unique contexts and needs.
+
+Action-Oriented — Dialogue without action is incomplete. We translate understanding into concrete initiatives that create positive change.
+
+Global-Local Balance — We maintain a global vision while honoring local contexts, cultures, and specific interfaith dynamics in each community.`,
+      orderIndex: 3,
+    },
+    {
+      sectionKey: 'what_makes_us_different',
+      title: 'What Makes Us Different?',
+      content: `Rooted in Tradition, Open to All — While grounded in Sufi wisdom, we welcome people of all faiths and none. Our Sufi foundation provides spiritual depth without exclusivity.
+
+Experience Over Theory — We emphasize lived experience and personal transformation, not just academic knowledge or theological debate.
+
+Sustainable Relationships — We're not interested in one-time events. We build long-term relationships and communities that continue growing together.
+
+Grassroots Empowerment — We train local leaders to facilitate interfaith work in their own communities, creating a multiplier effect.`,
+      orderIndex: 4,
+    },
+    {
+      sectionKey: 'success_metrics',
+      title: 'Success Metrics',
+      content: `We measure our impact through: Number of lasting friendships formed across faith lines. Community projects completed collaboratively. Participants reporting reduced prejudice and increased understanding. New interfaith initiatives launched by trained leaders. Stories of personal transformation and spiritual growth.`,
+      orderIndex: 5,
+    },
+  ]
+
+  for (const section of approachSections) {
+    await prisma.approachContent.upsert({
+      where: { sectionKey: section.sectionKey },
+      update: {},
+      create: section,
+    })
+  }
+  console.log(`✅ approachContent: ${approachSections.length} sections`)
+
+  // ── Sufi Cards ────────────────────────────────────────────
+  console.log('\n--- Sufi Cards ---')
+
+  await seedTable('sufiCard', async () => {
+    const cards = [
+      // Principles
+      { sectionType: 'principle', title: 'Ishq (Divine Love)', description: 'Love is not just an emotion but the very fabric of existence and the ultimate path to the Divine.', icon: 'Heart', color: '#E07070', orderIndex: 0 },
+      { sectionType: 'principle', title: 'Marifah (Gnosis)', description: 'Direct experiential knowledge of God that transcends intellectual understanding.', icon: 'Eye', color: '#C8A75E', orderIndex: 1 },
+      { sectionType: 'principle', title: 'Fana (Annihilation)', description: 'The dissolution of the ego and the experience of unity with the Divine Beloved.', icon: 'Flame', color: '#D4A07B', orderIndex: 2 },
+      { sectionType: 'principle', title: 'Baqa (Subsistence)', description: 'Eternal existence in God after the annihilation of the false self.', icon: 'Sun', color: '#F59E0B', orderIndex: 3 },
+      // Stages
+      { sectionType: 'stage', title: 'Shariah (The Law)', description: 'The foundation: living according to divine guidance, establishing ethical conduct and ritual practice.', icon: 'Moon', color: '#C8A75E', orderIndex: 0 },
+      { sectionType: 'stage', title: 'Tariqah (The Way)', description: 'The journey: engaging in spiritual practices, purifying the heart, and cultivating divine attributes.', icon: 'Wind', color: '#9B59B6', orderIndex: 1 },
+      { sectionType: 'stage', title: 'Haqiqah (The Truth)', description: 'The realization: direct experience of divine reality and the unveiling of ultimate truth.', icon: 'Sun', color: '#D4A07B', orderIndex: 2 },
+      // Practices
+      { sectionType: 'practice', title: 'Dhikr (Remembrance)', description: 'The repetition of divine names and sacred phrases to maintain constant awareness of God\'s presence.', icon: 'Sparkles', color: '#C8A75E', orderIndex: 0 },
+      { sectionType: 'practice', title: 'Muraqaba (Meditation)', description: 'Contemplative practice involving deep introspection, visualization, and spiritual observation.', icon: 'Eye', color: '#9B59B6', orderIndex: 1 },
+      { sectionType: 'practice', title: 'Sama (Sacred Music)', description: 'Spiritual listening and devotional music that induces ecstatic states and opens the heart to divine love.', icon: 'Wind', color: '#D4A07B', orderIndex: 2 },
+      { sectionType: 'practice', title: 'Sohbet (Spiritual Discourse)', description: 'Heart-to-heart conversations with a spiritual teacher or fellow seekers.', icon: 'Heart', color: '#E07070', orderIndex: 3 },
+      // Masters
+      { sectionType: 'master', title: 'Rumi', subtitle: '1207-1273 CE', description: 'Persian poet and mystic whose works transcend cultural and religious boundaries, inspiring millions worldwide.', quote: 'Let yourself be silently drawn by the strange pull of what you really love. It will not lead you astray.', icon: 'Heart', color: '#C8A75E', orderIndex: 0 },
+      { sectionType: 'master', title: 'Ibn Arabi', subtitle: '1165-1240 CE', description: 'Andalusian philosopher and mystic who articulated the doctrine of the Unity of Being (Wahdat al-Wujud).', quote: 'My heart has become capable of every form: it is a pasture for gazelles and a convent for Christian monks.', icon: 'Eye', color: '#9B59B6', orderIndex: 1 },
+      { sectionType: 'master', title: 'Rabia al-Adawiyya', subtitle: '717-801 CE', description: 'One of the first Sufi saints and the first to articulate the principle of divine love without expectation of reward.', quote: 'O God! If I worship You for fear of Hell, burn me in Hell. If I worship You in hope of Paradise, exclude me from Paradise. But if I worship You for Your Own sake, grudge me not Your everlasting Beauty.', icon: 'Sparkles', color: '#D4A07B', orderIndex: 2 },
+    ]
+    await prisma.sufiCard.createMany({ data: cards })
+    return cards
+  })
+
+  // ── Approach Cards ─────────────────────────────────────────
+  console.log('\n--- Approach Cards ---')
+
+  await seedTable('approachCard', async () => {
+    const cards = [
+      // Pillars
+      { sectionType: 'pillar', title: 'Education & Learning', description: 'We believe understanding comes before unity. Our educational programs demystify religious traditions, correct misconceptions, and highlight shared values across faiths.', features: ['Interfaith study circles', 'Sacred text exploration workshops', 'Online courses on world religions', 'Scholar-led seminars and webinars'], icon: 'BookOpen', color: '#C8A75E', orderIndex: 0 },
+      { sectionType: 'pillar', title: 'Dialogue & Exchange', description: 'Creating safe, sacred spaces where people of different faiths can speak from the heart, listen deeply, and discover our common humanity.', features: ['Facilitated interfaith dialogues', 'Community conversation circles', 'Virtual global gatherings', 'One-on-one faith pairing programs'], icon: 'MessageCircle', color: '#9B59B6', orderIndex: 1 },
+      { sectionType: 'pillar', title: 'Service & Action', description: 'Faith without action is incomplete. We unite diverse communities through collaborative service projects that address real needs.', features: ['Interfaith volunteer initiatives', 'Community development projects', 'Disaster relief partnerships', 'Social justice advocacy'], icon: 'HandHeart', color: '#E07070', orderIndex: 2 },
+      { sectionType: 'pillar', title: 'Spiritual Practice', description: 'Shared contemplative practices create heart connections that transcend intellectual understanding and theological differences.', features: ['Interfaith meditation gatherings', 'Peace prayer ceremonies', 'Sufi-inspired spiritual retreats', 'Contemplative practice workshops'], icon: 'Heart', color: '#D4A07B', orderIndex: 3 },
+      // Steps
+      { sectionType: 'step', title: 'Connect', description: 'Bring people together in welcoming, inclusive spaces', color: '#C8A75E', orderIndex: 0 },
+      { sectionType: 'step', title: 'Learn', description: 'Share knowledge about different faith traditions authentically', color: '#9B59B6', orderIndex: 1 },
+      { sectionType: 'step', title: 'Relate', description: 'Find common ground through shared values and experiences', color: '#14B8A6', orderIndex: 2 },
+      { sectionType: 'step', title: 'Serve', description: 'Work together on meaningful projects that benefit communities', color: '#D4A07B', orderIndex: 3 },
+      { sectionType: 'step', title: 'Transform', description: 'Become ambassadors of peace in your own circles', color: '#E07070', orderIndex: 4 },
+      // Approach Principles
+      { sectionType: 'principle', title: 'Mutual Respect', description: 'We honor each tradition\'s integrity, authenticity, and sacred teachings. No faith is superior or inferior; each is a valid path to the Divine.', icon: 'Users', color: '#C8A75E', orderIndex: 0 },
+      { sectionType: 'principle', title: 'Deep Listening', description: 'We create spaces for genuine dialogue where people feel truly heard. Understanding precedes agreement, and connection transcends conversion.', icon: 'MessageCircle', color: '#D4A07B', orderIndex: 1 },
+      { sectionType: 'principle', title: 'Heart-Centered Approach', description: 'We engage from the heart, not just the head. Spiritual connection and lived experience complement intellectual understanding.', icon: 'Heart', color: '#E07070', orderIndex: 2 },
+      { sectionType: 'principle', title: 'Collaborative Spirit', description: 'We work with, not for, communities. Local leaders and participants co-create programs that reflect their unique contexts and needs.', icon: 'HandHeart', color: '#C8A75E', orderIndex: 3 },
+      { sectionType: 'principle', title: 'Action-Oriented', description: 'Dialogue without action is incomplete. We translate understanding into concrete initiatives that create positive change.', icon: 'Target', color: '#9B59B6', orderIndex: 4 },
+      { sectionType: 'principle', title: 'Global-Local Balance', description: 'We maintain a global vision while honoring local contexts, cultures, and specific interfaith dynamics in each community.', icon: 'Globe', color: '#14B8A6', orderIndex: 5 },
+      // Differentiators
+      { sectionType: 'differentiator', title: 'Rooted in Tradition, Open to All', description: 'While grounded in Sufi wisdom, we welcome people of all faiths and none. Our Sufi foundation provides spiritual depth without exclusivity.', orderIndex: 0 },
+      { sectionType: 'differentiator', title: 'Experience Over Theory', description: 'We emphasize lived experience and personal transformation, not just academic knowledge or theological debate.', orderIndex: 1 },
+      { sectionType: 'differentiator', title: 'Sustainable Relationships', description: 'We\'re not interested in one-time events. We build long-term relationships and communities that continue growing together.', orderIndex: 2 },
+      { sectionType: 'differentiator', title: 'Grassroots Empowerment', description: 'We train local leaders to facilitate interfaith work in their own communities, creating a multiplier effect.', orderIndex: 3 },
+    ]
+    await prisma.approachCard.createMany({ data: cards })
+    return cards
+  })
 
   console.log('\n🎉 Seeding completed!')
 }

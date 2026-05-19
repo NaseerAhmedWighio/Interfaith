@@ -19,7 +19,9 @@ import {
   X,
   ChevronLeft,
   Settings,
-  ClipboardCheck
+  ClipboardCheck,
+  Globe2,
+  Lightbulb
 } from 'lucide-react'
 
 interface AdminLayoutProps {
@@ -75,39 +77,81 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
       adminOnly: true
     },
     {
-      title: 'Traditions',
-      href: '/admin/traditions',
+      title: '── Page Editors ──',
+      href: '',
+      icon: LayoutDashboard,
+      isDivider: true,
+      adminOnly: true
+    },
+    {
+      title: 'Mission Page',
+      href: '/admin/pages/mission',
+      icon: BookOpen,
+      adminOnly: true
+    },
+    {
+      title: 'Teachings Page',
+      href: '/admin/pages/teachings',
+      icon: BookOpen,
+      adminOnly: true
+    },
+    {
+      title: 'Sacred Texts Page',
+      href: '/admin/pages/sacred-texts-explorer',
+      icon: FileText,
+      adminOnly: true
+    },
+    {
+      title: 'Truth Page',
+      href: '/admin/pages/truth',
+      icon: Lightbulb,
+      adminOnly: true
+    },
+    {
+      title: 'Traditions Page',
+      href: '/admin/pages/traditions',
+      icon: Globe2,
+      adminOnly: true
+    },
+    {
+      title: 'Peace Init. Page',
+      href: '/admin/pages/peace-initiatives',
+      icon: Heart,
+      adminOnly: true
+    },
+    {
+      title: 'Peace Page',
+      href: '/admin/peace',
+      icon: Heart,
+      adminOnly: true
+    },
+    {
+      title: '── Content Models ──',
+      href: '',
+      icon: Database,
+      isDivider: true
+    },
+    {
+      title: 'Core Pillars',
+      href: '/admin/core-pillars',
       icon: Database
     },
     {
-      title: 'Teachings',
-      href: '/admin/teachings',
-      icon: BookOpen
+      title: 'Similarity Themes',
+      href: '/admin/similarity-themes',
+      icon: TrendingUp,
+      adminOnly: true
     },
     {
-      title: 'Misconceptions',
-      href: '/admin/misconceptions',
-      icon: MessageSquare
+      title: 'Assessment Questions',
+      href: '/admin/assessment-questions',
+      icon: BarChart3,
+      adminOnly: true
     },
     {
-      title: 'Sacred Texts',
-      href: '/admin/sacred-texts',
-      icon: FileText
-    },
-    {
-      title: 'Peace Initiatives',
-      href: '/admin/peace-initiatives',
-      icon: Heart
-    },
-    {
-      title: 'Movement Members',
-      href: '/admin/movement-members',
-      icon: Users
-    },
-    {
-      title: 'Newsletter',
-      href: '/admin/newsletter-subscribers',
-      icon: Mail,
+      title: 'Assessment Results',
+      href: '/admin/assessment-results',
+      icon: BarChart3,
       adminOnly: true
     },
     {
@@ -117,15 +161,33 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
       adminOnly: true
     },
     {
-      title: 'Similarity Themes',
-      href: '/admin/similarity-themes',
-      icon: TrendingUp,
+      title: 'Movement Members',
+      href: '/admin/movement-members',
+      icon: Users,
       adminOnly: true
     },
     {
-      title: 'Assessment Results',
-      href: '/admin/assessment-results',
-      icon: BarChart3,
+      title: 'Newsletter Subs.',
+      href: '/admin/newsletter-subscribers',
+      icon: Mail,
+      adminOnly: true
+    },
+    {
+      title: 'Sufi Cards',
+      href: '/admin/sufi-cards',
+      icon: BookOpen,
+      adminOnly: true
+    },
+    {
+      title: 'Approach Cards',
+      href: '/admin/approach-cards',
+      icon: Lightbulb,
+      adminOnly: true
+    },
+    {
+      title: 'About Page',
+      href: '/admin/pages/about',
+      icon: FileText,
       adminOnly: true
     }
   ]
@@ -199,11 +261,20 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
             <nav className="flex-1 overflow-y-auto py-4 lg:py-6 px-3 custom-scrollbar">
               <div className="space-y-1">
                 {menuItems.filter(item => {
+                  if (item.isDivider) return sidebarOpen && (!item.adminOnly || !authLoaded || !user || user.role === 'admin')
                   if (!authLoaded || !user) return true
                   if (user.role === 'admin') return true
                   if (user.role === 'moderator') return !item.adminOnly
                   return !item.adminOnly && !item.moderatorOnly
                 }).map((item) => {
+                  if (item.isDivider) {
+                    return (
+                      <div key={item.title} className="px-3 py-2">
+                        <span className="text-[10px] font-bold text-[#aab0d6]/40 uppercase tracking-widest">{item.title.replace(/─/g, '').trim()}</span>
+                      </div>
+                    )
+                  }
+
                   const Icon = item.icon
                   const active = isActive(item.href, item.exact)
 

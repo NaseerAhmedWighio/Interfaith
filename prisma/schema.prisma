@@ -166,6 +166,7 @@ model AssessmentResult {
   overallScore       Int?      @default(0) @map("overall_score")
   resultCategory     String?   @map("result_category")
   answers            Json?
+  country            String?
   createdAt          DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
   userId             String?   @map("user_id") @db.Uuid
   user               User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -238,7 +239,6 @@ model SacredText {
   rejectionReason String?          @map("rejection_reason")
   createdAt       DateTime?        @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime?        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  comparisonTexts ComparisonText[]
   tradition       Tradition?       @relation(fields: [traditionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   shareableQuotes ShareableQuote[]
   creator         User?            @relation("SacredTextCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
@@ -250,31 +250,6 @@ model SacredText {
   @@index([status], map: "idx_sacred_texts_status")
   @@index([createdBy], map: "idx_sacred_texts_created_by")
   @@map("sacred_texts")
-}
-
-model TextComparison {
-  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  theme           String
-  title           String
-  description     String
-  createdAt       DateTime?        @default(now()) @map("created_at") @db.Timestamptz(6)
-  comparisonTexts ComparisonText[]
-
-  @@index([theme], map: "idx_text_comparisons_theme")
-  @@map("text_comparisons")
-}
-
-model ComparisonText {
-  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  comparisonId String?         @map("comparison_id") @db.Uuid
-  sacredTextId String?         @map("sacred_text_id") @db.Uuid
-  displayOrder Int?            @default(0) @map("display_order")
-  createdAt    DateTime?       @default(now()) @map("created_at") @db.Timestamptz(6)
-  comparison   TextComparison? @relation(fields: [comparisonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  sacredText   SacredText?     @relation(fields: [sacredTextId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([comparisonId], map: "idx_comparison_texts_comparison")
-  @@map("comparison_texts")
 }
 
 model ShareableQuote {
@@ -349,6 +324,10 @@ model User {
   createdTraditions           Tradition[]         @relation("TraditionCreator")
   modifiedTraditions          Tradition[]         @relation("TraditionModifier")
   approvedTraditions          Tradition[]         @relation("TraditionApprover")
+  createdCorePillars          CorePillar[]        @relation("CorePillarCreator")
+  modifiedCorePillars         CorePillar[]        @relation("CorePillarModifier")
+  createdFeaturedPrograms     FeaturedProgram[]   @relation("FeaturedProgramCreator")
+  modifiedFeaturedPrograms    FeaturedProgram[]   @relation("FeaturedProgramModifier")
 
   @@index([email], map: "idx_users_email")
   @@index([emailVerificationToken], map: "idx_users_email_verification_token")
@@ -438,4 +417,256 @@ model SiteSetting {
 
   @@index([key], map: "idx_site_settings_key")
   @@map("site_settings")
+}
+
+model CorePillar {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String
+  description     String
+  icon            String
+  color           String
+  orderIndex      Int        @default(0) @map("order_index")
+  status          String?    @default("published")
+  createdBy       String?    @map("created_by") @db.Uuid
+  lastModifiedBy  String?    @map("last_modified_by") @db.Uuid
+  createdAt       DateTime?  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime?  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  creator         User?      @relation("CorePillarCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier        User?      @relation("CorePillarModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status])
+  @@map("core_pillars")
+}
+
+model MissionContent {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("mission_content")
+}
+
+model WisdomToAction {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  content   String
+  status    String?   @default("published")
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("wisdom_to_action")
+}
+
+model ImpactGoal {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  number     String
+  label      String
+  orderIndex Int       @default(0) @map("order_index")
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("impact_goals")
+}
+
+model FeaturedProgram {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String
+  description      String
+  details          Json
+  testimonialText  String     @map("testimonial_text")
+  testimonialAuthor String    @map("testimonial_author")
+  orderIndex       Int        @default(0) @map("order_index")
+  status           String?    @default("published")
+  createdBy        String?    @map("created_by") @db.Uuid
+  lastModifiedBy   String?    @map("last_modified_by") @db.Uuid
+  createdAt        DateTime?  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime?  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  creator          User?      @relation("FeaturedProgramCreator", fields: [createdBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  modifier         User?      @relation("FeaturedProgramModifier", fields: [lastModifiedBy], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status])
+  @@map("featured_programs")
+}
+
+model RegionalInitiative {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  region      String
+  initiatives Json
+  orderIndex  Int       @default(0) @map("order_index")
+  status      String?   @default("published")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("regional_initiatives")
+}
+
+model GetInvolved {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String
+  orderIndex  Int       @default(0) @map("order_index")
+  status      String?   @default("published")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("get_involved")
+}
+
+model AboutContent {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  orderIndex Int       @default(0) @map("order_index")
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("about_content")
+}
+
+model AboutValue {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title      String
+  description String
+  icon       String?
+  color      String?
+  orderIndex Int       @default(0) @map("order_index")
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("about_values")
+}
+
+model AboutLeader {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  role        String
+  description String
+  image       String?
+  orderIndex  Int       @default(0) @map("order_index")
+  status      String?   @default("published")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("about_leaders")
+}
+
+model CurrentInitiative {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  category    String
+  title       String
+  description String
+  stats       String
+  event       String
+  iconColor   String    @map("icon_color")
+  orderIndex  Int       @default(0) @map("order_index")
+  status      String?   @default("published")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("current_initiatives")
+}
+
+model TeachingSection {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("teaching_sections")
+}
+
+model TruthSection {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("truth_sections")
+}
+
+model TraditionSection {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("tradition_sections")
+}
+
+model SufiContent {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  orderIndex Int       @default(0) @map("order_index")
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("sufi_content")
+}
+
+model ApproachContent {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionKey String    @unique @map("section_key")
+  title      String
+  content    String
+  orderIndex Int       @default(0) @map("order_index")
+  status     String?   @default("published")
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("approach_content")
+}
+
+model SufiCard {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionType String    @map("section_type")
+  title       String
+  subtitle    String?
+  description String?
+  quote       String?
+  icon        String?
+  color       String?
+  orderIndex  Int       @default(0) @map("order_index")
+  status      String?   @default("published")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([sectionType], map: "idx_sufi_cards_section_type")
+  @@map("sufi_cards")
+}
+
+model ApproachCard {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sectionType String    @map("section_type")
+  title       String
+  description String?
+  features    Json?
+  icon        String?
+  color       String?
+  orderIndex  Int       @default(0) @map("order_index")
+  status      String?   @default("published")
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([sectionType], map: "idx_approach_cards_section_type")
+  @@map("approach_cards")
 }

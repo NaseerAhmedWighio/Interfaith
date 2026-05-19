@@ -1,5 +1,63 @@
 import { compare, hash } from 'bcryptjs'
 
+const MAX_STRING_LENGTH = 255
+
+/**
+ * Strip control characters and trim input
+ */
+export function sanitizeInput(value: string): string {
+  return value
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .trim()
+    .slice(0, MAX_STRING_LENGTH)
+}
+
+/**
+ * Reject potentially malicious patterns in text fields
+ */
+const SUSPICIOUS_PATTERNS = /(?:<\s*script|on\w+\s*=|javascript\s*:|union\s+select|--\s|or\s+'1'\s*=\s*'1)/i
+
+export function containsSuspiciousPattern(value: string): boolean {
+  return SUSPICIOUS_PATTERNS.test(value)
+}
+
+/**
+ * Validate name field
+ */
+export function validateName(name: string): { isValid: boolean; error?: string } {
+  const cleaned = sanitizeInput(name)
+  if (cleaned.length < 2) return { isValid: false, error: 'Name must be at least 2 characters' }
+  if (cleaned.length > 100) return { isValid: false, error: 'Name is too long' }
+  if (containsSuspiciousPattern(cleaned)) return { isValid: false, error: 'Name contains invalid characters' }
+  return { isValid: true }
+}
+
+/**
+ * Validate login input
+ */
+export function validateLoginInput(email: string, password: string): { isValid: boolean; error?: string } {
+  if (!email || !password) return { isValid: false, error: 'Email and password are required' }
+  const sanitizedEmail = sanitizeInput(email)
+  if (sanitizedEmail.length > MAX_STRING_LENGTH) return { isValid: false, error: 'Email is too long' }
+  if (!validateEmail(sanitizedEmail)) return { isValid: false, error: 'Invalid email format' }
+  if (password.length > 128) return { isValid: false, error: 'Password is too long' }
+  return { isValid: true }
+}
+
+/**
+ * Validate registration input
+ */
+export function validateRegistrationInput(email: string, password: string, fullName: string): { isValid: boolean; error?: string } {
+  if (!email || !password || !fullName) return { isValid: false, error: 'All fields are required' }
+  const nameValidation = validateName(fullName)
+  if (!nameValidation.isValid) return nameValidation
+  const sanitizedEmail = sanitizeInput(email)
+  if (!validateEmail(sanitizedEmail)) return { isValid: false, error: 'Invalid email format' }
+  const passwordValidation = validatePassword(password)
+  if (!passwordValidation.isValid) return { isValid: false, error: passwordValidation.errors[0] }
+  return { isValid: true }
+}
+
 /**
  * Password hashing and verification utilities
  */

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { getCurrentUser } from '@/lib/session'
 
 export async function POST(request: NextRequest) {
   try {
+    const currentUser = await getCurrentUser()
     const body = await request.json()
     const {
       sessionId,
@@ -12,7 +14,8 @@ export async function POST(request: NextRequest) {
       compassionScore,
       understandingScore,
       overallScore,
-      resultCategory
+      resultCategory,
+      country
     } = body
 
     const result = await prisma.assessmentResult.create({
@@ -24,7 +27,9 @@ export async function POST(request: NextRequest) {
         compassionScore,
         understandingScore,
         overallScore,
-        resultCategory
+        resultCategory,
+        country: country || null,
+        userId: currentUser?.id || null
       }
     })
 

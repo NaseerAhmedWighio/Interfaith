@@ -1,0 +1,122 @@
+import { NextRequest, NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
+import { requireAuth, getCurrentUser } from '@/lib/session'
+import { checkPermission } from '@/lib/permissions'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const currentUser = await getCurrentUser()
+
+    const content = await prisma.traditionSection.findUnique({
+      where: { id },
+    })
+
+    if (!content) {
+      return NextResponse.json(
+        { error: 'Tradition section not found' },
+        { status: 404 }
+      )
+    }
+
+    if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'moderator')) {
+      if (content.status !== 'published') {
+        return NextResponse.json(
+          { error: 'Tradition section not found' },
+          { status: 404 }
+        )
+      }
+    }
+
+    return NextResponse.json(content)
+  } catch (error) {
+    console.error('Error fetching tradition section:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch tradition section' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const user = await requireAuth()
+    const { id } = await params
+
+    const hasPermission = await checkPermission(user.id, 'tradition_sections', 'update')
+    if (!hasPermission) {
+      return NextResponse.json(
+        { error: 'You do not have permission to update tradition sections' },
+        { status: 403 }
+      )
+    }
+
+    const body = await request.json()
+    const { sectionKey, title, content } = body
+
+    const traditionSection = await prisma.traditionSection.update({
+      where: { id },
+      data: { sectionKey, title, content },
+    })
+
+    return NextResponse.json(traditionSection)
+  } catch (error) {
+    console.error('Error updating tradition section:', error)
+
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    return NextResponse.json(
+      { error: 'Failed to update tradition section' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const user = await requireAuth()
+    const { id } = await params
+
+    const hasPermission = await checkPermission(user.id, 'tradition_sections', 'delete')
+    if (!hasPermission) {
+      return NextResponse.json(
+        { error: 'You do not have permission to delete tradition sections' },
+        { status: 403 }
+      )
+    }
+
+    await prisma.traditionSection.delete({
+      where: { id }
+    })
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Error deleting tradition section:', error)
+
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    return NextResponse.json(
+      { error: 'Failed to delete tradition section' },
+      { status: 500 }
+    )
+  }
+}

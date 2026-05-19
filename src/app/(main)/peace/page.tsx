@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Sparkles, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { getPeaceInitiatives } from '@/actions/database'
+import Pagination from '@/components/Pagination'
 
 interface PeaceInitiative {
   id: string
@@ -14,64 +15,120 @@ interface PeaceInitiative {
   createdAt?: Date | null
 }
 
+interface WisdomToActionItem {
+  id: string
+  title: string
+  content: string
+}
+
 export default function Peace() {
   const [peaceInitiatives, setPeaceInitiatives] = useState<PeaceInitiative[]>([])
+  const [loaded, setLoaded] = useState(false)
+  const [fetchError, setFetchError] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [wisdomData, setWisdomData] = useState<WisdomToActionItem | null>(null)
+  const ITEMS_PER_PAGE = 4
 
   useEffect(() => {
     fetchInitiatives()
+    fetchWisdomToAction()
   }, [])
 
   async function fetchInitiatives() {
-    const result = await getPeaceInitiatives()
-    if (result.data) setPeaceInitiatives(result.data)
+    setFetchError(null)
+    try {
+      const result = await getPeaceInitiatives()
+      if (result.data) {
+        setPeaceInitiatives(result.data)
+      }
+      if (result.error) {
+        setFetchError(result.error)
+      }
+    } catch (err) {
+      setFetchError('Failed to load peace initiatives')
+    } finally {
+      setLoaded(true)
+    }
   }
+
+  async function fetchWisdomToAction() {
+    try {
+      const res = await fetch('/api/wisdom-to-action')
+      if (res.ok) {
+        const data: WisdomToActionItem[] = await res.json()
+        if (data.length > 0) setWisdomData(data[0])
+      }
+    } catch (err) {
+      console.error('Failed to load wisdom to action:', err)
+    }
+  }
+
+  const totalPages = Math.ceil(peaceInitiatives.length / ITEMS_PER_PAGE)
+  const paginatedInitiatives = peaceInitiatives.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
 
   return (
     <div>
-      <section className="section-premium pt-28 md:pt-36  pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
+      <section className="section-premium pt-28 md:pt-36 pb-20 px-6">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-xl mb-4 sm:mb-6">
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" />
-            <span className="text-xs sm:text-sm font-semibold text-[#E07070]">
-              Building Peace Together
-            </span>
+          <div className="inline-flex items-center space-x-2 glass-effect px-6 py-3 rounded-xl mb-6">
+            <Heart className="w-5 h-5 text-rose-400" />
+            <span className="text-sm font-semibold text-[#E07070]">Building Peace Together</span>
           </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
-            Active Peace
-            <span className="block text-[#C8A75E] mt-2">Initiatives</span>
+          <h1 className="text-5xl md:text-7xl heading-premium text-[#f5f3ee] mb-6 leading-tight">
+            Our <span className="text-[#C8A75E]">Peace</span> Work
           </h1>
-
-          <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed max-w-3xl mx-auto px-4">
-            From contemplation to action: building a world of compassion, understanding,
-            and genuine interfaith harmony.
+          <p className="text-xl text-premium leading-relaxed max-w-3xl mx-auto">
+            From local dialogue circles to global collaborations, discover the initiatives that are
+            building bridges of understanding across communities and traditions.
           </p>
         </div>
       </section>
 
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
-              Our Peace Work in Action
-            </h2>
-            <div className="divider-premium max-w-xs mx-auto mb-3 sm:mb-4"></div>
-            <p className="text-sm sm:text-base md:text-lg text-premium max-w-3xl mx-auto px-4">
-              These initiatives transform spiritual wisdom into concrete actions that heal divisions
-              and build lasting bridges between communities.
-            </p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl heading-premium text-[#f5f3ee] mb-4">Active Initiatives</h2>
+            <div className="divider-premium max-w-xs mx-auto"></div>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-stretch">
-            {peaceInitiatives.map((initiative) => (
-              <InitiativeCard key={initiative.id} initiative={initiative} />
-            ))}
-          </div>
-
-          {peaceInitiatives.length === 0 && (
-            <div className="text-center py-8 sm:py-10 md:py-12">
-              <p className="text-sm sm:text-base text-[#aab0d6]/70">Loading peace initiatives...</p>
+          {fetchError && (
+            <div className="text-center mb-8 p-4 bg-red-500/10 rounded-xl border border-red-500/20">
+              <p className="text-red-400 text-sm">{fetchError}</p>
             </div>
+          )}
+
+          {!loaded ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="relative w-16 h-16">
+                <div className="absolute inset-0 border-4 border-[#c8a75e]/20 rounded-full"></div>
+                <div className="absolute inset-0 border-4 border-transparent border-t-[#c8a75e] rounded-full animate-spin"></div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                {paginatedInitiatives.length > 0 ? (
+                  paginatedInitiatives.map((initiative) => (
+                    <InitiativeCard key={initiative.id} initiative={initiative} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-20">
+                    <Heart className="w-16 h-16 mx-auto mb-6 text-[#c8a75e]/40" />
+                    <p className="text-xl text-premium">No initiatives found</p>
+                    <p className="text-premium-light mt-2">Check back soon for upcoming peace initiatives.</p>
+                  </div>
+                )}
+              </div>
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </>
           )}
         </div>
       </section>
@@ -80,32 +137,47 @@ export default function Peace() {
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
             <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
-              The Path from Wisdom to Action
+              {wisdomData?.title || 'The Path from Wisdom to Action'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
-              <p>
-                Sufi wisdom teaches that spiritual knowledge must be lived, not merely contemplated.
-                True understanding of divine love manifests in service, compassion, and active peacemaking.
-                Our initiatives embody this principle, translating ancient wisdom into modern action.
-              </p>
-              <p>
-                Each initiative is designed to address a specific barrier to interfaith harmony - whether
-                it's lack of personal connection, educational gaps, or absence of collaborative spaces.
-                By creating opportunities for genuine encounter and shared purpose, we help people move
-                beyond abstract tolerance to authentic friendship.
-              </p>
-              <p>
-                The impact extends far beyond statistics. When a Christian and a Muslim build a community
-                garden together, when a Hindu and a Jew share their family's migration stories, when a
-                Buddhist and a Sufi meditate side by side - these moments transform hearts and ripple
-                outward to transform communities.
-              </p>
-              <div className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
-                <p className="font-semibold text-sm sm:text-base text-[#f5f3ee] text-center">
-                  Peace is not merely the absence of conflict - it is the active presence of understanding,
-                  compassion, and recognition of our shared humanity.
-                </p>
-              </div>
+              {wisdomData ? (
+                wisdomData.content.split('\n\n').filter(Boolean).map((p, i, arr) => {
+                  if (i === arr.length - 1) {
+                    return (
+                      <div key={i} className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
+                        <p className="font-semibold text-sm sm:text-base text-[#f5f3ee] text-center">{p}</p>
+                      </div>
+                    )
+                  }
+                  return <p key={i}>{p}</p>
+                })
+              ) : (
+                <>
+                  <p>
+                    Sufi wisdom teaches that spiritual knowledge must be lived, not merely contemplated.
+                    True understanding of divine love manifests in service, compassion, and active peacemaking.
+                    Our initiatives embody this principle, translating ancient wisdom into modern action.
+                  </p>
+                  <p>
+                    Each initiative is designed to address a specific barrier to interfaith harmony - whether
+                    it&apos;s lack of personal connection, educational gaps, or absence of collaborative spaces.
+                    By creating opportunities for genuine encounter and shared purpose, we help people move
+                    beyond abstract tolerance to authentic friendship.
+                  </p>
+                  <p>
+                    The impact extends far beyond statistics. When a Christian and a Muslim build a community
+                    garden together, when a Hindu and a Jew share their family&apos;s migration stories, when a
+                    Buddhist and a Sufi meditate side by side - these moments transform hearts and ripple
+                    outward to transform communities.
+                  </p>
+                  <div className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
+                    <p className="font-semibold text-sm sm:text-base text-[#f5f3ee] text-center">
+                      Peace is not merely the absence of conflict - it is the active presence of understanding,
+                      compassion, and recognition of our shared humanity.
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -145,17 +217,14 @@ function InitiativeCard({ initiative }: { initiative: PeaceInitiative }) {
   return (
     <div className="event-card p-6 sm:p-8 md:p-10 group flex flex-col h-full">
 
-      {/* TOP SECTION */}
       <div className="flex flex-col sm:flex-row items-start justify-between mb-4 sm:mb-5 md:mb-6 gap-3">
 
-        {/* ✅ FIXED TITLE HEIGHT */}
         <h3 className="text-2xl md:text-3xl heading-premium text-[#f5f3ee] 
         group-hover:text-[#c8a75e] transition-colors 
         min-h-[3.5rem] flex items-start flex-1">
           {initiative.title}
         </h3>
 
-        {/* STATUS */}
         <span
           className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold shadow-lg 
           ${initiative.status ? statusColors[initiative.status] || 'bg-gray-500 text-[#f5f3ee]' : 'bg-gray-500 text-[#f5f3ee]'} 
@@ -165,13 +234,11 @@ function InitiativeCard({ initiative }: { initiative: PeaceInitiative }) {
         </span>
       </div>
 
-      {/* ✅ FIXED DESCRIPTION */}
       <p className="text-premium mb-4 sm:mb-5 md:mb-6 leading-relaxed text-base sm:text-lg 
       min-h-[5rem] line-clamp-3">
         {initiative.description}
       </p>
 
-      {/* ✅ PUSH IMPACT SECTION DOWN */}
       <div className="mt-auto">
         <div className="glass-effect p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100">
 
@@ -187,7 +254,6 @@ function InitiativeCard({ initiative }: { initiative: PeaceInitiative }) {
               </h4>
             </div>
 
-            {/* ✅ FIXED IMPACT HEIGHT */}
             <p className="text-premium leading-relaxed text-sm sm:text-base min-h-[4rem] line-clamp-3">
               {initiative.impact}
             </p>

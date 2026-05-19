@@ -15,6 +15,19 @@ export type Resource =
   | 'assessment_results'
   | 'users'
   | 'role_requests'
+  | 'core_pillars'
+  | 'mission_content'
+  | 'wisdom_to_action'
+  | 'impact_goals'
+  | 'featured_programs'
+  | 'regional_initiatives'
+  | 'get_involved'
+  | 'about_content'
+  | 'teaching_sections'
+  | 'truth_sections'
+  | 'tradition_sections'
+  | 'sufi_content'
+  | 'approach_content'
 
 /**
  * Check if a user has permission to perform an action on a resource
@@ -52,6 +65,18 @@ export async function checkPermission(
         'movement_members',
         'newsletter_subscribers',
         'assessment_results',
+        'core_pillars',
+        'mission_content',
+        'wisdom_to_action',
+        'impact_goals',
+        'featured_programs',
+        'regional_initiatives',
+        'get_involved',
+        'teaching_sections',
+        'truth_sections',
+        'tradition_sections',
+        'sufi_content',
+        'approach_content',
       ]
       return contentResources.includes(resource)
     }
@@ -203,6 +228,18 @@ export function getDefaultPermissions(role: Role): {
         { resource: 'peace_initiatives', actions: ['read', 'create', 'update'] },
         { resource: 'similarity_themes', actions: ['read', 'create', 'update'] },
         { resource: 'shareable_quotes', actions: ['read', 'create', 'update'] },
+        { resource: 'core_pillars', actions: ['read', 'create', 'update'] },
+        { resource: 'mission_content', actions: ['read', 'create', 'update'] },
+        { resource: 'wisdom_to_action', actions: ['read', 'create', 'update'] },
+        { resource: 'impact_goals', actions: ['read', 'create', 'update'] },
+        { resource: 'featured_programs', actions: ['read', 'create', 'update'] },
+        { resource: 'regional_initiatives', actions: ['read', 'create', 'update'] },
+        { resource: 'get_involved', actions: ['read', 'create', 'update'] },
+        { resource: 'teaching_sections', actions: ['read', 'create', 'update'] },
+        { resource: 'truth_sections', actions: ['read', 'create', 'update'] },
+        { resource: 'tradition_sections', actions: ['read', 'create', 'update'] },
+        { resource: 'sufi_content', actions: ['read', 'create', 'update'] },
+        { resource: 'approach_content', actions: ['read', 'create', 'update'] },
       ]
 
     case 'user':

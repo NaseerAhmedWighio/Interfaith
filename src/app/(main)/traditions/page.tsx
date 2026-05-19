@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { Globe as Globe2 } from 'lucide-react'
-import { getTraditions } from '@/actions/database'
+import { getTraditions, getTraditionSection } from '@/actions/database'
+import Pagination from '@/components/Pagination'
 
 interface Tradition {
   id: string
@@ -13,15 +14,30 @@ interface Tradition {
 
 export default function Traditions() {
   const [traditions, setTraditions] = useState<Tradition[]>([])
+  const [unitySection, setUnitySection] = useState<{ title: string; content: string } | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 6
 
   useEffect(() => {
     fetchTraditions()
+    fetchUnitySection()
   }, [])
+
+  async function fetchUnitySection() {
+    const result = await getTraditionSection('unity_in_diversity')
+    if (result.data && !Array.isArray(result.data)) setUnitySection(result.data)
+  }
 
   async function fetchTraditions() {
     const result = await getTraditions()
     if (result.data) setTraditions(result.data)
   }
+
+  const totalPages = Math.ceil(traditions.length / ITEMS_PER_PAGE)
+  const paginatedTraditions = traditions.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
 
   return (
     <div>
@@ -60,7 +76,7 @@ export default function Traditions() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 items-stretch">
-            {traditions.map((tradition) => (
+            {paginatedTraditions.map((tradition) => (
               <TraditionCard key={tradition.id} tradition={tradition} />
             ))}
           </div>
@@ -70,6 +86,12 @@ export default function Traditions() {
               <p className="text-sm sm:text-base text-[#aab0d6]/70">Loading faith traditions...</p>
             </div>
           )}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </section>
 
@@ -77,30 +99,29 @@ export default function Traditions() {
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
             <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
-              Unity in Diversity
+              {unitySection?.title || 'Unity in Diversity'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
-              <p>
-                The Sufi masters teach us a profound truth: the Divine is infinite and manifests in countless forms.
-                Just as white light passing through a prism creates a rainbow of colors, the One Truth expresses
-                itself through the beautiful diversity of world religions.
-              </p>
-              <p>
-                This diversity is not a problem to solve but a gift to celebrate. Each tradition offers unique
-                insights, practices, and perspectives that enrich our collective understanding of the sacred.
-                When we honor these differences with respect and curiosity, we discover that beneath surface
-                variations lies a deep unity.
-              </p>
-              <p>
-                All authentic spiritual paths share core values: compassion, justice, truth, love, and service
-                to others. They may express these values through different languages, rituals, and stories, but
-                the essence remains the same - the call to transcend ego, serve others, and connect with the Divine.
-              </p>
-              <div className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
-                <p className="font-semibold text-sm sm:text-base md:text-lg text-[#f5f3ee] text-center italic">
-                  "The lamps are different, but the Light is the same." - Rumi
-                </p>
-              </div>
+              {unitySection
+                ? unitySection.content.split('\n\n').filter(Boolean).map((p, i, arr) => (
+                    i === arr.length - 1 ? (
+                      <div key={i} className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
+                        <p className="font-semibold text-sm sm:text-base md:text-lg text-[#f5f3ee] text-center italic">{p}</p>
+                      </div>
+                    ) : (
+                      <p key={i}>{p}</p>
+                    )
+                  ))
+                : (
+                  <>
+                    <p>The Sufi masters teach us a profound truth: the Divine is infinite and manifests in countless forms. Just as white light passing through a prism creates a rainbow of colors, the One Truth expresses itself through the beautiful diversity of world religions.</p>
+                    <p>This diversity is not a problem to solve but a gift to celebrate. Each tradition offers unique insights, practices, and perspectives that enrich our collective understanding of the sacred. When we honor these differences with respect and curiosity, we discover that beneath surface variations lies a deep unity.</p>
+                    <p>All authentic spiritual paths share core values: compassion, justice, truth, love, and service to others. They may express these values through different languages, rituals, and stories, but the essence remains the same - the call to transcend ego, serve others, and connect with the Divine.</p>
+                    <div className="border-t border-[#aab0d6]/20 pt-4 sm:pt-5 md:pt-6 mt-4 sm:mt-5 md:mt-6">
+                      <p className="font-semibold text-sm sm:text-base md:text-lg text-[#f5f3ee] text-center italic">&quot;The lamps are different, but the Light is the same.&quot; - Rumi</p>
+                    </div>
+                  </>
+                )}
             </div>
           </div>
         </div>

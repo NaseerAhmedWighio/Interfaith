@@ -15,9 +15,27 @@ interface Teaching {
   title: string
 }
 
+interface CorePillar {
+  id: string
+  title: string
+  description: string
+  icon: string
+  color: string
+}
+
+const iconMap: Record<string, React.ReactNode> = {
+  Heart: <Heart className="w-10 h-10" />,
+  Lightbulb: <Lightbulb className="w-10 h-10" />,
+  HandHeart: <HandHeart className="w-10 h-10" />,
+  Flame: <Flame className="w-10 h-10" />,
+  Globe2: <Globe2 className="w-10 h-10" />,
+  BookOpen: <BookOpen className="w-10 h-10" />,
+}
+
 export default function Home() {
   const [traditions, setTraditions] = useState<Tradition[]>([])
   const [teachings, setTeachings] = useState<Teaching[]>([])
+  const [corePillars, setCorePillars] = useState<CorePillar[]>([])
 
   useEffect(() => {
     fetchData()
@@ -31,6 +49,13 @@ export default function Home() {
 
     if (traditionsResult.data) setTraditions(traditionsResult.data)
     if (teachingsResult.data) setTeachings(teachingsResult.data)
+
+    try {
+      const res = await fetch('/api/core-pillars')
+      if (res.ok) setCorePillars(await res.json())
+    } catch (err) {
+      console.error('Error fetching core pillars:', err)
+    }
   }
 
   return (
@@ -97,42 +122,26 @@ export default function Home() {
           </div>
 
           <div className="feature-grid">
-            <MissionCard
-              icon={<Heart className="w-10 h-10" />}
-              title="Eliminate Hatred"
-              description="Through divine love and understanding, we dissolve the barriers of prejudice and fear that separate hearts."
-              gradient="from-[#e07070] to-[#e74c3c]"
-            />
-            <MissionCard
-              icon={<Lightbulb className="w-10 h-10" />}
-              title="Dispel Misconceptions"
-              description="Illuminate truth by addressing falsehoods and revealing the authentic beauty of each tradition."
-              gradient="from-[#d4a07b] to-[#d4a07b]"
-            />
-            <MissionCard
-              icon={<HandHeart className="w-10 h-10" />}
-              title="Foster Unity"
-              description="Discover the universal thread of compassion, mercy, and love woven through all spiritual paths."
-              gradient="from-[#c8a75e] to-[#d4b56d]"
-            />
-            <MissionCard
-              icon={<Flame className="w-10 h-10" />}
-              title="Sufi Teachings"
-              description="Share the timeless wisdom of Sufism, the path of divine love that embraces all of humanity."
-              gradient="from-[#d4a07b] to-[#e07070]"
-            />
-            <MissionCard
-              icon={<Globe2 className="w-10 h-10" />}
-              title="Global Peace"
-              description="Build bridges of understanding that span cultures, languages, and traditions worldwide."
-              gradient="from-[#27ae60] to-[#16a085]"
-            />
-            <MissionCard
-              icon={<BookOpen className="w-10 h-10" />}
-              title="Sacred Knowledge"
-              description="Preserve and share the profound wisdom that guides seekers toward truth and enlightenment."
-              gradient="from-[#9b59b6] to-[#c8b4e8]"
-            />
+            {corePillars.length > 0 ? (
+              corePillars.map((pillar) => (
+                <MissionCard
+                  key={pillar.id}
+                  icon={iconMap[pillar.icon] || <Heart className="w-10 h-10" />}
+                  title={pillar.title}
+                  description={pillar.description}
+                  gradient={pillar.color ? `from-[${pillar.color}] to-[${pillar.color}]` : ''}
+                />
+              ))
+            ) : (
+              <>
+                <MissionCard icon={<Heart className="w-10 h-10" />} title="Eliminate Hatred" description="Through divine love and understanding, we dissolve the barriers of prejudice and fear that separate hearts." gradient="from-[#e07070] to-[#e74c3c]" />
+                <MissionCard icon={<Lightbulb className="w-10 h-10" />} title="Dispel Misconceptions" description="Illuminate truth by addressing falsehoods and revealing the authentic beauty of each tradition." gradient="from-[#d4a07b] to-[#d4a07b]" />
+                <MissionCard icon={<HandHeart className="w-10 h-10" />} title="Foster Unity" description="Discover the universal thread of compassion, mercy, and love woven through all spiritual paths." gradient="from-[#c8a75e] to-[#d4b56d]" />
+                <MissionCard icon={<Flame className="w-10 h-10" />} title="Sufi Teachings" description="Share the timeless wisdom of Sufism, the path of divine love that embraces all of humanity." gradient="from-[#d4a07b] to-[#e07070]" />
+                <MissionCard icon={<Globe2 className="w-10 h-10" />} title="Global Peace" description="Build bridges of understanding that span cultures, languages, and traditions worldwide." gradient="from-[#27ae60] to-[#16a085]" />
+                <MissionCard icon={<BookOpen className="w-10 h-10" />} title="Sacred Knowledge" description="Preserve and share the profound wisdom that guides seekers toward truth and enlightenment." gradient="from-[#9b59b6] to-[#c8b4e8]" />
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -188,7 +197,6 @@ function MissionCard({ icon, title, description, gradient }: any) {
     </div>
   )
 }
-
 
 
 

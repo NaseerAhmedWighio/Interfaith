@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { BookOpen, Flame, Heart, HeartHandshake, Sparkles, HandHeart, Users, Scale, Home, ArrowRight } from 'lucide-react'
-import { getTeachings, getSimilarityThemes } from '@/actions/database'
+import { getTeachings, getSimilarityThemes, getTeachingSection } from '@/actions/database'
 import Link from 'next/link'
+import Pagination from '@/components/Pagination'
 
 interface Teaching {
   id: string
@@ -25,11 +26,24 @@ export default function Teachings() {
   const [teachings, setTeachings] = useState<Teaching[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [similarityThemes, setSimilarityThemes] = useState<SimilarityTheme[]>([])
+  const [universalMessage, setUniversalMessage] = useState<{ title: string; content: string } | null>(null)
+  const [teachingsPage, setTeachingsPage] = useState(1)
+  const TEACHINGS_PER_PAGE = 6
 
   useEffect(() => {
     fetchTeachings()
     fetchSimilarityThemes()
+    fetchUniversalMessage()
   }, [])
+
+  async function fetchUniversalMessage() {
+    const result = await getTeachingSection('universal_message')
+    if (result.data && !Array.isArray(result.data)) setUniversalMessage(result.data)
+  }
+
+  useEffect(() => {
+    setTeachingsPage(1)
+  }, [selectedCategory])
 
   async function fetchTeachings() {
     const result = await getTeachings()
@@ -45,6 +59,11 @@ export default function Teachings() {
   const filteredTeachings = selectedCategory === 'all'
     ? teachings
     : teachings.filter(t => t.category === selectedCategory)
+  const totalTeachingPages = Math.ceil(filteredTeachings.length / TEACHINGS_PER_PAGE)
+  const paginatedTeachings = filteredTeachings.slice(
+    (teachingsPage - 1) * TEACHINGS_PER_PAGE,
+    teachingsPage * TEACHINGS_PER_PAGE
+  )
 
   return (
     <div>
@@ -88,7 +107,7 @@ export default function Teachings() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-            {filteredTeachings.map((teaching) => (
+            {paginatedTeachings.map((teaching) => (
               <TeachingCard key={teaching.id} teaching={teaching} />
             ))}
           </div>
@@ -98,6 +117,12 @@ export default function Teachings() {
               <p className="text-sm sm:text-base text-[#aab0d6]/70">No teachings found in this category.</p>
             </div>
           )}
+
+          <Pagination
+            currentPage={teachingsPage}
+            totalPages={totalTeachingPages}
+            onPageChange={setTeachingsPage}
+          />
         </div>
       </section>
 
@@ -137,22 +162,22 @@ export default function Teachings() {
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12 text-center">
             <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
-              The Universal Message
+              {universalMessage?.title || 'The Universal Message'}
             </h2>
             <div className="text-sm sm:text-base text-premium leading-relaxed space-y-3 sm:space-y-4 text-left">
-              <p>
-                Throughout history, enlightened teachers from every tradition have shared a common message:
-                that love conquers hatred, compassion heals division, and unity underlies all apparent diversity.
-              </p>
-              <p>
-                These teachings remind us that the path to peace begins within our own hearts. When we cultivate
-                love, understanding, and compassion internally, we naturally extend these qualities to others,
-                regardless of their faith, culture, or background.
-              </p>
-              <p className="font-semibold text-sm sm:text-base text-[#f5f3ee]">
-                May these sacred teachings inspire your journey toward a heart filled with divine love
-                and a life dedicated to peace.
-              </p>
+              {universalMessage
+                ? universalMessage.content.split('\n\n').filter(Boolean).map((p, i, arr) => (
+                    <p key={i} className={i === arr.length - 1 ? 'font-semibold text-sm sm:text-base text-[#f5f3ee]' : ''}>
+                      {p}
+                    </p>
+                  ))
+                : (
+                  <>
+                    <p>Throughout history, enlightened teachers from every tradition have shared a common message: that love conquers hatred, compassion heals division, and unity underlies all apparent diversity.</p>
+                    <p>These teachings remind us that the path to peace begins within our own hearts. When we cultivate love, understanding, and compassion internally, we naturally extend these qualities to others, regardless of their faith, culture, or background.</p>
+                    <p className="font-semibold text-sm sm:text-base text-[#f5f3ee]">May these sacred teachings inspire your journey toward a heart filled with divine love and a life dedicated to peace.</p>
+                  </>
+                )}
             </div>
           </div>
         </div>

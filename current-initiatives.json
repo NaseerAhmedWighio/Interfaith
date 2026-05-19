@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "category": "Interfaith Dialogue",
+    "title": "Global Dialogue Series",
+    "description": "Monthly virtual gatherings bringing together faith leaders, scholars, and practitioners from around the world to discuss pressing global issues through an interfaith lens.",
+    "stats": "12,000+ participants across 65 countries",
+    "event": "May 15, 2026 - Climate Justice & Sacred Stewardship",
+    "iconColor": "gold"
+  },
+  {
+    "id": 2,
+    "category": "Grassroots Peacebuilding",
+    "title": "Community Peace Circles",
+    "description": "Facilitated small-group dialogues in local communities where neighbors of different faiths share stories, build relationships, and collaborate on community projects.",
+    "stats": "450+ active circles in 28 countries",
+    "event": "Weekly circles ongoing - Find one near you",
+    "iconColor": "green"
+  },
+  {
+    "id": 3,
+    "category": "Youth Empowerment",
+    "title": "Interfaith Youth Leadership Program",
+    "description": "Year-long intensive training for young adults (18-30) to become interfaith leaders in their communities, combining theological education, leadership skills, and hands-on peacebuilding.",
+    "stats": "200+ graduates serving in 40 countries",
+    "event": "Applications open June 2026 for 2027 cohort",
+    "iconColor": "purple"
+  },
+  {
+    "id": 4,
+    "category": "Community Service",
+    "title": "Sacred Service Days",
+    "description": "Quarterly interfaith volunteer events where people of all faiths work together on community projects - from feeding the hungry to environmental restoration.",
+    "stats": "25,000+ volunteers, 150+ projects completed",
+    "event": "June 21, 2026 - Summer Solstice Service Day",
+    "iconColor": "orange"
+  }
+]

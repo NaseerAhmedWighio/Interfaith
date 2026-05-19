@@ -1,13 +1,75 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { BookOpen, Star, Scroll, Feather, Globe as Globe2, Heart, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import type { Metadata } from 'next'
+import { getSacredTexts } from '@/actions/database'
+import Pagination from '@/components/Pagination'
 
-export const metadata: Metadata = {
-  title: 'Sacred Texts & Scriptures | Interfaith Peace Bridge',
-  description: 'Explore the profound wisdom found in the sacred writings of the world\'s great spiritual traditions, revealing universal truths that unite humanity.',
+interface SacredText {
+  id: string
+  title: string
+  source: string
+  textContent: string
+  theme: string
+  context?: string | null
+  translation?: string | null
+  tradition?: { id: string; name: string } | null
+}
+
+const themeColors: Record<string, string> = {
+  love: '#E07070',
+  unity: '#C8A75E',
+  compassion: '#27AE60',
+  peace: '#9B59B6',
+  justice: '#5B7FDB',
+  wisdom: '#D4A07B',
+  service: '#10B981',
+  mercy: '#F59E0B',
+}
+
+const themeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  love: Heart,
+  unity: Star,
+  compassion: Heart,
+  peace: Feather,
+  justice: Scroll,
+  wisdom: BookOpen,
+  service: Globe2,
+  mercy: Sparkles,
 }
 
 export default function SacredTexts() {
+  const [texts, setTexts] = useState<SacredText[]>([])
+  const [selectedTheme, setSelectedTheme] = useState<string>('all')
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 6
+
+  useEffect(() => {
+    fetchTexts()
+  }, [])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedTheme])
+
+  async function fetchTexts() {
+    const result = await getSacredTexts()
+    if (result.data) setTexts(result.data)
+  }
+
+  const themes = ['all', ...new Set(texts.map((t) => t.theme))]
+
+  const filteredTexts = selectedTheme === 'all'
+    ? texts
+    : texts.filter((t) => t.theme === selectedTheme)
+
+  const totalPages = Math.ceil(filteredTexts.length / ITEMS_PER_PAGE)
+  const paginatedTexts = filteredTexts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
+
   return (
     <div>
       <section className="section-premium pt-28 md:pt-36  pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
@@ -25,7 +87,7 @@ export default function SacredTexts() {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-premium leading-relaxed max-w-3xl mx-auto px-4">
-            Explore the profound wisdom found in the sacred writings of the world's great
+            Explore the profound wisdom found in the sacred writings of the world&apos;s great
             spiritual traditions, revealing universal truths that unite humanity.
           </p>
         </div>
@@ -44,60 +106,45 @@ export default function SacredTexts() {
           </div>
 
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Major Sacred Texts</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Sacred Texts from World Traditions</h2>
             <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
+          {texts.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 md:mb-12">
+              {themes.map((theme) => (
+                <button
+                  key={theme}
+                  onClick={() => setSelectedTheme(theme)}
+                  className={`px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 text-sm sm:text-base rounded-xl font-medium transition-all capitalize ${
+                    selectedTheme === theme
+                      ? 'bg-[#C8A75E] text-[#0B0F2A] shadow-lg'
+                      : 'bg-[#141A3A] text-[#aab0d6] hover:bg-[#1a1f4a] border border-[#C8A75E]/20'
+                  }`}
+                >
+                  {theme === 'all' ? 'All Themes' : theme}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-            <TextCard
-              title="The Quran"
-              tradition="Islam"
-              description="The final revelation to Prophet Muhammad (peace be upon him), the Quran is considered the literal word of God in Arabic. It emphasizes divine mercy, social justice, and submission to the One God."
-              keyThemes={['Tawhid (Divine Unity)', 'Mercy and Compassion', 'Justice', 'Prophetic Guidance']}
-              color="#27AE60"
-              icon={<Star className="w-12 h-12" />}
-            />
-            <TextCard
-              title="The Bible"
-              tradition="Christianity"
-              description="Comprising the Old and New Testaments, the Bible chronicles God's covenant with humanity, culminating in the teachings of Jesus Christ about love, forgiveness, and redemption."
-              keyThemes={['Love thy Neighbor', 'Forgiveness', 'Grace', 'Kingdom of God']}
-              color="#C8A75E"
-              icon={<BookOpen className="w-12 h-12" />}
-            />
-            <TextCard
-              title="The Torah"
-              tradition="Judaism"
-              description="The foundational text of Judaism, containing the law and teachings given to Moses. It forms the basis for ethical monotheism and emphasizes covenant relationship with God."
-              keyThemes={['Covenant', 'Torah Study', 'Justice (Tzedakah)', 'Tikkun Olam (Repair the World)']}
-              color="#9B59B6"
-              icon={<Scroll className="w-12 h-12" />}
-            />
-            <TextCard
-              title="The Bhagavad Gita"
-              tradition="Hinduism"
-              description="A profound dialogue between Lord Krishna and Arjuna on duty, devotion, and the nature of reality. It synthesizes yoga, devotion, and philosophical wisdom."
-              keyThemes={['Dharma (Righteous Duty)', 'Karma Yoga', 'Bhakti (Devotion)', 'Self-Realization']}
-              color="#D4A07B"
-              icon={<Feather className="w-12 h-12" />}
-            />
-            <TextCard
-              title="The Dhammapada"
-              tradition="Buddhism"
-              description="A collection of the Buddha's sayings on the path to enlightenment, emphasizing mindfulness, compassion, and liberation from suffering."
-              keyThemes={['Four Noble Truths', 'Eightfold Path', 'Compassion', 'Mindfulness']}
-              color="#E07070"
-              icon={<Heart className="w-12 h-12" />}
-            />
-            <TextCard
-              title="The Guru Granth Sahib"
-              tradition="Sikhism"
-              description="The central scripture of Sikhism, containing hymns and poetry from Sikh Gurus and saints of other traditions, emphasizing the unity of God and equality of all."
-              keyThemes={['Ik Onkar (One God)', 'Equality', 'Service (Seva)', 'Honest Living']}
-              color="#F59E0B"
-              icon={<Globe2 className="w-12 h-12" />}
-            />
+            {paginatedTexts.map((text) => (
+              <SacredTextCard key={text.id} text={text} />
+            ))}
           </div>
+
+          {texts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-sm sm:text-base text-[#aab0d6]/70">Loading sacred texts...</p>
+            </div>
+          )}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </section>
 
@@ -165,9 +212,9 @@ export default function SacredTexts() {
                   seek the deeper spiritual realities behind the words.
                 </p>
                 <p>
-                  The great Sufi master Rumi said, "The Quran is like a bride: though you pull aside
+                  The great Sufi master Rumi said, &quot;The Quran is like a bride: though you pull aside
                   her veil, she does not show herself to you. Your attempt to unveil her will only
-                  increase her concealment."
+                  increase her concealment.&quot;
                 </p>
                 <p>
                   This mystical approach leads Sufis to find profound connections between their own
@@ -232,8 +279,8 @@ export default function SacredTexts() {
         <div className="container mx-auto max-w-4xl text-center">
           <BookOpen className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4 sm:mb-5 md:mb-6 opacity-80" />
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
-            "All the sacred books are branches
-            <span className="block mt-2">of the one tree of life."</span>
+            &quot;All the sacred books are branches
+            <span className="block mt-2">of the one tree of life.&quot;</span>
           </h2>
           <p className="text-lg sm:text-xl md:text-2xl opacity-90 mb-6 sm:mb-8 px-4">— Hazrat Inayat Khan</p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
@@ -250,25 +297,24 @@ export default function SacredTexts() {
   )
 }
 
-function TextCard({ title, tradition, description, keyThemes, color, icon }: any) {
+function SacredTextCard({ text }: { text: SacredText }) {
+  const color = themeColors[text.theme] || '#6B7280'
+  const IconComponent = themeIcons[text.theme] || BookOpen
+
   return (
     <div className="card-premium p-6 sm:p-7 md:p-8">
-      <div className={`w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 mb-4 sm:mb-5 md:mb-6 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl`} style={{ backgroundColor: color }}>
-        <div className="text-[#f5f3ee] [&>svg]:w-10 [&>svg]:h-10 sm:[&>svg]:w-11 sm:[&>svg]:h-11 md:[&>svg]:w-12 md:[&>svg]:h-12">{icon}</div>
+      <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 mb-4 sm:mb-5 md:mb-6 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl" style={{ backgroundColor: color }}>
+        <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 text-[#f5f3ee]" />
       </div>
-      <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-2">{title}</h3>
-      <p className="text-xs sm:text-sm font-semibold text-[#c8a75e] mb-3 sm:mb-4">{tradition}</p>
-      <p className="text-sm sm:text-base text-premium leading-relaxed mb-4 sm:mb-5 md:mb-6">{description}</p>
-      <div>
-        <h4 className="text-xs sm:text-sm font-bold text-[#aab0d6] mb-2 sm:mb-3 uppercase tracking-wider">Key Themes:</h4>
-        <ul className="space-y-2">
-          {keyThemes.map((theme: string, index: number) => (
-            <li key={index} className="flex items-start text-xs sm:text-sm text-premium">
-              <span className="text-[#c8a75e] mr-2 mt-1">•</span>
-              <span>{theme}</span>
-            </li>
-          ))}
-        </ul>
+      <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-2">{text.title}</h3>
+      {text.tradition && (
+        <p className="text-xs sm:text-sm font-semibold text-[#c8a75e] mb-3 sm:mb-4">{text.tradition.name}</p>
+      )}
+      <p className="text-sm sm:text-base text-premium leading-relaxed mb-4 sm:mb-5 md:mb-6">{text.source}</p>
+      <div className="border-t border-[#aab0d6]/20 pt-4">
+        <p className="text-xs sm:text-sm text-premium italic leading-relaxed line-clamp-3">
+          &quot;{text.textContent}&quot;
+        </p>
       </div>
     </div>
   )

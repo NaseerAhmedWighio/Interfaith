@@ -18,7 +18,9 @@ import {
   ChevronDown,
   ChevronUp,
   Activity,
-  Clock
+  Clock,
+  Globe2,
+  Lightbulb
 } from 'lucide-react'
 
 interface DashboardStats {
@@ -34,6 +36,8 @@ interface DashboardStats {
   similarityThemes: number
   roleRequests: number
   users: number
+  corePillars: number
+  aboutContent: number
 }
 
 interface StatCard {
@@ -43,6 +47,7 @@ interface StatCard {
   color: string
   href: string
   description: string
+  adminOnly?: boolean
 }
 
 export default function AdminDashboard() {
@@ -212,10 +217,27 @@ export default function AdminDashboard() {
       color: 'from-cyan-500 to-cyan-600',
       href: '/admin/assessment-results',
       description: 'Completed faith assessments'
-    }
+    },
+    {
+      title: 'Core Pillars',
+      count: stats?.corePillars || 0,
+      icon: Database,
+      color: 'from-amber-500 to-amber-600',
+      href: '/admin/core-pillars',
+      description: 'Mission core pillar cards'
+    },
+    {
+      title: 'About Content',
+      count: stats?.aboutContent || 0,
+      icon: FileText,
+      color: 'from-indigo-500 to-indigo-600',
+      href: '/admin/about-content',
+      description: 'About page content sections',
+      adminOnly: true
+    },
   ]
 
-  const totalContent = (stats?.traditions || 0) + (stats?.teachings || 0) + (stats?.sacredTexts || 0)
+  const totalContent = (stats?.traditions || 0) + (stats?.teachings || 0) + (stats?.sacredTexts || 0) + (stats?.corePillars || 0) + (stats?.aboutContent || 0)
   const totalUsers = (stats?.movementMembers || 0) + (stats?.newsletterSubscribers || 0)
 
   // Show loading while checking authentication
@@ -281,7 +303,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-        {statCards.map((card) => {
+        {statCards.filter(card => !card.adminOnly || user?.role === 'admin').map((card) => {
           const Icon = card.icon
           const isExpanded = expandedCard === card.title
 

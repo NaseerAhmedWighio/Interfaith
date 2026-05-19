@@ -42,14 +42,20 @@ services:
       -c "
         echo '⏳ Waiting for database...' &&
         sleep 3 &&
-        echo '📦 Running content seed SQL files...' &&
-        for f in /app/data/migrations/*.sql; do
-          echo \"   Running $$(basename $$f)...\";
-          PGPASSWORD=\"${POSTGRES_PASSWORD}\" psql -h db -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-interfaith_db} -f \"$$f\" 2>&1 || true;
-        done &&
-        echo '✅ Content data seeded!' &&
+        echo '📋 Checking if content data exists...' &&
+        DATA_EXISTS=$$(PGPASSWORD=\"${POSTGRES_PASSWORD}\" psql -h db -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-interfaith_db} -t -c \"SELECT EXISTS (SELECT 1 FROM traditions LIMIT 1);\" 2>/dev/null | tr -d '[:space:]') &&
+        if [ \"$$DATA_EXISTS\" != \"t\" ]; then
+          echo '📦 Running content seed SQL files...' &&
+          for f in /app/data/migrations/*.sql; do
+            echo \"   Running $$(basename $$f)...\";
+            PGPASSWORD=\"${POSTGRES_PASSWORD}\" psql -v ON_ERROR_STOP=1 -h db -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-interfaith_db} -f \"$$f\";
+          done &&
+          echo '✅ Content data seeded!';
+        else
+          echo '⏭️  Content data already exists — skipping SQL files';
+        fi &&
         echo '📋 Syncing Prisma schema...' &&
-        npx prisma db push --accept-data-loss &&
+        npx prisma db push &&
         echo '✅ Schema synced!' &&
         echo '🌱 Seeding admin accounts...' &&
         npx prisma db seed &&

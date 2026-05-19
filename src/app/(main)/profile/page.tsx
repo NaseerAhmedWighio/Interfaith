@@ -181,6 +181,8 @@ export default function ProfilePage() {
       setImageFile(null)
       setMessage({ type: 'success', text: 'Profile updated successfully!' })
 
+      window.dispatchEvent(new CustomEvent('profileUpdated'))
+
       setTimeout(() => {
         router.refresh()
       }, 1000)
