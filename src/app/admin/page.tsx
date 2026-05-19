@@ -38,6 +38,22 @@ interface DashboardStats {
   users: number
   corePillars: number
   aboutContent: number
+  aboutValues: number
+  aboutLeaders: number
+  missionContent: number
+  wisdomToAction: number
+  impactGoals: number
+  featuredPrograms: number
+  regionalInitiatives: number
+  getInvolved: number
+  currentInitiatives: number
+  teachingSections: number
+  truthSections: number
+  traditionSections: number
+  sufiContent: number
+  approachContent: number
+  sufiCards: number
+  approachCards: number
 }
 
 interface StatCard {
@@ -231,9 +247,136 @@ export default function AdminDashboard() {
       count: stats?.aboutContent || 0,
       icon: FileText,
       color: 'from-indigo-500 to-indigo-600',
-      href: '/admin/about-content',
+      href: '/admin/pages/about',
       description: 'About page content sections',
-      adminOnly: true
+    },
+    {
+      title: 'About Values',
+      count: stats?.aboutValues || 0,
+      icon: Heart,
+      color: 'from-pink-500 to-pink-600',
+      href: '/admin/pages/about',
+      description: 'Core value cards on about page',
+    },
+    {
+      title: 'About Leaders',
+      count: stats?.aboutLeaders || 0,
+      icon: Users,
+      color: 'from-purple-500 to-purple-600',
+      href: '/admin/pages/about',
+      description: 'Leadership team profiles',
+    },
+    {
+      title: 'Mission Content',
+      count: stats?.missionContent || 0,
+      icon: FileText,
+      color: 'from-emerald-500 to-emerald-600',
+      href: '/admin/pages/mission',
+      description: 'Mission page sections',
+    },
+    {
+      title: 'Wisdom to Action',
+      count: stats?.wisdomToAction || 0,
+      icon: Lightbulb,
+      color: 'from-amber-500 to-amber-600',
+      href: '/admin/peace',
+      description: 'Mission to action entries',
+    },
+    {
+      title: 'Impact Goals',
+      count: stats?.impactGoals || 0,
+      icon: TrendingUp,
+      color: 'from-green-500 to-green-600',
+      href: '/admin/peace',
+      description: 'Impact goal statistics',
+    },
+    {
+      title: 'Featured Programs',
+      count: stats?.featuredPrograms || 0,
+      icon: Lightbulb,
+      color: 'from-blue-500 to-blue-600',
+      href: '/admin/peace',
+      description: 'Featured program cards',
+    },
+    {
+      title: 'Regional Initiatives',
+      count: stats?.regionalInitiatives || 0,
+      icon: Globe2,
+      color: 'from-cyan-500 to-cyan-600',
+      href: '/admin/peace',
+      description: 'Regional initiative entries',
+    },
+    {
+      title: 'Get Involved',
+      count: stats?.getInvolved || 0,
+      icon: Activity,
+      color: 'from-teal-500 to-teal-600',
+      href: '/admin/peace',
+      description: 'Get involved call-to-action cards',
+    },
+    {
+      title: 'Current Initiatives',
+      count: stats?.currentInitiatives || 0,
+      icon: Clock,
+      color: 'from-orange-500 to-orange-600',
+      href: '/admin/peace',
+      description: 'Active initiative cards',
+    },
+    {
+      title: 'Teaching Sections',
+      count: stats?.teachingSections || 0,
+      icon: BookOpen,
+      color: 'from-violet-500 to-violet-600',
+      href: '/admin/pages/teachings',
+      description: 'Teachings page content sections',
+    },
+    {
+      title: 'Truth Sections',
+      count: stats?.truthSections || 0,
+      icon: MessageSquare,
+      color: 'from-rose-500 to-rose-600',
+      href: '/admin/pages/truth',
+      description: 'Truth page content sections',
+    },
+    {
+      title: 'Tradition Sections',
+      count: stats?.traditionSections || 0,
+      icon: Database,
+      color: 'from-sky-500 to-sky-600',
+      href: '/admin/pages/traditions',
+      description: 'Traditions page content sections',
+    },
+    {
+      title: 'Sufi Content',
+      count: stats?.sufiContent || 0,
+      icon: BookOpen,
+      color: 'from-fuchsia-500 to-fuchsia-600',
+      href: '/admin/pages/teachings',
+      description: 'Sufi teachings page sections',
+    },
+    {
+      title: 'Approach Content',
+      count: stats?.approachContent || 0,
+      icon: FileText,
+      color: 'from-lime-500 to-lime-600',
+      href: '/admin/pages/traditions',
+      description: 'Approach page content sections',
+    },
+    {
+      title: 'Sufi Cards',
+      count: stats?.sufiCards || 0,
+      icon: BookOpen,
+      color: 'from-purple-500 to-purple-600',
+      href: '/admin/sufi-cards',
+      description: 'Sufi teachings card entries',
+    },
+    {
+      title: 'Approach Cards',
+      count: stats?.approachCards || 0,
+      icon: FileText,
+      color: 'from-indigo-500 to-indigo-600',
+      href: '/admin/approach-cards',
+      description: 'Approach page card entries',
     },
   ]
 

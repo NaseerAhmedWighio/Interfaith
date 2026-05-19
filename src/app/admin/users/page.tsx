@@ -187,49 +187,49 @@ export default function AdminUsersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[#0b0f2a]/60 border-b border-[#c8a75e]/10">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
-                  User
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
-                  Role
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
-                  Joined
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#c8a75e]/10">
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-[#c8a75e]/5 transition-colors">
-                  <td className="px-6 py-4">
-                    <div>
-                      <div className="font-semibold text-[#f5f3ee]">{user.fullName}</div>
-                      <div className="text-sm text-premium-light flex items-center gap-2">
-                        {user.email}
+                  <tr>
+                    <th className="px-3 md:px-6 py-2 md:py-4 text-left text-[10px] md:text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
+                      User
+                    </th>
+                    <th className="px-3 md:px-6 py-2 md:py-4 text-left text-[10px] md:text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-3 md:px-6 py-2 md:py-4 text-left text-[10px] md:text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="hidden sm:table-cell px-3 md:px-6 py-2 md:py-4 text-left text-[10px] md:text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
+                      Joined
+                    </th>
+                    <th className="px-3 md:px-6 py-2 md:py-4 text-left text-[10px] md:text-xs font-bold text-[#aab0d6] uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#c8a75e]/10">
+                  {users.map((user) => (
+                    <tr key={user.id} className="hover:bg-[#c8a75e]/5 transition-colors">
+                      <td className="px-3 md:px-6 py-2 md:py-4">
+                    <div className="min-w-0">
+                      <div className="font-semibold text-[#f5f3ee] text-sm md:text-base truncate">{user.fullName}</div>
+                      <div className="text-xs md:text-sm text-premium-light flex items-center gap-2">
+                        <span className="truncate">{user.email}</span>
                         {user.emailVerified && (
-                          <span className="text-xs bg-green-500/20 text-green-500 px-2 py-0.5 rounded">
+                          <span className="shrink-0 text-[10px] bg-green-500/20 text-green-500 px-1.5 py-0.5 rounded">
                             Verified
                           </span>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-[#c8a75e]" />
-                      <span className="text-[#f5f3ee] capitalize">{user.role}</span>
+                  <td className="px-3 md:px-6 py-2 md:py-4">
+                    <div className="flex items-center gap-1 md:gap-2">
+                      <Shield className="w-3 h-3 md:w-4 md:h-4 text-[#c8a75e]" />
+                      <span className="text-xs md:text-base text-[#f5f3ee] capitalize">{user.role}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-2 md:py-4">
                     <span
-                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                      className={`inline-flex items-center gap-1 px-2 md:px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-semibold ${
                         user.isActive
                           ? 'bg-green-500/20 text-green-500'
                           : 'bg-red-500/20 text-red-500'
@@ -237,40 +237,42 @@ export default function AdminUsersPage() {
                     >
                       {user.isActive ? (
                         <>
-                          <UserCheck className="w-3 h-3" />
-                          Active
+                          <UserCheck className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                          <span className="hidden xs:inline">Active</span>
+                          <span className="xs:hidden">On</span>
                         </>
                       ) : (
                         <>
-                          <UserX className="w-3 h-3" />
-                          Inactive
+                          <UserX className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                          <span className="hidden xs:inline">Inactive</span>
+                          <span className="xs:hidden">Off</span>
                         </>
                       )}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-premium-light">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(user.createdAt).toLocaleDateString()}
+                  <td className="hidden sm:table-cell px-3 md:px-6 py-2 md:py-4">
+                    <div className="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-premium-light">
+                      <Calendar className="w-3 h-3 md:w-4 md:h-4" />
+                      <span className="truncate">{new Date(user.createdAt).toLocaleDateString()}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                  <td className="px-3 md:px-6 py-2 md:py-4">
+                    <div className="flex items-center gap-1 md:gap-2">
                       <Link
                         href={`/admin/users/${user.id}`}
-                        className="text-sm text-[#c8a75e] hover:text-[#d4b56d] font-semibold"
+                        className="text-xs md:text-sm text-[#c8a75e] hover:text-[#d4b56d] font-semibold"
                       >
                         View
                       </Link>
                       <button
                         onClick={() => toggleUserStatus(user.id, user.isActive)}
-                        className={`text-sm font-semibold ${
+                        className={`text-xs md:text-sm font-semibold ${
                           user.isActive
                             ? 'text-red-500 hover:text-red-400'
                             : 'text-green-500 hover:text-green-400'
                         }`}
                       >
-                        {user.isActive ? 'Deactivate' : 'Activate'}
+                        {user.isActive ? 'Deact' : 'Activate'}
                       </button>
                     </div>
                   </td>
@@ -282,7 +284,7 @@ export default function AdminUsersPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-[#c8a75e]/10">
+          <div className="flex items-center justify-between px-3 md:px-6 py-3 md:py-4 border-t border-[#c8a75e]/10">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}

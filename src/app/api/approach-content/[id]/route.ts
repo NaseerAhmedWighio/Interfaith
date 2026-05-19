@@ -58,21 +58,39 @@ export async function PUT(
     }
 
     const body = await request.json()
-    const { sectionKey, title, content, orderIndex, status } = body
+    const { sectionKey, title, content, orderIndex } = body
 
     const updateData: Record<string, unknown> = {}
     if (sectionKey !== undefined) updateData.sectionKey = sectionKey
     if (title !== undefined) updateData.title = title
     if (content !== undefined) updateData.content = content
     if (orderIndex !== undefined) updateData.orderIndex = orderIndex
-    if (status !== undefined) updateData.status = status
+    updateData.status = 'published'
 
-    const approachContent = await prisma.approachContent.update({
-      where: { id },
-      data: updateData,
+    const userWithRole = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { role: true },
     })
 
-    return NextResponse.json(approachContent)
+    if (userWithRole?.role === 'admin') {
+      const approachContent = await prisma.approachContent.update({
+        where: { id },
+        data: updateData,
+      })
+      return NextResponse.json(approachContent)
+    }
+
+    const pendingEdit = await prisma.pendingEdit.create({
+      data: {
+        contentType: 'approach_content',
+        contentId: id,
+        changes: { sectionKey, title, content, orderIndex },
+        status: userWithRole?.role === 'editor' ? 'pending_moderator' : 'pending_admin',
+        createdBy: user.id,
+      }
+    })
+
+    return NextResponse.json({ message: 'Edit submitted for review', pendingEdit })
   } catch (error) {
     console.error('Error updating approach content:', error)
 

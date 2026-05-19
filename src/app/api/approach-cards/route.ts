@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { requireAuth } from '@/lib/session'
+import { checkPermission } from '@/lib/permissions'
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,6 +27,16 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
   try {
+    const user = await requireAuth()
+
+    const hasPermission = await checkPermission(user.id, 'approach_cards', 'create')
+    if (!hasPermission) {
+      return NextResponse.json(
+        { error: 'You do not have permission to create approach cards' },
+        { status: 403 }
+      )
+    }
+
     const body = await request.json()
     const { sectionType, title, description, features, icon, color, orderIndex } = body
 
@@ -35,6 +47,11 @@ export async function POST(request: Request) {
       )
     }
 
+    const userWithRole = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { role: true },
+    })
+
     const card = await prisma.approachCard.create({
       data: {
         sectionType,
@@ -44,12 +61,21 @@ export async function POST(request: Request) {
         icon,
         color,
         orderIndex: orderIndex ?? 0,
+        status: userWithRole?.role === 'admin' ? 'published' : 'pending_moderator',
       },
     })
 
     return NextResponse.json(card, { status: 201 })
   } catch (error) {
     console.error('Error creating approach card:', error)
+
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
     return NextResponse.json(
       { error: 'Failed to create approach card' },
       { status: 500 }

@@ -60,12 +60,30 @@ export async function PUT(
     const body = await request.json()
     const { sectionKey, title, content } = body
 
-    const teachingSection = await prisma.teachingSection.update({
-      where: { id },
-      data: { sectionKey, title, content },
+    const userWithRole = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { role: true },
     })
 
-    return NextResponse.json(teachingSection)
+    if (userWithRole?.role === 'admin') {
+      const teachingSection = await prisma.teachingSection.update({
+        where: { id },
+        data: { sectionKey, title, content, status: 'published' },
+      })
+      return NextResponse.json(teachingSection)
+    }
+
+    const pendingEdit = await prisma.pendingEdit.create({
+      data: {
+        contentType: 'teaching_sections',
+        contentId: id,
+        changes: { sectionKey, title, content },
+        status: userWithRole?.role === 'editor' ? 'pending_moderator' : 'pending_admin',
+        createdBy: user.id,
+      }
+    })
+
+    return NextResponse.json({ message: 'Edit submitted for review', pendingEdit })
   } catch (error) {
     console.error('Error updating teaching section:', error)
 

@@ -23,6 +23,15 @@ const nextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
 
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: '/api/uploads/:path*',
+      },
+    ]
+  },
+
   async headers() {
     return [
       {

@@ -28,6 +28,11 @@ export type Resource =
   | 'tradition_sections'
   | 'sufi_content'
   | 'approach_content'
+  | 'about_values'
+  | 'about_leaders'
+  | 'sufi_cards'
+  | 'approach_cards'
+  | 'current_initiatives'
 
 /**
  * Check if a user has permission to perform an action on a resource
@@ -77,6 +82,11 @@ export async function checkPermission(
         'tradition_sections',
         'sufi_content',
         'approach_content',
+        'about_values',
+        'about_leaders',
+        'sufi_cards',
+        'approach_cards',
+        'current_initiatives',
       ]
       return contentResources.includes(resource)
     }
@@ -240,6 +250,11 @@ export function getDefaultPermissions(role: Role): {
         { resource: 'tradition_sections', actions: ['read', 'create', 'update'] },
         { resource: 'sufi_content', actions: ['read', 'create', 'update'] },
         { resource: 'approach_content', actions: ['read', 'create', 'update'] },
+        { resource: 'about_values', actions: ['read', 'create', 'update'] },
+        { resource: 'about_leaders', actions: ['read', 'create', 'update'] },
+        { resource: 'sufi_cards', actions: ['read', 'create', 'update'] },
+        { resource: 'approach_cards', actions: ['read', 'create', 'update'] },
+        { resource: 'current_initiatives', actions: ['read', 'create', 'update'] },
       ]
 
     case 'user':

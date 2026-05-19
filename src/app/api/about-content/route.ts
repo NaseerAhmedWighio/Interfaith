@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { requireAuth, getCurrentUser } from '@/lib/session'
+import { checkPermission } from '@/lib/permissions'
 
 export async function GET() {
   try {
@@ -33,7 +34,8 @@ export async function POST(request: Request) {
   try {
     const user = await requireAuth()
 
-    if (user.role !== 'admin') {
+    const hasPermission = await checkPermission(user.id, 'about_content', 'create')
+    if (!hasPermission) {
       return NextResponse.json(
         { error: 'You do not have permission to create about content' },
         { status: 403 }
@@ -50,12 +52,17 @@ export async function POST(request: Request) {
       )
     }
 
+    const userWithRole = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { role: true },
+    })
+
     const aboutContent = await prisma.aboutContent.create({
       data: {
         sectionKey,
         title,
         content,
-        status: 'published',
+        status: userWithRole?.role === 'admin' ? 'published' : 'pending_moderator',
       }
     })
 

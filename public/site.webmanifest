@@ -1,0 +1,16 @@
+{
+  "name": "Interfaith Peace Bridge",
+  "short_name": "Peace Bridge",
+  "description": "Uniting humanity through divine love, Sufi wisdom, and interfaith understanding",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0F2A",
+  "theme_color": "#C8A75E",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

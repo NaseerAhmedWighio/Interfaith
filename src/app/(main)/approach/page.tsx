@@ -30,6 +30,7 @@ export default function OurApproach() {
   const [sections, setSections] = useState<ApproachContentItem[]>([])
   const [cards, setCards] = useState<ApproachCard[]>([])
   const [loading, setLoading] = useState(true)
+  const [sectionPages, setSectionPages] = useState<Record<string, number>>({})
 
   useEffect(() => {
     Promise.all([
@@ -79,7 +80,22 @@ export default function OurApproach() {
   const pillarIcons = [<BookOpen className="w-8 h-8" />, <MessageCircle className="w-8 h-8" />, <HandHeart className="w-8 h-8" />, <Heart className="w-8 h-8" />]
   const pillarColors = ['#C8A75E', '#9B59B6', '#E07070', '#D4A07B']
 
+  const ITEMS_PER_PAGE: Record<string, number> = { pillar: 4, step: 5, principle: 6, differentiator: 4 }
   const getCards = (sectionType: string) => cards.filter(c => c.sectionType === sectionType).sort((a, b) => a.orderIndex - b.orderIndex)
+  const getPage = (sectionType: string) => sectionPages[sectionType] || 1
+  const setPage = (sectionType: string, page: number) => setSectionPages(p => ({ ...p, [sectionType]: page }))
+  const getPaginatedCards = (sectionType: string) => {
+    const all = getCards(sectionType)
+    const perPage = ITEMS_PER_PAGE[sectionType] || 4
+    const page = getPage(sectionType)
+    const total = Math.max(1, Math.ceil(all.length / perPage))
+    const safe = Math.min(page, total)
+    return {
+      cards: all.slice((safe - 1) * perPage, safe * perPage),
+      total,
+      safe,
+    }
+  }
 
   return (
     <div>
@@ -120,20 +136,23 @@ export default function OurApproach() {
             <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-10"></div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 sm:gap-7 md:gap-8 mb-12 sm:mb-16 md:mb-20">
-            {getCards('pillar').length > 0 ? getCards('pillar').map((card, i) => {
-              const IconComp = iconComponents[card.icon || ''] || BookOpen
-              return (
-                <PillarCard
-                  key={card.id}
-                  icon={<IconComp className="w-8 h-8" />}
-                  title={card.title}
-                  description={card.description || ''}
-                  features={card.features || []}
-                  color={card.color || pillarColors[i] || '#C8A75E'}
-                />
-              )
-            }) : (
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-7 md:gap-8 mb-6 sm:mb-6 md:mb-6">
+            {cards.filter(c => c.sectionType === 'pillar').length > 0 ? (() => {
+              const { cards: pcards, total, safe } = getPaginatedCards('pillar')
+              return pcards.map((card, i) => {
+                const IconComp = iconComponents[card.icon || ''] || BookOpen
+                return (
+                  <PillarCard
+                    key={card.id}
+                    icon={<IconComp className="w-8 h-8" />}
+                    title={card.title}
+                    description={card.description || ''}
+                    features={card.features || []}
+                    color={card.color || pillarColors[i] || '#C8A75E'}
+                  />
+                )
+              })
+            })() : (
               <>
                 <PillarCard icon={<BookOpen className="w-8 h-8" />} title="Education & Learning" description="We believe understanding comes before unity. Our educational programs demystify religious traditions, correct misconceptions, and highlight shared values across faiths." features={['Interfaith study circles', 'Sacred text exploration workshops', 'Online courses on world religions', 'Scholar-led seminars and webinars']} color="#C8A75E" />
                 <PillarCard icon={<MessageCircle className="w-8 h-8" />} title="Dialogue & Exchange" description="Creating safe, sacred spaces where people of different faiths can speak from the heart, listen deeply, and discover our common humanity." features={['Facilitated interfaith dialogues', 'Community conversation circles', 'Virtual global gatherings', 'One-on-one faith pairing programs']} color="#9B59B6" />
@@ -142,6 +161,22 @@ export default function OurApproach() {
               </>
             )}
           </div>
+          {getPaginatedCards('pillar').total > 1 && (() => {
+            const { total, safe } = getPaginatedCards('pillar')
+            return (
+              <div className="flex items-center justify-center gap-3 mb-12 sm:mb-16 md:mb-20">
+                <button onClick={() => setPage('pillar', safe - 1)} disabled={safe === 1}
+                  className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Previous
+                </button>
+                <span className="text-sm text-premium-light">Page {safe} of {total}</span>
+                <button onClick={() => setPage('pillar', safe + 1)} disabled={safe === total}
+                  className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Next
+                </button>
+              </div>
+            )
+          })()}
 
           <div className="card-premium p-12 text-center">
             <Lightbulb className="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 mx-auto mb-6 text-[#d4b56d]" />
@@ -172,18 +207,19 @@ export default function OurApproach() {
           </div>
 
           <div className="grid md:grid-cols-5 gap-6">
-            {getCards('step').length > 0 ? getCards('step').map((card, i) => {
+            {cards.filter(c => c.sectionType === 'step').length > 0 ? (() => {
+              const { cards: scards } = getPaginatedCards('step')
               const stepColors = ['#C8A75E', '#9B59B6', '#14B8A6', '#D4A07B', '#E07070']
-              return (
+              return scards.map((card) => (
                 <StepCard
                   key={card.id}
                   number={String(card.orderIndex + 1)}
                   title={card.title}
                   description={card.description || ''}
-                  color={card.color || stepColors[i] || '#C8A75E'}
+                  color={card.color || stepColors[card.orderIndex] || '#C8A75E'}
                 />
-              )
-            }) : (
+              ))
+            })() : (
               <>
                 <StepCard number="1" title="Connect" description="Bring people together in welcoming, inclusive spaces" color="#C8A75E" />
                 <StepCard number="2" title="Learn" description="Share knowledge about different faith traditions authentically" color="#9B59B6" />
@@ -193,6 +229,22 @@ export default function OurApproach() {
               </>
             )}
           </div>
+          {getPaginatedCards('step').total > 1 && (() => {
+            const { total, safe } = getPaginatedCards('step')
+            return (
+              <div className="flex items-center justify-center gap-3 mt-8">
+                <button onClick={() => setPage('step', safe - 1)} disabled={safe === 1}
+                  className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Previous
+                </button>
+                <span className="text-sm text-premium-light">Page {safe} of {total}</span>
+                <button onClick={() => setPage('step', safe + 1)} disabled={safe === total}
+                  className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Next
+                </button>
+              </div>
+            )
+          })()}
         </div>
       </section>
 
@@ -204,17 +256,20 @@ export default function OurApproach() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {getCards('principle').length > 0 ? getCards('principle').map((card, i) => {
-              const IconComp = iconComponents[card.icon || ''] || Users
-              return (
-                <PrincipleCard
-                  key={card.id}
-                  title={card.title}
-                  description={card.description || ''}
-                  icon={<IconComp className="w-10 h-10 text-[#c8a75e]" />}
-                />
-              )
-            }) : (
+            {cards.filter(c => c.sectionType === 'principle').length > 0 ? (() => {
+              const { cards: pcards } = getPaginatedCards('principle')
+              return pcards.map((card) => {
+                const IconComp = iconComponents[card.icon || ''] || Users
+                return (
+                  <PrincipleCard
+                    key={card.id}
+                    title={card.title}
+                    description={card.description || ''}
+                    icon={<IconComp className="w-10 h-10 text-[#c8a75e]" />}
+                  />
+                )
+              })
+            })() : (
               <>
                 <PrincipleCard title="Mutual Respect" description="We honor each tradition's integrity, authenticity, and sacred teachings. No faith is superior or inferior; each is a valid path to the Divine." icon={<Users className="w-10 h-10 text-[#c8a75e]" />} />
                 <PrincipleCard title="Deep Listening" description="We create spaces for genuine dialogue where people feel truly heard. Understanding precedes agreement, and connection transcends conversion." icon={<MessageCircle className="w-10 h-10 text-[#d4b56d]" />} />
@@ -225,6 +280,22 @@ export default function OurApproach() {
               </>
             )}
           </div>
+          {getPaginatedCards('principle').total > 1 && (() => {
+            const { total, safe } = getPaginatedCards('principle')
+            return (
+              <div className="flex items-center justify-center gap-3 mt-8">
+                <button onClick={() => setPage('principle', safe - 1)} disabled={safe === 1}
+                  className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Previous
+                </button>
+                <span className="text-sm text-premium-light">Page {safe} of {total}</span>
+                <button onClick={() => setPage('principle', safe + 1)} disabled={safe === total}
+                  className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                  Next
+                </button>
+              </div>
+            )
+          })()}
         </div>
       </section>
 
@@ -235,15 +306,16 @@ export default function OurApproach() {
               <h2 className="text-4xl heading-premium text-[#f5f3ee] mb-6">{whatMakesUsDifferent?.title || 'What Makes Us Different?'}</h2>
               <div className="divider-premium max-w-xs mb-8"></div>
               <div className="space-y-6">
-                {getCards('differentiator').length > 0 ? getCards('differentiator').map((card, i) => {
-                  return (
+                {cards.filter(c => c.sectionType === 'differentiator').length > 0 ? (() => {
+                  const { cards: dcards } = getPaginatedCards('differentiator')
+                  return dcards.map((card) => (
                     <DifferentiatorItem
                       key={card.id}
                       title={card.title}
                       description={card.description || ''}
                     />
-                  )
-                }) : (
+                  ))
+                })() : (
                   <>
                     <DifferentiatorItem title="Rooted in Tradition, Open to All" description="While grounded in Sufi wisdom, we welcome people of all faiths and none. Our Sufi foundation provides spiritual depth without exclusivity." />
                     <DifferentiatorItem title="Experience Over Theory" description="We emphasize lived experience and personal transformation, not just academic knowledge or theological debate." />
@@ -252,6 +324,22 @@ export default function OurApproach() {
                   </>
                 )}
               </div>
+              {getPaginatedCards('differentiator').total > 1 && (() => {
+                const { total, safe } = getPaginatedCards('differentiator')
+                return (
+                  <div className="flex items-center justify-center gap-3 mt-6">
+                    <button onClick={() => setPage('differentiator', safe - 1)} disabled={safe === 1}
+                      className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                      Previous
+                    </button>
+                    <span className="text-sm text-premium-light">Page {safe} of {total}</span>
+                    <button onClick={() => setPage('differentiator', safe + 1)} disabled={safe === total}
+                      className="px-4 py-2 text-sm font-semibold text-[#f5f3ee] bg-[#0b0f2a]/60 rounded-xl hover:bg-[#c8a75e]/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                      Next
+                    </button>
+                  </div>
+                )
+              })()}
             </div>
             <div className="space-y-6">
               <div className="card-premium p-8">

@@ -57,6 +57,24 @@ interface PendingContent {
   peaceInitiatives: ContentItem[]
   similarityThemes: ContentItem[]
   shareableQuotes: ContentItem[]
+  corePillars: ContentItem[]
+  missionContent: ContentItem[]
+  wisdomToAction: ContentItem[]
+  impactGoals: ContentItem[]
+  featuredPrograms: ContentItem[]
+  regionalInitiatives: ContentItem[]
+  getInvolved: ContentItem[]
+  currentInitiatives: ContentItem[]
+  aboutContent: ContentItem[]
+  aboutValues: ContentItem[]
+  aboutLeaders: ContentItem[]
+  teachingSections: ContentItem[]
+  truthSections: ContentItem[]
+  traditionSections: ContentItem[]
+  sufiContent: ContentItem[]
+  approachContent: ContentItem[]
+  sufiCards: ContentItem[]
+  approachCards: ContentItem[]
   pendingEdits: PendingEditItem[]
 }
 
@@ -106,6 +124,109 @@ const CONTENT_FIELD_MAP: Record<string, ContentField[]> = {
     { label: 'Background Style', value: 'backgroundStyle' },
     { label: 'Sacred Text', value: (i: ContentItem) => i.sacredText?.title ?? 'N/A' },
   ],
+  core_pillars: [
+    { label: 'Title', value: 'title' },
+    { label: 'Description', value: 'description' },
+    { label: 'Icon', value: 'icon' },
+    { label: 'Color', value: 'color' },
+  ],
+  mission_content: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+  ],
+  wisdom_to_action: [
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+  ],
+  impact_goals: [
+    { label: 'Number', value: 'number' },
+    { label: 'Label', value: 'label' },
+  ],
+  featured_programs: [
+    { label: 'Title', value: 'title' },
+    { label: 'Description', value: 'description' },
+    { label: 'Details', value: 'details' },
+    { label: 'Testimonial', value: 'testimonialText' },
+  ],
+  regional_initiatives: [
+    { label: 'Region', value: 'region' },
+    { label: 'Initiatives', value: 'initiatives' },
+  ],
+  get_involved: [
+    { label: 'Title', value: 'title' },
+    { label: 'Description', value: 'description' },
+  ],
+  current_initiatives: [
+    { label: 'Title', value: 'title' },
+    { label: 'Description', value: 'description' },
+    { label: 'Impact', value: 'impact' },
+    { label: 'Region', value: 'region' },
+  ],
+  about_content: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+  ],
+  about_values: [
+    { label: 'Title', value: 'title' },
+    { label: 'Description', value: 'description' },
+    { label: 'Icon', value: 'icon' },
+    { label: 'Color', value: 'color' },
+    { label: 'Order', value: 'orderIndex' },
+  ],
+  about_leaders: [
+    { label: 'Name', value: 'name' },
+    { label: 'Role', value: 'role' },
+    { label: 'Description', value: 'description' },
+    { label: 'Order', value: 'orderIndex' },
+  ],
+  teaching_sections: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+  ],
+  truth_sections: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+  ],
+  tradition_sections: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+  ],
+  sufi_content: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+    { label: 'Order', value: 'orderIndex' },
+  ],
+  approach_content: [
+    { label: 'Section Key', value: 'sectionKey' },
+    { label: 'Title', value: 'title' },
+    { label: 'Content', value: 'content' },
+    { label: 'Order', value: 'orderIndex' },
+  ],
+  sufi_cards: [
+    { label: 'Section Type', value: 'sectionType' },
+    { label: 'Title', value: 'title' },
+    { label: 'Subtitle', value: 'subtitle' },
+    { label: 'Description', value: 'description' },
+    { label: 'Quote', value: 'quote' },
+    { label: 'Icon', value: 'icon' },
+    { label: 'Color', value: 'color' },
+    { label: 'Order', value: 'orderIndex' },
+  ],
+  approach_cards: [
+    { label: 'Section Type', value: 'sectionType' },
+    { label: 'Title', value: 'title' },
+    { label: 'Description', value: 'description' },
+    { label: 'Features', value: 'features' },
+    { label: 'Icon', value: 'icon' },
+    { label: 'Color', value: 'color' },
+    { label: 'Order', value: 'orderIndex' },
+  ],
 }
 
 const ALLOWED_EDIT_FIELDS: Record<string, string[]> = {
@@ -116,6 +237,24 @@ const ALLOWED_EDIT_FIELDS: Record<string, string[]> = {
   peace_initiatives: ['title', 'description', 'impact'],
   similarity_themes: ['title', 'description', 'icon', 'slug', 'orderIndex'],
   shareable_quotes: ['quoteText', 'backgroundStyle', 'sacredTextId'],
+  core_pillars: ['title', 'description', 'icon', 'color'],
+  mission_content: ['sectionKey', 'title', 'content'],
+  wisdom_to_action: ['title', 'content'],
+  impact_goals: ['number', 'label'],
+  featured_programs: ['title', 'description', 'details', 'testimonialText', 'testimonialAuthor'],
+  regional_initiatives: ['region', 'initiatives'],
+  get_involved: ['title', 'description'],
+  current_initiatives: ['title', 'description', 'impact', 'region'],
+  about_content: ['sectionKey', 'title', 'content'],
+  about_values: ['title', 'description', 'icon', 'color', 'orderIndex'],
+  about_leaders: ['name', 'role', 'description', 'image', 'orderIndex'],
+  teaching_sections: ['sectionKey', 'title', 'content'],
+  truth_sections: ['sectionKey', 'title', 'content'],
+  tradition_sections: ['sectionKey', 'title', 'content'],
+  sufi_content: ['sectionKey', 'title', 'content', 'orderIndex'],
+  approach_content: ['sectionKey', 'title', 'content', 'orderIndex'],
+  sufi_cards: ['sectionType', 'title', 'subtitle', 'description', 'quote', 'icon', 'color', 'orderIndex'],
+  approach_cards: ['sectionType', 'title', 'description', 'features', 'icon', 'color', 'orderIndex'],
 }
 
 const FIELD_LABELS: Record<string, string> = {
@@ -140,6 +279,20 @@ const FIELD_LABELS: Record<string, string> = {
   traditionId: 'Tradition',
   sacredTextId: 'Sacred Text',
   orderIndex: 'Order Index',
+  sectionKey: 'Section Key',
+  number: 'Number',
+  label: 'Label',
+  details: 'Details',
+  testimonialText: 'Testimonial Text',
+  testimonialAuthor: 'Testimonial Author',
+  region: 'Region',
+  initiatives: 'Initiatives',
+  image: 'Image',
+  subtitle: 'Subtitle',
+  quote: 'Quote',
+  color: 'Color',
+  features: 'Features',
+  sectionType: 'Section Type',
 }
 
 export default function ContentReviewPage() {
@@ -359,6 +512,24 @@ export default function ContentReviewPage() {
       ...pendingContent.peaceInitiatives,
       ...pendingContent.similarityThemes,
       ...pendingContent.shareableQuotes,
+      ...pendingContent.corePillars,
+      ...pendingContent.missionContent,
+      ...pendingContent.wisdomToAction,
+      ...pendingContent.impactGoals,
+      ...pendingContent.featuredPrograms,
+      ...pendingContent.regionalInitiatives,
+      ...pendingContent.getInvolved,
+      ...pendingContent.currentInitiatives,
+      ...pendingContent.aboutContent,
+      ...pendingContent.aboutValues,
+      ...pendingContent.aboutLeaders,
+      ...pendingContent.teachingSections,
+      ...pendingContent.truthSections,
+      ...pendingContent.traditionSections,
+      ...pendingContent.sufiContent,
+      ...pendingContent.approachContent,
+      ...pendingContent.sufiCards,
+      ...pendingContent.approachCards,
       ...pendingContent.pendingEdits,
     ]
 
@@ -549,6 +720,111 @@ export default function ContentReviewPage() {
         { key: 'quoteText', label: 'Quote Text', multiline: true },
         { key: 'backgroundStyle', label: 'Background Style', multiline: false },
       ],
+      core_pillars: [
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'icon', label: 'Icon', multiline: false },
+        { key: 'color', label: 'Color', multiline: false },
+      ],
+      mission_content: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+      ],
+      wisdom_to_action: [
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+      ],
+      impact_goals: [
+        { key: 'number', label: 'Number', multiline: false },
+        { key: 'label', label: 'Label', multiline: false },
+      ],
+      featured_programs: [
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'details', label: 'Details', multiline: true },
+        { key: 'testimonialText', label: 'Testimonial Text', multiline: true },
+        { key: 'testimonialAuthor', label: 'Testimonial Author', multiline: false },
+      ],
+      regional_initiatives: [
+        { key: 'region', label: 'Region', multiline: false },
+        { key: 'initiatives', label: 'Initiatives', multiline: true },
+      ],
+      get_involved: [
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+      ],
+      current_initiatives: [
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'impact', label: 'Impact', multiline: true },
+        { key: 'region', label: 'Region', multiline: false },
+      ],
+      about_content: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+      ],
+      about_values: [
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'icon', label: 'Icon', multiline: false },
+        { key: 'color', label: 'Color', multiline: false },
+        { key: 'orderIndex', label: 'Order Index', multiline: false },
+      ],
+      about_leaders: [
+        { key: 'name', label: 'Name', multiline: false },
+        { key: 'role', label: 'Role', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'image', label: 'Image', multiline: false },
+        { key: 'orderIndex', label: 'Order Index', multiline: false },
+      ],
+      teaching_sections: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+      ],
+      truth_sections: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+      ],
+      tradition_sections: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+      ],
+      sufi_content: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+        { key: 'orderIndex', label: 'Order Index', multiline: false },
+      ],
+      approach_content: [
+        { key: 'sectionKey', label: 'Section Key', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'content', label: 'Content', multiline: true },
+        { key: 'orderIndex', label: 'Order Index', multiline: false },
+      ],
+      sufi_cards: [
+        { key: 'sectionType', label: 'Section Type', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'subtitle', label: 'Subtitle', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'quote', label: 'Quote', multiline: true },
+        { key: 'icon', label: 'Icon', multiline: false },
+        { key: 'color', label: 'Color', multiline: false },
+        { key: 'orderIndex', label: 'Order Index', multiline: false },
+      ],
+      approach_cards: [
+        { key: 'sectionType', label: 'Section Type', multiline: false },
+        { key: 'title', label: 'Title', multiline: false },
+        { key: 'description', label: 'Description', multiline: true },
+        { key: 'features', label: 'Features (one per line)', multiline: true },
+        { key: 'icon', label: 'Icon', multiline: false },
+        { key: 'color', label: 'Color', multiline: false },
+        { key: 'orderIndex', label: 'Order Index', multiline: false },
+      ],
     }
     return map[type] || []
   }
@@ -649,7 +925,7 @@ export default function ContentReviewPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-3 md:gap-4 mb-6">
         <button
           onClick={() => setSelectedTab('pending_moderator')}
           className={`px-6 py-3 rounded-xl font-semibold transition-all ${
