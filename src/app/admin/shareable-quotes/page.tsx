@@ -123,10 +123,10 @@ export default function ShareableQuotesManagement() {
 
         <div className="grid gap-6">
           {sortedQuotes.map((quote) => (
-            <div key={quote.id} className="glass-effect rounded-2xl p-6">
+            <div key={quote.id} className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="text-3xl">{quote.sacredText.tradition?.symbol || '🌍'}</div>
+                  <div className="text-3xl">{quote.sacredText.tradition?.symbol || 'ðŸŒ'}</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
                       <span className="px-3 py-1 bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl text-sm">

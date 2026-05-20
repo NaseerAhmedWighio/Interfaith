@@ -1049,7 +1049,7 @@ export default function ContentReviewPage() {
       {/* Reject Modal */}
       {showRejectModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20 max-w-md w-full">
+          <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20 max-w-md w-full">
             <h3 className="text-xl font-bold text-[#f5f3ee] mb-4">Reject Content</h3>
             <p className="text-premium-light mb-4">
               Please provide a reason for rejecting this content:

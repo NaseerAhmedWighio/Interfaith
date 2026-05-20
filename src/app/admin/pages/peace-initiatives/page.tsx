@@ -429,7 +429,7 @@ export default function PeaceInitiativesPageEditor() {
     setGetInvolvedAddForm({ title: '', description: '' })
   }
 
-  // ── Current Initiatives CRUD ─────────────────────────────
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Current Initiatives CRUD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
   function handleCiEdit(item: CurrentInitiative) {
     setCiEditingId(item.id)
@@ -595,14 +595,14 @@ export default function PeaceInitiativesPageEditor() {
 
       <div className="grid gap-6">
         {/* Current Initiatives */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl">
-                <Globe2 className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg sm:rounded-xl">
+                <Globe2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Current Initiatives</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Current Initiatives</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-400 mt-1">
                   {currentInitiatives.length} item{currentInitiatives.length !== 1 ? 's' : ''}
                 </span>
@@ -634,7 +634,7 @@ export default function PeaceInitiativesPageEditor() {
                 <div key={item.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#f5f3ee]">{item.title}</p>
-                    <p className="text-xs text-premium-light truncate">{item.category} — {item.description.length > 60 ? item.description.slice(0, 60) + '...' : item.description}</p>
+                    <p className="text-xs text-premium-light truncate">{item.category} Ã¢â‚¬â€ {item.description.length > 60 ? item.description.slice(0, 60) + '...' : item.description}</p>
                   </div>
                   {renderActionButtons(() => handleCiEdit(item), () => handleCiDelete(item.id))}
                 </div>
@@ -676,14 +676,14 @@ export default function PeaceInitiativesPageEditor() {
         </div>
 
         {/* Impact Goals */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl">
-                <TrendingUp className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg sm:rounded-xl">
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Impact Goals</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Impact Goals</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/20 text-rose-400 mt-1">
                   {goals.length} goal{goals.length !== 1 ? 's' : ''}
                 </span>
@@ -738,14 +738,14 @@ export default function PeaceInitiativesPageEditor() {
         </div>
 
         {/* Featured Programs */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl">
-                <Heart className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg sm:rounded-xl">
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Featured Programs</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Featured Programs</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-500/20 text-pink-400 mt-1">
                   {programs.length} program{programs.length !== 1 ? 's' : ''}
                 </span>
@@ -820,14 +820,14 @@ export default function PeaceInitiativesPageEditor() {
         </div>
 
         {/* Regional Initiatives */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl">
-                <Globe2 className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg sm:rounded-xl">
+                <Globe2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Regional Initiatives</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Regional Initiatives</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-500/20 text-teal-400 mt-1">
                   {regionals.length} region{regionals.length !== 1 ? 's' : ''}
                 </span>
@@ -906,14 +906,14 @@ export default function PeaceInitiativesPageEditor() {
         </div>
 
         {/* Get Involved */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
-                <Users className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg sm:rounded-xl">
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Get Involved</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Get Involved</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400 mt-1">
                   {getInvolved.length} item{getInvolved.length !== 1 ? 's' : ''}
                 </span>

@@ -100,14 +100,14 @@ export default function TeachingsPageEditor() {
 
       <div className="grid gap-6">
         {/* Teachings */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
-                <BookOpen className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg sm:rounded-xl">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Teachings</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Teachings</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 mt-1">
                   {teachings.length} teaching{teachings.length !== 1 ? 's' : ''}
                 </span>
@@ -117,7 +117,7 @@ export default function TeachingsPageEditor() {
           {teachings.length > 0 && (
             <div className="space-y-2 mb-4">
               {teachings.slice(0, 5).map(t => (
-                <p key={t.id} className="text-sm text-premium-light">• {t.title}</p>
+                <p key={t.id} className="text-sm text-premium-light">Ã¢â‚¬Â¢ {t.title}</p>
               ))}
               {teachings.length > 5 && (
                 <p className="text-sm text-premium-light italic">...and {teachings.length - 5} more</p>
@@ -136,14 +136,14 @@ export default function TeachingsPageEditor() {
         </div>
 
         {/* Similarity Themes */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl">
-                <TrendingUp className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-lg sm:rounded-xl">
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Similarity Themes</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Similarity Themes</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-400 mt-1">
                   {similarityThemes.length} theme{similarityThemes.length !== 1 ? 's' : ''}
                 </span>
@@ -153,7 +153,7 @@ export default function TeachingsPageEditor() {
           {similarityThemes.length > 0 && (
             <div className="space-y-2 mb-4">
               {similarityThemes.map(t => (
-                <p key={t.id} className="text-sm text-premium-light">• {t.title}</p>
+                <p key={t.id} className="text-sm text-premium-light">Ã¢â‚¬Â¢ {t.title}</p>
               ))}
             </div>
           )}
@@ -169,14 +169,14 @@ export default function TeachingsPageEditor() {
         </div>
 
         {/* The Universal Message */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl">
-                <MessageSquare className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg sm:rounded-xl">
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">The Universal Message</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">The Universal Message</h2>
                 {universalMessage && (
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                     universalMessage.status === 'published' ? 'bg-green-500/20 text-green-400' :

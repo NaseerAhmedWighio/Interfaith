@@ -91,14 +91,14 @@ export default function MissionPageEditor() {
 
       <div className="grid gap-6">
         {/* Our Mission Header */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl">
-                <FileText className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg sm:rounded-xl">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Our Mission Header</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Our Mission Header</h2>
                 {header && (
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                     header.status === 'published' ? 'bg-green-500/20 text-green-400' :
@@ -147,14 +147,14 @@ export default function MissionPageEditor() {
         </div>
 
         {/* Sufi Path Content */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
-                <Shield className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg sm:rounded-xl">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Sufi Path Content</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Sufi Path Content</h2>
                 {sufiPath && (
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                     sufiPath.status === 'published' ? 'bg-green-500/20 text-green-400' :
@@ -203,14 +203,14 @@ export default function MissionPageEditor() {
         </div>
 
         {/* Core Pillars */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl">
-                <LayoutDashboard className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg sm:rounded-xl">
+                <LayoutDashboard className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Core Pillars</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Core Pillars</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 mt-1">
                   {corePillars.length} pillar{corePillars.length !== 1 ? 's' : ''}
                 </span>
@@ -220,7 +220,7 @@ export default function MissionPageEditor() {
           {corePillars.length > 0 ? (
             <div className="space-y-2 mb-4">
               {corePillars.map(p => (
-                <p key={p.id} className="text-sm text-premium-light">• {p.title}</p>
+                <p key={p.id} className="text-sm text-premium-light">Ã¢â‚¬Â¢ {p.title}</p>
               ))}
             </div>
           ) : (

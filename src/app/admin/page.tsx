@@ -410,36 +410,36 @@ export default function AdminDashboard() {
 
       {/* Summary Cards */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] rounded-xl">
-              <Activity className="w-6 h-6 text-[#0b0f2a]" />
+            <div className="p-2 sm:p-3 bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] rounded-xl">
+              <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-[#0b0f2a]" />
             </div>
             <span className="text-xs text-premium-light">Total Content</span>
           </div>
-          <div className="text-3xl font-bold text-[#f5f3ee] mb-1">{totalContent}</div>
+          <div className="text-2xl sm:text-3xl font-bold text-[#f5f3ee] mb-1">{totalContent}</div>
           <p className="text-sm text-premium-light">Traditions, Teachings & Texts</p>
         </div>
 
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
-              <Users className="w-6 h-6 text-white" />
+            <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <span className="text-xs text-premium-light">Community</span>
           </div>
-          <div className="text-3xl font-bold text-[#f5f3ee] mb-1">{totalUsers}</div>
+          <div className="text-2xl sm:text-3xl font-bold text-[#f5f3ee] mb-1">{totalUsers}</div>
           <p className="text-sm text-premium-light">Members & Subscribers</p>
         </div>
 
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl">
-              <Clock className="w-6 h-6 text-white" />
+            <div className="p-2 sm:p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <span className="text-xs text-premium-light">Last Updated</span>
           </div>
-          <div className="text-3xl font-bold text-[#f5f3ee] mb-1">Today</div>
+          <div className="text-2xl sm:text-3xl font-bold text-[#f5f3ee] mb-1">Today</div>
           <p className="text-sm text-premium-light">{new Date().toLocaleDateString()}</p>
         </div>
       </div>
@@ -453,12 +453,12 @@ export default function AdminDashboard() {
           return (
             <div
               key={card.title}
-              className="glass-effect rounded-2xl overflow-hidden border border-[#c8a75e]/10 hover:border-[#c8a75e]/30 transition-all duration-300"
+              className="glass-effect rounded-xl sm:rounded-2xl overflow-hidden border border-[#c8a75e]/10 hover:border-[#c8a75e]/30 transition-all duration-300"
             >
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className={`p-3 rounded-xl bg-gradient-to-br ${card.color}`}>
-                    <Icon className="w-6 h-6 text-white" />
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
                   <button
                     onClick={() => setExpandedCard(isExpanded ? null : card.title)}
@@ -469,7 +469,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="mb-4">
-                  <div className="text-3xl font-bold text-[#f5f3ee] mb-1">{card.count}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-[#f5f3ee] mb-1">{card.count}</div>
                   <h3 className="text-lg font-semibold text-[#f5f3ee]">{card.title}</h3>
                   <p className="text-sm text-premium-light mt-1">{card.description}</p>
                 </div>

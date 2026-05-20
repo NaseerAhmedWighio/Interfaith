@@ -103,13 +103,13 @@ export default function PeaceInitiativesManagement() {
       <div className="glass-effect rounded-xl p-4 border border-[#c8a75e]/20">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-premium-light" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-premium-light" />
               <input
                 type="text"
                 placeholder="Search peace initiatives..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-[#0b0f2a]/20 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
+                className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 bg-[#0b0f2a]/20 border border-[#c8a75e]/20 rounded-lg sm:rounded-xl text-sm sm:text-base text-[#f5f3ee] placeholder-premium-light focus:outline-none focus:border-[#c8a75e] transition-colors"
               />
             </div>
             <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_peace_initiatives" />
@@ -121,9 +121,9 @@ export default function PeaceInitiativesManagement() {
             <div key={initiative.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="text-4xl">{initiative.icon}</div>
+                  <div className="text-2xl sm:text-4xl">{initiative.icon}</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-[#f5f3ee] mb-3 truncate">{initiative.title}</h3>
+                    <h3 className="text-base sm:text-xl font-semibold text-[#f5f3ee] mb-3 truncate">{initiative.title}</h3>
                     <p className="text-premium-light leading-relaxed line-clamp-2">{initiative.description}</p>
                   </div>
                 </div>

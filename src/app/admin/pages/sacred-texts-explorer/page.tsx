@@ -62,14 +62,14 @@ export default function SacredTextsExplorerEditor() {
 
       <div className="grid gap-6">
         {/* Sacred Texts */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl">
-                <FileText className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg sm:rounded-xl">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Sacred Texts</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Sacred Texts</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 mt-1">
                   {sacredTexts.length} text{sacredTexts.length !== 1 ? 's' : ''}
                 </span>
@@ -80,7 +80,7 @@ export default function SacredTextsExplorerEditor() {
             <div className="space-y-2 mb-4">
               {Object.entries(themeCounts).map(([theme, count]) => (
                 <p key={theme} className="text-sm text-premium-light">
-                  • <span className="text-[#f5f3ee] capitalize">{theme}</span>: {count} text{count !== 1 ? 's' : ''}
+                  Ã¢â‚¬Â¢ <span className="text-[#f5f3ee] capitalize">{theme}</span>: {count} text{count !== 1 ? 's' : ''}
                 </p>
               ))}
             </div>

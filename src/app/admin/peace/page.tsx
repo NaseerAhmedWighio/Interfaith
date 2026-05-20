@@ -43,7 +43,7 @@ export default function PeaceAdmin() {
 
   useEffect(() => { fetchAll() }, [])
 
-  // ── Wisdom CRUD ──────────────────────────────────────────
+  // â”€â”€ Wisdom CRUD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   function handleWisdomEdit(item: WisdomItem) {
     setWisdomEditingId(item.id)
@@ -66,7 +66,7 @@ export default function PeaceAdmin() {
     }
   }
 
-  // ── Render helpers ───────────────────────────────────────
+  // â”€â”€ Render helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   function renderField(label: string, value: string, onChange: (v: string) => void, multiline = false) {
     if (multiline) {
@@ -129,7 +129,7 @@ export default function PeaceAdmin() {
       <div className="grid gap-6">
 
         {/* The Path from Wisdom to Action */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="space-y-3">
             {wisdom.length > 0 ? wisdom.map(w => (
               wisdomEditingId === w.id ? (
@@ -163,7 +163,7 @@ export default function PeaceAdmin() {
         </div>
 
         {/* Active Initiatives */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl">

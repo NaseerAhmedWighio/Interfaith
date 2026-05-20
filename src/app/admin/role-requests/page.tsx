@@ -193,7 +193,7 @@ export default function AdminRoleRequestsPage() {
       </div>
 
       {/* Status Filter */}
-      <div className="glass-effect rounded-xl p-2 flex items-center gap-2 flex-wrap">
+      <div className="glass-effect rounded-xl p-2 flex items-center gap-2 justify-between md:flex-wrap">
         <Filter className="w-4 h-4 text-premium-light mr-2" />
         {filterButtons.map((btn) => (
           <button
@@ -236,13 +236,13 @@ export default function AdminRoleRequestsPage() {
       ) : (
         <div className="space-y-4">
           {requests.map((request) => (
-            <div key={request.id} className="glass-effect rounded-2xl p-6">
+            <div key={request.id} className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 {/* Request Info */}
                 <div className="flex-1">
-                  <div className="flex items-start gap-4 mb-4">
+                  <div className="flex flex-col md:flex-row items-start gap-4 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c8a75e] to-[#d4b56d] flex items-center justify-center flex-shrink-0">
-                      <User className="w-6 h-6 text-[#0b0f2a]" />
+                      <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#0b0f2a]" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
@@ -257,7 +257,7 @@ export default function AdminRoleRequestsPage() {
                           <span className="font-semibold">Current Role:</span>
                           <span className="capitalize">{request.user.role}</span>
                         </span>
-                        <span className="text-[#aab0d6]/30">→</span>
+                        <span className="text-[#aab0d6]/30">â†’</span>
                         <span className="flex items-center gap-1">
                           <span className="font-semibold text-premium-light">Requested:</span>
                           <span className="capitalize text-[#c8a75e] font-bold">

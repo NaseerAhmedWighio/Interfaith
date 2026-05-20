@@ -92,14 +92,14 @@ export default function TraditionsPageEditor() {
 
       <div className="grid gap-6">
         {/* Faith Traditions */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
-                <Database className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl">
+                <Database className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Faith Traditions</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Faith Traditions</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 mt-1">
                   {traditions.length} tradition{traditions.length !== 1 ? 's' : ''}
                 </span>
@@ -109,7 +109,7 @@ export default function TraditionsPageEditor() {
           {traditions.length > 0 && (
             <div className="space-y-2 mb-4">
               {traditions.map(t => (
-                <p key={t.id} className="text-sm text-premium-light">• {t.name}</p>
+                <p key={t.id} className="text-sm text-premium-light">Ã¢â‚¬Â¢ {t.name}</p>
               ))}
             </div>
           )}
@@ -125,14 +125,14 @@ export default function TraditionsPageEditor() {
         </div>
 
         {/* Unity in Diversity */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl">
-                <Globe2 className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg sm:rounded-xl">
+                <Globe2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Unity in Diversity</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Unity in Diversity</h2>
                 {unitySection && (
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                     unitySection.status === 'published' ? 'bg-green-500/20 text-green-400' :

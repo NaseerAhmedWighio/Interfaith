@@ -48,8 +48,8 @@ export default function ContentSort({ sortConfig, onSortChange, settingKey, labe
   }
 
   return (
-    <div className="flex items-center gap-2">
-      {label && <span className="text-xs text-[#aab0d6] font-medium">{label}</span>}
+    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+      {label && <span className="text-xs text-[#aab0d6] font-medium w-full sm:w-auto">{label}</span>}
       <div className="flex bg-[#0b0f2a] border border-[#c8a75e]/20 rounded-lg overflow-hidden">
         {options.map((opt) => {
           const isActive = sortConfig.field === opt.value.field && sortConfig.order === opt.value.order
@@ -58,13 +58,13 @@ export default function ContentSort({ sortConfig, onSortChange, settingKey, labe
             <button
               key={opt.label}
               onClick={() => onSortChange(opt.value)}
-              className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium transition-all ${
+              className={`flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-medium transition-all ${
                 isActive
                   ? 'bg-[#c8a75e] text-[#0b0f2a]'
                   : 'text-[#aab0d6] hover:text-[#f5f3ee] hover:bg-[#c8a75e]/10'
               }`}
             >
-              <Icon className="w-3 h-3" />
+              <Icon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
               {opt.label}
             </button>
           )
@@ -74,13 +74,13 @@ export default function ContentSort({ sortConfig, onSortChange, settingKey, labe
         <button
           onClick={handleSave}
           disabled={saving}
-          className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
+          className={`flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-medium rounded-lg transition-all ${
             saved
               ? 'bg-green-500/20 text-green-400 border border-green-500/30'
               : 'bg-[#c8a75e]/10 text-[#c8a75e] border border-[#c8a75e]/20 hover:bg-[#c8a75e]/20'
           }`}
         >
-          <Save className="w-3 h-3" />
+          <Save className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           {saving ? 'Saving...' : saved ? 'Saved!' : 'Save'}
         </button>
       )}

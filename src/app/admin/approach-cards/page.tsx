@@ -190,7 +190,7 @@ export default function ApproachCardsManagement() {
       </div>
 
       {showAdd && (
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb className="w-5 h-5 text-[#c8a75e]" />
             <span className="text-sm font-medium text-[#f5f3ee]">New Approach Card</span>

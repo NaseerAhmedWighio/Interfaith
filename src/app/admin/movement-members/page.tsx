@@ -97,10 +97,10 @@ export default function MovementMembersManagement() {
       {/* Members Grid */}
       <div className="grid gap-4">
           {members.map((member) => (
-            <div key={member.id} className="glass-effect rounded-2xl p-6">
+            <div key={member.id} className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-[#f5f3ee] mb-2 truncate">{member.full_name}</h3>
+                  <h3 className="text-base sm:text-xl font-semibold text-[#f5f3ee] mb-2 truncate">{member.full_name}</h3>
                   <div className="flex items-center gap-2 text-premium-light mb-2">
                     <Mail className="w-4 h-4" />
                     <a href={`mailto:${member.email}`} className="hover:text-[#c8a75e] transition-colors truncate">

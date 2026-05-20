@@ -83,14 +83,14 @@ export default function TruthPageEditor() {
 
       <div className="grid gap-6">
         {/* Misconceptions */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
-                <MessageSquare className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg sm:rounded-xl">
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Misconceptions</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Misconceptions</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400 mt-1">
                   {misconceptions.length} total
                 </span>
@@ -101,7 +101,7 @@ export default function TruthPageEditor() {
             <div className="space-y-2 mb-4">
               {misconceptions.slice(0, 5).map(m => (
                 <p key={m.id} className="text-sm text-premium-light">
-                  • {m.misconception.length > 80 ? m.misconception.slice(0, 80) + '...' : m.misconception}
+                  Ã¢â‚¬Â¢ {m.misconception.length > 80 ? m.misconception.slice(0, 80) + '...' : m.misconception}
                 </p>
               ))}
               {misconceptions.length > 5 && (
@@ -121,14 +121,14 @@ export default function TruthPageEditor() {
         </div>
 
         {/* Why Dispelling Misconceptions Matters */}
-        <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl">
-                <Lightbulb className="w-5 h-5 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg sm:rounded-xl">
+                <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Why Dispelling Misconceptions Matters</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Why Dispelling Misconceptions Matters</h2>
                 {dispellingSection && (
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                     dispellingSection.status === 'published' ? 'bg-green-500/20 text-green-400' :
