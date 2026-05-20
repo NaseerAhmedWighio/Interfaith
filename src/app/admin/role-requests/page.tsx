@@ -318,7 +318,7 @@ export default function AdminRoleRequestsPage() {
                 {(request.status === 'pending' || !request.status) && (
                   <div className="flex-shrink-0">
                     {reviewingId === request.id ? (
-                      <div className="space-y-3 min-w-[250px]">
+                      <div className="space-y-3 min-w-0 w-full">
                         <textarea
                           value={adminNotes}
                           onChange={(e) => setAdminNotes(e.target.value)}

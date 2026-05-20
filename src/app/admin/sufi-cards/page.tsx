@@ -241,7 +241,7 @@ export default function SufiCardsManagement() {
 
       <div className="space-y-3">
         {filteredCards.map(c => (
-          <div key={c.id} className="glass-effect rounded-2xl p-5 border border-[#c8a75e]/10">
+          <div key={c.id} className="glass-effect rounded-xl sm:rounded-2xl p-5 border border-[#c8a75e]/10">
             {editingId === c.id ? (
               <div className="grid gap-4">
                 <div className="flex gap-4">
@@ -326,7 +326,7 @@ export default function SufiCardsManagement() {
       </div>
 
       {filteredCards.length === 0 && (
-        <div className="glass-effect rounded-2xl p-12 text-center">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
           <BookOpen className="w-16 h-16 text-premium-light mx-auto mb-4" />
           <p className="text-premium-light">No Sufi cards found</p>
         </div>

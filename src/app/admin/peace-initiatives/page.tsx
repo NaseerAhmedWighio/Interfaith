@@ -118,7 +118,7 @@ export default function PeaceInitiativesManagement() {
 
         <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
           {sortedInitiatives.map((initiative) => (
-            <div key={initiative.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+            <div key={initiative.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4 flex-1">
                   <div className="text-2xl sm:text-4xl">{initiative.icon}</div>
@@ -147,7 +147,7 @@ export default function PeaceInitiativesManagement() {
         </div>
 
         {sortedInitiatives.length === 0 && (
-          <div className="glass-effect rounded-2xl p-12 text-center">
+          <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
             <Heart className="w-16 h-16 text-premium-light mx-auto mb-4" />
             <p className="text-premium-light">No peace initiatives found</p>
           </div>

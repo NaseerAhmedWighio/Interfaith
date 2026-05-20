@@ -126,7 +126,7 @@ export default function MisconceptionsManagement() {
       {/* Misconceptions Grid */}
       <div className="grid gap-4">
         {sortedMisconceptions.map((misconception) => (
-          <div key={misconception.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div key={misconception.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-4 flex-1">
                 {/* <div className="text-4xl">{misconception.traditions?.symbol || '🌍'}</div> */}

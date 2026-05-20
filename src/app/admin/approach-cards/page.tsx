@@ -322,7 +322,7 @@ export default function ApproachCardsManagement() {
       </div>
 
       {filteredCards.length === 0 && (
-        <div className="glass-effect rounded-2xl p-12 text-center">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
           <BookOpen className="w-16 h-16 text-premium-light mx-auto mb-4" />
           <p className="text-premium-light">No approach cards found</p>
         </div>

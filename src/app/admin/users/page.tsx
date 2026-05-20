@@ -146,7 +146,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Filters */}
-      <div className="glass-effect rounded-2xl p-4 md:p-6">
+      <div className="glass-effect rounded-xl sm:rounded-2xl p-4 md:p-6">
         <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#aab0d6]/50" />
@@ -183,7 +183,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Users Table */}
-      <div className="glass-effect rounded-2xl overflow-hidden">
+      <div className="glass-effect rounded-xl sm:rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[#0b0f2a]/60 border-b border-[#c8a75e]/10">

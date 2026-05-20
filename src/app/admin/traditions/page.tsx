@@ -123,7 +123,7 @@ export default function TraditionsManagement() {
       {/* Table */}
       <div className="glass-effect rounded-xl overflow-hidden border border-[#c8a75e]/20">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px]">
+          <table className="w-full min-w-[500px]">
             <thead className="bg-[#0b0f2a]/50 border-b border-[#c8a75e]/20">
               <tr>
                 {/* <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Symbol</th> */}

@@ -214,7 +214,7 @@ export default function EditSimilarityTheme({ params }: { params: Promise<{ id: 
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20 space-y-6">
+      <form onSubmit={handleSubmit} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20 space-y-6">
         <h2 className="text-lg font-bold text-[#f5f3ee] border-b border-[#c8a75e]/20 pb-3">Theme Details</h2>
 
         <div>
@@ -302,7 +302,7 @@ export default function EditSimilarityTheme({ params }: { params: Promise<{ id: 
         </div>
       </form>
 
-      <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20 space-y-4">
+      <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20 space-y-4">
         <div className="flex items-center justify-between border-b border-[#c8a75e]/20 pb-3">
           <h2 className="text-lg font-bold text-[#f5f3ee]">Teachings ({teachings.length})</h2>
           {!showTeachingForm && (

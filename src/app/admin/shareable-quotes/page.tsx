@@ -104,11 +104,11 @@ export default function ShareableQuotesManagement() {
 
       {/* Stats Cards */}
       <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
-        <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-[#f5f3ee] mb-2">{quotes.length}</div>
             <div className="text-premium-light">Total Quotes</div>
           </div>
-          <div className="glass-effect rounded-xl p-6">
+          <div className="glass-effect rounded-xl p-4 sm:p-6">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-6 h-6 text-green-400" />
               <div className="text-3xl font-bold text-green-400">{totalShares}</div>
@@ -125,8 +125,8 @@ export default function ShareableQuotesManagement() {
           {sortedQuotes.map((quote) => (
             <div key={quote.id} className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="text-3xl">{quote.sacredText.tradition?.symbol || 'ðŸŒ'}</div>
+                <div className="flex flex-col md:flex-row items-start gap-4 flex-1">
+                  <div className="text-3xl">{quote.sacredText.tradition?.symbol || 'Title'}</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
                       <span className="px-3 py-1 bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl text-sm">
@@ -170,7 +170,7 @@ export default function ShareableQuotesManagement() {
         </div>
 
         {sortedQuotes.length === 0 && (
-          <div className="glass-effect rounded-2xl p-12 text-center">
+          <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
             <Share2 className="w-16 h-16 text-premium-light mx-auto mb-4" />
             <p className="text-premium-light">No shareable quotes found</p>
           </div>

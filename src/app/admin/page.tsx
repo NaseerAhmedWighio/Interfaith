@@ -474,10 +474,10 @@ export default function AdminDashboard() {
                   <p className="text-sm text-premium-light mt-1">{card.description}</p>
                 </div>
 
-                  <div className="flex w-full justify-between items-center space-y-3 pt-4 border-t border-[#c8a75e]/10 animate-fadeIn">
+                  <div className="flex flex-col sm:flex-row w-full justify-between items-stretch sm:items-center gap-2 pt-4 border-t border-[#c8a75e]/10 animate-fadeIn">
                    <Link
                   href={card.href}
-                  className="block px-6 py-3 bg-[#0b0f2a]/20 hover:bg-[#c8a75e]/10 transition-colors text-center"
+                  className="block px-4 py-2 sm:px-6 sm:py-3 bg-[#0b0f2a]/20 hover:bg-[#c8a75e]/10 transition-colors text-center rounded-lg"
                 >
                   <span className="text-sm text-[#c8a75e] font-medium">Manage →</span>
                 </Link>
@@ -497,7 +497,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="glass-effect rounded-2xl p-4 lg:p-6 border border-[#c8a75e]/20">
+      <div className="glass-effect rounded-xl sm:rounded-2xl p-4 lg:p-6 border border-[#c8a75e]/20">
         <h2 className="text-xl lg:text-2xl font-bold text-[#f5f3ee] mb-4 lg:mb-6">Quick Actions</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
           <Link

@@ -115,7 +115,7 @@ export default function EditSacredText({ params }: { params: Promise<{ id: strin
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20 space-y-6">
+      <form onSubmit={handleSubmit} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20 space-y-6">
         {error && (
           <div className="p-4 bg-[#e74c3c]/10 border border-[#e74c3c]/30 rounded-xl">
             <p className="text-[#e74c3c] text-sm">{error}</p>

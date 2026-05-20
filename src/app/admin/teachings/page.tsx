@@ -128,7 +128,7 @@ export default function TeachingsManagement() {
       {/* Teachings Grid */}
       <div className="grid gap-4">
         {sortedTeachings.map((teaching) => (
-          <div key={teaching.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20 hover:border-[#c8a75e]/40 transition-all">
+          <div key={teaching.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20 hover:border-[#c8a75e]/40 transition-all">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-4 flex-1">
                 {/* <div className="text-4xl">{teaching.tradition?.symbol || 'ðŸŒ'}</div> */}

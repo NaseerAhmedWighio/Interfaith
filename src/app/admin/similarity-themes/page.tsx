@@ -133,7 +133,7 @@ export default function SimilarityThemesManagement() {
 
       <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
         {sortedThemes.map((theme) => (
-          <div key={theme.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div key={theme.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-4 flex-1">
                 {renderIcon(theme.icon, theme.color)}
@@ -171,7 +171,7 @@ export default function SimilarityThemesManagement() {
       </div>
 
       {sortedThemes.length === 0 && (
-        <div className="glass-effect rounded-2xl p-12 text-center">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
           <TrendingUp className="w-16 h-16 text-premium-light mx-auto mb-4" />
           <p className="text-premium-light">No similarity themes found</p>
         </div>

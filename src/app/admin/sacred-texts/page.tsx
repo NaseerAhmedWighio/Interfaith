@@ -205,7 +205,7 @@ export default function SacredTextsManagement() {
       </div>
 
       {sortedTexts.length === 0 && (
-        <div className="glass-effect rounded-2xl p-12 text-center">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
           <FileText className="w-16 h-16 text-premium-light mx-auto mb-4" />
           <p className="text-premium-light">No sacred texts found</p>
         </div>

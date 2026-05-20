@@ -304,7 +304,7 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
 
         {/* Main Content */}
         <main className="flex-1 min-w-0">
-          <div className="p-4 lg:p-8 pt-16 lg:pt-0 min-w-screen max-w-7xl mx-auto w-full">
+          <div className="p-4 lg:p-8 pt-16 lg:pt-0 max-w-7xl mx-auto w-full">
             {children}
           </div>
         </main>

@@ -97,15 +97,15 @@ export default function NewsletterSubscribersManagement() {
 
       {/* Stats Cards */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-        <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-[#f5f3ee] mb-2">{subscribers.length}</div>
             <div className="text-premium-light">Total Subscribers</div>
           </div>
-          <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-green-400 mb-2">{activeCount}</div>
             <div className="text-premium-light">Active</div>
           </div>
-          <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-blue-400 mb-2">{confirmedCount}</div>
             <div className="text-premium-light">Confirmed</div>
           </div>
@@ -114,7 +114,7 @@ export default function NewsletterSubscribersManagement() {
       {/* Subscribers Table */}
       <div className="glass-effect rounded-xl overflow-hidden border border-[#c8a75e]/20">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[768px]">
+            <table className="w-full min-w-[600px]">
               <thead className="bg-[#0b0f2a]/50 border-b border-[#c8a75e]/20">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Email</th>
@@ -132,14 +132,14 @@ export default function NewsletterSubscribersManagement() {
                         <Mail className="w-4 h-4 text-premium-light" />
                         <a
                           href={`mailto:${subscriber.email}`}
-                          className="text-[#f5f3ee] hover:text-[#c8a75e] transition-colors truncate max-w-[200px] block"
+                          className="text-[#f5f3ee] hover:text-[#c8a75e] transition-colors truncate  block"
                         >
                           {subscriber.email}
                         </a>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-[#f5f3ee] truncate max-w-[200px]">{subscriber.name || '-'}</div>
+                      <div className="text-[#f5f3ee] truncate ">{subscriber.name || '-'}</div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-wrap gap-1">

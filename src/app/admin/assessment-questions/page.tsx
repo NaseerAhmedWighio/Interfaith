@@ -172,7 +172,7 @@ export default function AssessmentQuestionsManagement() {
 
       <div className="space-y-3">
         {questions.map((q, i) => (
-          <div key={q.id} className="glass-effect rounded-2xl p-5 border border-[#c8a75e]/10">
+          <div key={q.id} className="glass-effect rounded-xl sm:rounded-2xl p-5 border border-[#c8a75e]/10">
             {editingId === q.id ? (
               <div>
                 <textarea value={editForm.questionText} onChange={e => setEditForm(p => ({ ...p, questionText: e.target.value }))}
@@ -219,7 +219,7 @@ export default function AssessmentQuestionsManagement() {
       </div>
 
       {questions.length === 0 && (
-        <div className="glass-effect rounded-2xl p-12 text-center">
+        <div className="glass-effect rounded-xl sm:rounded-2xl p-12 text-center">
           <BookOpen className="w-16 h-16 text-premium-light mx-auto mb-4" />
           <p className="text-premium-light">No questions yet</p>
         </div>

@@ -105,30 +105,30 @@ export default function AssessmentResultsManagement() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-6">
-        <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+        <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-[#f5f3ee] mb-2">{stats.avgPeace || 0}</div>
             <div className="text-premium-light text-sm">Avg Peace Score</div>
           </div>
-          <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-[#f5f3ee] mb-2">{stats.avgTolerance || 0}</div>
             <div className="text-premium-light text-sm">Avg Tolerance</div>
           </div>
-          <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-[#f5f3ee] mb-2">{stats.avgCompassion || 0}</div>
             <div className="text-premium-light text-sm">Avg Compassion</div>
           </div>
-          <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-[#f5f3ee] mb-2">{stats.avgUnderstanding || 0}</div>
             <div className="text-premium-light text-sm">Avg Understanding</div>
           </div>
-          <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+          <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
             <div className="text-3xl font-bold text-green-400 mb-2">{stats.avgOverall || 0}</div>
             <div className="text-premium-light text-sm">Avg Overall</div>
           </div>
         </div>
 
       {/* Category Breakdown */}
-      <div className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
+      <div className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
         <h2 className="text-xl font-semibold text-[#f5f3ee] mb-4">Results by Category</h2>
         <div className="grid md:grid-cols-4 gap-4">
           {Object.entries(categoryCounts).map(([category, count]) => (
@@ -143,7 +143,7 @@ export default function AssessmentResultsManagement() {
       {/* Results Table */}
       <div className="glass-effect rounded-xl overflow-hidden border border-[#c8a75e]/20">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1200px]">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-[#0b0f2a]/50 border-b border-[#c8a75e]/20">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">User</th>
