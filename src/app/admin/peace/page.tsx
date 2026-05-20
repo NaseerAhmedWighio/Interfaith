@@ -118,10 +118,10 @@ export default function PeaceAdmin() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-[#f5f3ee]">Peace Page Admin</h1>
-        <p className="text-premium-light mt-1 text-sm lg:text-base">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#f5f3ee]">Peace Page Admin</h1>
+        <p className="text-premium-light mt-1 text-xs sm:text-sm lg:text-base">
           Manage the &ldquo;The Path from Wisdom to Action&rdquo; quote and Active Initiatives
         </p>
       </div>
@@ -165,12 +165,12 @@ export default function PeaceAdmin() {
         {/* Active Initiatives */}
         <div className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl">
-                <Heart className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg sm:rounded-xl">
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-[#f5f3ee]">Active Initiatives</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-[#f5f3ee]">Active Initiatives</h2>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/20 text-rose-400 mt-1">
                   {initiatives.length} initiative{initiatives.length !== 1 ? 's' : ''}
                 </span>
@@ -179,12 +179,12 @@ export default function PeaceAdmin() {
           </div>
           <div className="space-y-2 mb-4">
             {initiatives.length > 0 ? initiatives.map(p => (
-              <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
+              <div key={p.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-[#0b0f2a]/20">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#f5f3ee]">{p.title}</p>
-                  <p className="text-xs text-premium-light truncate">{p.description.length > 80 ? p.description.slice(0, 80) + '...' : p.description}</p>
+                  <p className="text-xs sm:text-sm font-medium text-[#f5f3ee] truncate">{p.title}</p>
+                  <p className="text-[10px] sm:text-xs text-premium-light truncate">{p.description.length > 80 ? p.description.slice(0, 80) + '...' : p.description}</p>
                 </div>
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ml-3 ${p.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                <span className={`self-start sm:self-auto px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${p.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
                   {p.status || 'draft'}
                 </span>
               </div>

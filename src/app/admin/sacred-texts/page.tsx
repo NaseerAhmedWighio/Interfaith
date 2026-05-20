@@ -131,36 +131,29 @@ export default function SacredTextsManagement() {
       <div className="grid gap-6">
         {sortedTexts.map((text) => (
           <div key={text.id} className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#c8a75e]/20">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-start gap-4 flex-1">
-                {/* <div className="text-4xl">{text.tradition?.symbol || 'Ã°Å¸Å’Â'}</div> */}
-                <div className="flex-1">
-                  <div className='flex justify-between '>
-                  <h3 className="text-base sm:text-xl font-semibold text-[#f5f3ee] mb-2 truncate">{text.title}</h3>
-
-
-
-                  <div className="flex items-center gap-2 ml-4">
-                    <Link
-                      href={`/admin/sacred-texts/${text.id}`}
-                      className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
-                    >
-                      <Edit className="w-4 h-4 text-[#c8a75e]" />
-                    </Link>
-                    <button
-                      onClick={() => deleteSacredText(text.id)}
-                      className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4 text-red-400" />
-                    </button>
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+              <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
+                    <h3 className="text-sm sm:text-xl font-semibold text-[#f5f3ee] truncate">{text.title}</h3>
+                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0 self-end sm:self-auto">
+                      <Link
+                        href={`/admin/sacred-texts/${text.id}`}
+                        className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
+                      >
+                        <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
+                      </Link>
+                      <button
+                        onClick={() => deleteSacredText(text.id)}
+                        className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
+                      </button>
+                    </div>
                   </div>
-                  </div>
-
-
-
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 mt-1 sm:mt-2">
                     <span
-                      className="px-3 py-1 rounded-xl text-sm font-medium border"
+                      className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-medium border"
                       style={{
                         backgroundColor: text.tradition ? `${text.tradition.color}20` : '#c8a75e20',
                         color: text.tradition?.color || '#c8a75e',
@@ -170,30 +163,27 @@ export default function SacredTextsManagement() {
                       {text.tradition?.name || 'Universal'}
                     </span>
                     {text.theme && (
-                      <span className="px-3 py-1 bg-[#c8a75e]/10 border border-[#c8a75e]/20 rounded-xl text-sm text-[#c8a75e] capitalize">
+                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#c8a75e]/10 border border-[#c8a75e]/20 rounded-lg sm:rounded-xl text-[11px] sm:text-sm text-[#c8a75e] capitalize">
                         {text.theme}
                       </span>
                     )}
-                    <span className="text-premium-light text-sm">Ã¢â‚¬Â¢ {text.source}</span>
+                    <span className="text-premium-light text-[11px] sm:text-sm">{text.source}</span>
                   </div>
-
-                  <div className="space-y-3">
-                    <div className="p-4 bg-[#0b0f2a]/30 rounded-xl border border-[#c8a75e]/10">
-                      <p className="text-xs text-premium-light mb-1 font-semibold uppercase tracking-wide">Text Content:</p>
-                      <p className="text-[#f5f3ee] leading-relaxed italic line-clamp-3">"{text.textContent}"</p>
+                  <div className="space-y-2 sm:space-y-3">
+                    <div className="p-3 sm:p-4 bg-[#0b0f2a]/30 rounded-xl border border-[#c8a75e]/10">
+                      <p className="text-[10px] sm:text-xs text-premium-light mb-1 font-semibold uppercase tracking-wide">Text Content:</p>
+                      <p className="text-sm sm:text-base text-[#f5f3ee] leading-relaxed italic line-clamp-3">"{text.textContent}"</p>
                     </div>
-
                     {text.translation && (
-                      <div className="p-4 bg-[#0b0f2a]/20 rounded-xl border border-[#c8a75e]/10">
-                        <p className="text-xs text-premium-light mb-1 font-semibold uppercase tracking-wide">Translation:</p>
-                        <p className="text-premium-light text-sm leading-relaxed line-clamp-2">{text.translation}</p>
+                      <div className="p-3 sm:p-4 bg-[#0b0f2a]/20 rounded-xl border border-[#c8a75e]/10">
+                        <p className="text-[10px] sm:text-xs text-premium-light mb-1 font-semibold uppercase tracking-wide">Translation:</p>
+                        <p className="text-xs sm:text-sm text-premium-light leading-relaxed line-clamp-2">{text.translation}</p>
                       </div>
                     )}
-
                     {text.context && (
-                      <div className="p-4 bg-[#0b0f2a]/20 rounded-xl border border-[#c8a75e]/10">
-                        <p className="text-xs text-premium-light mb-1 font-semibold uppercase tracking-wide">Context:</p>
-                        <p className="text-premium-light text-sm leading-relaxed line-clamp-2">{text.context}</p>
+                      <div className="p-3 sm:p-4 bg-[#0b0f2a]/20 rounded-xl border border-[#c8a75e]/10">
+                        <p className="text-[10px] sm:text-xs text-premium-light mb-1 font-semibold uppercase tracking-wide">Context:</p>
+                        <p className="text-xs sm:text-sm text-premium-light leading-relaxed line-clamp-2">{text.context}</p>
                       </div>
                     )}
                   </div>

@@ -550,17 +550,17 @@ export default function PeaceInitiativesPageEditor() {
       <div className="flex items-center gap-1 flex-shrink-0">
         <button
           onClick={onEdit}
-          className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+          className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
           title="Edit"
         >
-          <Pencil className="w-4 h-4 text-[#c8a75e]" />
+          <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
         </button>
         <button
           onClick={onDelete}
-          className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+          className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
           title="Delete"
         >
-          <Trash2 className="w-4 h-4 text-red-400" />
+          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
         </button>
       </div>
     )
@@ -631,7 +631,7 @@ export default function PeaceInitiativesPageEditor() {
                   {renderEditActions(() => handleCiSave(item.id), handleCiCancelEdit, ciSaving)}
                 </div>
               ) : (
-                <div key={item.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
+                <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 p-3 rounded-xl bg-[#0b0f2a]/20">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#f5f3ee]">{item.title}</p>
                     <p className="text-xs text-premium-light truncate">{item.category} Ã¢â‚¬â€ {item.description.length > 60 ? item.description.slice(0, 60) + '...' : item.description}</p>
@@ -701,7 +701,7 @@ export default function PeaceInitiativesPageEditor() {
                   {renderEditActions(() => handleGoalsSave(g.id), handleGoalsCancelEdit, goalsSaving)}
                 </div>
               ) : (
-                <div key={g.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
+                <div key={g.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 p-3 rounded-xl bg-[#0b0f2a]/20">
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <span className="text-lg font-bold text-[#c8a75e]">{g.number}</span>
                     <span className="text-sm text-premium-light">{g.label}</span>
@@ -772,7 +772,7 @@ export default function PeaceInitiativesPageEditor() {
                   {renderEditActions(() => handleProgramsSave(p.id), handleProgramsCancelEdit, programsSaving)}
                 </div>
               ) : (
-                <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
+                <div key={p.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 p-3 rounded-xl bg-[#0b0f2a]/20">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#f5f3ee]">{p.title}</p>
                     <p className="text-xs text-premium-light truncate">
@@ -856,7 +856,7 @@ export default function PeaceInitiativesPageEditor() {
                   {renderEditActions(() => handleRegionalsSave(r.id), handleRegionalsCancelEdit, regionalsSaving)}
                 </div>
               ) : (
-                <div key={r.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
+                <div key={r.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 p-3 rounded-xl bg-[#0b0f2a]/20">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#f5f3ee]">{r.region}</p>
                     <p className="text-xs text-premium-light truncate">
@@ -931,7 +931,7 @@ export default function PeaceInitiativesPageEditor() {
                   {renderEditActions(() => handleGetInvolvedSave(item.id), handleGetInvolvedCancelEdit, getInvolvedSaving)}
                 </div>
               ) : (
-                <div key={item.id} className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/20">
+                <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 p-3 rounded-xl bg-[#0b0f2a]/20">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#f5f3ee]">{item.title}</p>
                     <p className="text-xs text-premium-light truncate">

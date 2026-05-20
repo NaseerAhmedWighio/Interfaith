@@ -127,10 +127,9 @@ export default function TraditionsManagement() {
             <thead className="bg-[#0b0f2a]/50 border-b border-[#c8a75e]/20">
               <tr>
                 {/* <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Symbol</th> */}
-                <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Name</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Description</th>
-                {/* <th className="px-6 py-4 text-left text-sm font-semibold text-[#f5f3ee]">Core Values</th> */}
-                <th className="px-6 py-4 text-right text-sm font-semibold text-[#f5f3ee]">Actions</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-[11px] sm:text-sm font-semibold text-[#f5f3ee]">Name</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-[11px] sm:text-sm font-semibold text-[#f5f3ee]">Description</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-right text-[11px] sm:text-sm font-semibold text-[#f5f3ee]">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#c8a75e]/10">
@@ -139,46 +138,29 @@ export default function TraditionsManagement() {
                   {/* <td className="px-6 py-4">
                     <span className="text-3xl">{tradition.symbol}</span>
                   </td> */}
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-[#f5f3ee] truncate max-w-xs" style={{ color: tradition.color }}>
+                  <td className="px-3 sm:px-6 py-2 sm:py-4">
+                    <div className="font-medium text-[#f5f3ee] truncate max-w-[120px] sm:max-w-xs" style={{ color: tradition.color }}>
                       {tradition.name}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="text-premium-light text-sm line-clamp-2 max-w-md">
+                  <td className="px-3 sm:px-6 py-2 sm:py-4">
+                    <div className="text-premium-light text-[11px] sm:text-sm line-clamp-2 max-w-[160px] sm:max-w-md">
                       {tradition.description}
                     </div>
                   </td>
-                  {/* <td className="px-6 py-4">
-                    <div className="flex flex-wrap gap-1">
-                      {tradition.core_values?.slice(0, 3).map((value, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 bg-[#c8a75e]/10 border border-[#c8a75e]/20 rounded text-xs text-premium-light"
-                        >
-                          {value}
-                        </span>
-                      ))}
-                      {tradition.core_values?.length > 3 && (
-                        <span className="px-2 py-1 text-xs text-premium-light">
-                          +{tradition.core_values.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  </td> */}
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="px-3 sm:px-6 py-2 sm:py-4">
+                    <div className="flex items-center justify-end gap-1 sm:gap-2">
                       <Link
                         href={`/admin/traditions/${tradition.id}`}
-                        className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+                        className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
                       >
-                        <Edit className="w-4 h-4 text-[#c8a75e]" />
+                        <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
                       </Link>
                       <button
                         onClick={() => deleteTradition(tradition.id)}
-                        className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+                        className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
                       >
-                        <Trash2 className="w-4 h-4 text-red-400" />
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
                       </button>
                     </div>
                   </td>

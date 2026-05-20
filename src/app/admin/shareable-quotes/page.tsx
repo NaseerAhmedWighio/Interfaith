@@ -121,47 +121,47 @@ export default function ShareableQuotesManagement() {
           <ContentSort sortConfig={sortConfig} onSortChange={setSortConfig} settingKey="sort_shareable_quotes" />
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-4 sm:gap-6">
           {sortedQuotes.map((quote) => (
             <div key={quote.id} className="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex flex-col md:flex-row items-start gap-4 flex-1">
-                  <div className="text-3xl">{quote.sacredText.tradition?.symbol || 'Title'}</div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="px-3 py-1 bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl text-sm">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                <div className="flex flex-col md:flex-row items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                  <div className="text-lg sm:text-2xl lg:text-3xl flex-shrink-0">{quote.sacredText.tradition?.symbol || 'Title'}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 mb-2 sm:mb-3">
+                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#c8a75e]/20 text-[#c8a75e] rounded-lg sm:rounded-xl text-[11px] sm:text-sm">
                         {quote.sacredText.tradition?.name || 'Universal'}
                       </span>
-                      <span className="text-premium-light text-sm">{quote.sacredText.source}</span>
-                      <div className="flex items-center gap-1 text-premium-light text-sm ml-auto">
-                        <Share2 className="w-4 h-4" />
+                      <span className="text-premium-light text-[11px] sm:text-sm">{quote.sacredText.source}</span>
+                      <div className="flex items-center gap-1 text-premium-light text-[11px] sm:text-sm ml-auto">
+                        <Share2 className="w-3 h-3 sm:w-4 sm:h-4" />
                         <span className="font-semibold">{quote.shareCount}</span>
-                        <span>shares</span>
+                        <span className="hidden sm:inline">shares</span>
                       </div>
                     </div>
-                    <div className="p-4 bg-[#0b0f2a]/30 rounded-xl mb-3">
-                      <p className="text-[#f5f3ee] text-lg italic line-clamp-3">"{quote.quoteText}"</p>
+                    <div className="p-3 sm:p-4 bg-[#0b0f2a]/30 rounded-xl mb-2 sm:mb-3">
+                      <p className="text-[#f5f3ee] text-sm sm:text-base italic line-clamp-3">"{quote.quoteText}"</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-premium-light text-sm">Background:</span>
-                      <span className="px-2 py-1 bg-[#0b0f2a]/20 rounded text-xs text-[#f5f3ee]">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <span className="text-premium-light text-[11px] sm:text-sm">Background:</span>
+                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#0b0f2a]/20 rounded text-[10px] sm:text-xs text-[#f5f3ee]">
                         {quote.backgroundStyle}
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0 self-end sm:self-auto">
                   <Link
                     href={`/admin/shareable-quotes/${quote.id}`}
-                    className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
                   >
-                    <Edit className="w-4 h-4 text-[#c8a75e]" />
+                    <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
                   </Link>
                   <button
                     onClick={() => deleteQuote(quote.id)}
-                    className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
                   >
-                    <Trash2 className="w-4 h-4 text-red-400" />
+                    <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
                   </button>
                 </div>
               </div>

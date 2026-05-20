@@ -129,36 +129,29 @@ export default function TeachingsManagement() {
       <div className="grid gap-4">
         {sortedTeachings.map((teaching) => (
           <div key={teaching.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20 hover:border-[#c8a75e]/40 transition-all">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-start gap-4 flex-1">
-                {/* <div className="text-4xl">{teaching.tradition?.symbol || 'ðŸŒ'}</div> */}
-                <div className="flex-1">
-                  <div className='flex justify-between items-start'>
-                  <h3 className="text-base sm:text-xl font-semibold text-[#f5f3ee] mb-2 truncate">{teaching.title}</h3>
-
-
-
-                <div className="flex items-center gap-2">
-                <Link
-                  href={`/admin/teachings/${teaching.id}`}
-                  className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
-                >
-                  <Edit className="w-4 h-4 text-[#c8a75e]" />
-                </Link>
-                <button
-                  onClick={() => deleteTeaching(teaching.id)}
-                  className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
-                >
-                  <Trash2 className="w-4 h-4 text-red-400" />
-                </button>
-              </div>
-              </div>
-
-
-
-                  <div className="flex items-center gap-2 mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+              <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
+                    <h3 className="text-sm sm:text-xl font-semibold text-[#f5f3ee] truncate">{teaching.title}</h3>
+                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0 self-end sm:self-auto">
+                      <Link
+                        href={`/admin/teachings/${teaching.id}`}
+                        className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
+                      >
+                        <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
+                      </Link>
+                      <button
+                        onClick={() => deleteTeaching(teaching.id)}
+                        className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 mt-1 sm:mt-2">
                     <span
-                      className="px-3 py-1 rounded-xl text-sm font-medium border"
+                      className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-medium border"
                       style={{
                         backgroundColor: teaching.tradition ? `${teaching.tradition.color}20` : '#c8a75e20',
                         color: teaching.tradition?.color || '#c8a75e',
@@ -167,25 +160,11 @@ export default function TeachingsManagement() {
                     >
                       {teaching.tradition?.name || 'Universal'}
                     </span>
-                    <span className="text-premium-light text-sm">â€¢ {teaching.source}</span>
+                    <span className="text-premium-light text-[11px] sm:text-sm">{teaching.source}</span>
                   </div>
-                  <p className="text-premium-light leading-relaxed line-clamp-3">{teaching.content}</p>
+                  <p className="text-premium-light text-sm leading-relaxed line-clamp-3">{teaching.content}</p>
                 </div>
               </div>
-              {/* <div className="flex items-center gap-2">
-                <Link
-                  href={`/admin/teachings/${teaching.id}`}
-                  className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
-                >
-                  <Edit className="w-4 h-4 text-[#c8a75e]" />
-                </Link>
-                <button
-                  onClick={() => deleteTeaching(teaching.id)}
-                  className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
-                >
-                  <Trash2 className="w-4 h-4 text-red-400" />
-                </button>
-              </div> */}
             </div>
           </div>
         ))}

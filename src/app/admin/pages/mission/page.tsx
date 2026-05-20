@@ -135,8 +135,8 @@ export default function MissionPageEditor() {
                   {header.content.length > 200 ? header.content.slice(0, 200) + '...' : header.content}
                 </p>
                 <div className="pt-3">
-                  <button onClick={() => { setEditingId(header.id); setEditTitle(header.title); setEditContent(header.content); }} className="inline-flex items-center gap-2 px-4 py-2 bg-[#c8a75e]/10 hover:bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl transition-colors text-sm font-medium">
-                    <Pencil className="w-4 h-4" /> Edit Section
+                  <button onClick={() => { setEditingId(header.id); setEditTitle(header.title); setEditContent(header.content); }} className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#c8a75e]/10 hover:bg-[#c8a75e]/20 text-[#c8a75e] rounded-lg sm:rounded-xl transition-colors text-xs sm:text-sm font-medium">
+                    <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Edit Section
                   </button>
                 </div>
               </div>
@@ -191,8 +191,8 @@ export default function MissionPageEditor() {
                   {sufiPath.content.length > 200 ? sufiPath.content.slice(0, 200) + '...' : sufiPath.content}
                 </p>
                 <div className="pt-3">
-                  <button onClick={() => { setEditingId(sufiPath.id); setEditTitle(sufiPath.title); setEditContent(sufiPath.content); }} className="inline-flex items-center gap-2 px-4 py-2 bg-[#c8a75e]/10 hover:bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl transition-colors text-sm font-medium">
-                    <Pencil className="w-4 h-4" /> Edit Section
+                  <button onClick={() => { setEditingId(sufiPath.id); setEditTitle(sufiPath.title); setEditContent(sufiPath.content); }} className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#c8a75e]/10 hover:bg-[#c8a75e]/20 text-[#c8a75e] rounded-lg sm:rounded-xl transition-colors text-xs sm:text-sm font-medium">
+                    <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Edit Section
                   </button>
                 </div>
               </div>
@@ -229,9 +229,9 @@ export default function MissionPageEditor() {
           <div className="pt-3 border-t border-[#c8a75e]/10">
             <Link
               href="/admin/core-pillars"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#c8a75e]/10 hover:bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl transition-colors text-sm font-medium"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#c8a75e]/10 hover:bg-[#c8a75e]/20 text-[#c8a75e] rounded-lg sm:rounded-xl transition-colors text-xs sm:text-sm font-medium"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               Manage Core Pillars
             </Link>
           </div>

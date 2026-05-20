@@ -120,25 +120,25 @@ export default function PeaceInitiativesManagement() {
           {sortedInitiatives.map((initiative) => (
             <div key={initiative.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="text-2xl sm:text-4xl">{initiative.icon}</div>
-                  <div className="flex-1">
-                    <h3 className="text-base sm:text-xl font-semibold text-[#f5f3ee] mb-3 truncate">{initiative.title}</h3>
-                    <p className="text-premium-light leading-relaxed line-clamp-2">{initiative.description}</p>
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <div className="text-xl sm:text-2xl lg:text-4xl flex-shrink-0 mt-1">{initiative.icon}</div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm sm:text-base lg:text-xl font-semibold text-[#f5f3ee] mb-2 truncate">{initiative.title}</h3>
+                    <p className="text-xs sm:text-sm text-premium-light leading-relaxed line-clamp-2">{initiative.description}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 flex-shrink-0">
                   <Link
                     href={`/admin/peace-initiatives/${initiative.id}`}
-                    className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
                   >
-                    <Edit className="w-4 h-4 text-[#c8a75e]" />
+                    <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
                   </Link>
                   <button
                     onClick={() => deleteInitiative(initiative.id)}
-                    className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
                   >
-                    <Trash2 className="w-4 h-4 text-red-400" />
+                    <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
                   </button>
                 </div>
               </div>

@@ -120,27 +120,26 @@ export default function CorePillarsManagement() {
         <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
           {sortedPillars.map((pillar) => (
             <div key={pillar.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-4 flex-1">
-                  
-                  <div className="flex-1">
-                    <div className="text-2xl sm:text-4xl">{pillar.icon}</div>
-                    <h3 className="text-base sm:text-xl font-semibold text-[#f5f3ee] mb-3 truncate">{pillar.title}</h3>
-                    <p className="text-premium-light leading-relaxed line-clamp-2">{pillar.description}</p>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xl sm:text-2xl lg:text-4xl mb-2">{pillar.icon}</div>
+                    <h3 className="text-sm sm:text-xl font-semibold text-[#f5f3ee] mb-2 sm:mb-3 truncate">{pillar.title}</h3>
+                    <p className="text-xs sm:text-sm text-premium-light leading-relaxed line-clamp-2">{pillar.description}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0 self-end sm:self-auto">
                   <Link
                     href={`/admin/core-pillars/${pillar.id}`}
-                    className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
                   >
-                    <Edit className="w-4 h-4 text-[#c8a75e]" />
+                    <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
                   </Link>
                   <button
                     onClick={() => deletePillar(pillar.id)}
-                    className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
                   >
-                    <Trash2 className="w-4 h-4 text-red-400" />
+                    <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
                   </button>
                 </div>
               </div>

@@ -76,8 +76,8 @@ export default function SimilarityThemesManagement() {
       : null
     if (!Icon) return null
     return (
-      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: color || '#6B7280' }}>
-        <Icon className="w-6 h-6 text-[#f5f3ee]" />
+      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color || '#6B7280' }}>
+        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5f3ee]" />
       </div>
     )
   }
@@ -134,35 +134,35 @@ export default function SimilarityThemesManagement() {
       <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
         {sortedThemes.map((theme) => (
           <div key={theme.id} className="glass-effect rounded-xl p-4 sm:p-6 border border-[#c8a75e]/20">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-start gap-4 flex-1">
+            <div className="flex items-start justify-between gap-2 mb-3 sm:mb-4">
+              <div className="flex flex-col md:flex-row items-start gap-3 sm:gap-4 flex-1 min-w-0">
                 {renderIcon(theme.icon, theme.color)}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-[#f5f3ee] truncate">{theme.title}</h3>
-                    <span className="px-2 py-1 bg-[#0b0f2a]/20 rounded text-xs text-premium-light whitespace-nowrap">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <h3 className="text-sm sm:text-lg font-semibold text-[#f5f3ee] truncate">{theme.title}</h3>
+                    <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 bg-[#0b0f2a]/20 rounded text-[10px] sm:text-xs text-premium-light whitespace-nowrap">
                       #{theme.orderIndex}
                     </span>
                   </div>
-                  <p className="text-premium-light text-xs mb-1">/{theme.slug}</p>
-                  <p className="text-premium-light text-sm leading-relaxed line-clamp-2">{theme.description}</p>
-                  <div className="flex items-center gap-3 mt-2 text-xs text-premium-light">
+                  <p className="text-[10px] sm:text-xs text-premium-light mb-1 truncate">/{theme.slug}</p>
+                  <p className="text-xs sm:text-sm text-premium-light leading-relaxed line-clamp-2">{theme.description}</p>
+                  <div className="flex items-center gap-3 mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-premium-light">
                     <span>{theme._count?.teachings ?? 0} teachings</span>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1 flex-shrink-0">
                 <Link
                   href={`/admin/similarity-themes/${theme.id}`}
-                  className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+                  className="p-1.5 sm:p-2 hover:bg-[#c8a75e]/20 rounded-lg sm:rounded-xl transition-colors"
                 >
-                  <Edit className="w-4 h-4 text-[#c8a75e]" />
+                  <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c8a75e]" />
                 </Link>
                 <button
                   onClick={() => deleteTheme(theme.id)}
-                  className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+                  className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-colors"
                 >
-                  <Trash2 className="w-4 h-4 text-red-400" />
+                  <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
                 </button>
               </div>
             </div>
