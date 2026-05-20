@@ -60,7 +60,7 @@ services:
           echo '⏭️  Content data already exists — skipping SQL files';
         fi &&
         echo '📋 Syncing Prisma schema...' &&
-        npx prisma db push &&
+        npx prisma db push --accept-data-loss &&
         echo '✅ Schema synced!' &&
         echo '🌱 Seeding admin accounts...' &&
         npx prisma db seed &&

@@ -28,6 +28,7 @@ const CONTENT_MODELS: Record<string, any> = {
   approach_content: prisma.approachContent,
   sufi_cards: prisma.sufiCard,
   approach_cards: prisma.approachCard,
+  similarity_teachings: prisma.similarityTeaching,
 }
 
 const ALLOWED_FIELDS: Record<string, string[]> = {
@@ -36,7 +37,7 @@ const ALLOWED_FIELDS: Record<string, string[]> = {
   misconceptions: ['misconception', 'truth', 'category', 'traditionId'],
   sacred_texts: ['title', 'source', 'textContent', 'theme', 'context', 'translation', 'traditionId'],
   peace_initiatives: ['title', 'description', 'impact'],
-  similarity_themes: ['title', 'description', 'icon', 'slug', 'orderIndex'],
+  similarity_themes: ['title', 'description', 'icon', 'color', 'slug', 'orderIndex'],
   shareable_quotes: ['quoteText', 'backgroundStyle', 'sacredTextId'],
   core_pillars: ['title', 'description', 'icon', 'color'],
   mission_content: ['sectionKey', 'title', 'content'],
@@ -56,6 +57,7 @@ const ALLOWED_FIELDS: Record<string, string[]> = {
   approach_content: ['sectionKey', 'title', 'content', 'orderIndex'],
   sufi_cards: ['sectionType', 'title', 'subtitle', 'description', 'quote', 'icon', 'color', 'orderIndex'],
   approach_cards: ['sectionType', 'title', 'description', 'features', 'icon', 'color', 'orderIndex'],
+  similarity_teachings: ['traditionId', 'teaching', 'source', 'context', 'orderIndex'],
 }
 
 export async function PUT(

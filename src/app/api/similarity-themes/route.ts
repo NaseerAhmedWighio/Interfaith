@@ -7,10 +7,9 @@ export async function GET() {
   try {
     const currentUser = await getCurrentUser()
 
-    let whereClause = {}
+    let whereClause: any = {}
 
-    // If not authenticated or not admin/moderator, only show published content
-    if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'moderator')) {
+    if (!currentUser || currentUser.role === 'user') {
       whereClause = { status: 'published' }
     }
 
@@ -24,10 +23,13 @@ export async function GET() {
             email: true,
           },
         },
+        _count: {
+          select: { teachings: true },
+        },
       },
       orderBy: {
-        orderIndex: 'asc'
-      }
+        orderIndex: 'asc',
+      },
     })
 
     return NextResponse.json(themes)
@@ -44,7 +46,6 @@ export async function POST(request: Request) {
   try {
     const user = await requireAuth()
 
-    // Check create permission
     const hasPermission = await checkPermission(user.id, 'similarity_themes', 'create')
     if (!hasPermission) {
       return NextResponse.json(
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { title, description, icon, slug, orderIndex } = body
+    const { title, description, icon, color, slug, orderIndex } = body
 
     if (!title || !description || !icon || !slug) {
       return NextResponse.json(
@@ -63,7 +64,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Get user's role to determine status
     const userWithRole = await prisma.user.findUnique({
       where: { id: user.id },
       select: { role: true },
@@ -81,6 +81,7 @@ export async function POST(request: Request) {
         title,
         description,
         icon,
+        color: color || null,
         slug,
         orderIndex: orderIndex || 0,
         status,
@@ -95,7 +96,7 @@ export async function POST(request: Request) {
             email: true,
           },
         },
-      }
+      },
     })
 
     return NextResponse.json(similarityTheme, { status: 201 })

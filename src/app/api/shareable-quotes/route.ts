@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     let whereClause = {}
 
     // If not authenticated or not admin/moderator, only show published content
-    if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'moderator')) {
+    if (!currentUser || currentUser.role === 'user') {
       whereClause = { status: 'published' }
     }
 

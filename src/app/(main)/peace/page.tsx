@@ -71,16 +71,16 @@ export default function Peace() {
 
   return (
     <div>
-      <section className="section-premium pt-28 md:pt-36 pb-20 px-6">
+      <section className="section-premium pt-28 md:pt-36 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center space-x-2 glass-effect px-6 py-3 rounded-xl mb-6">
-            <Heart className="w-5 h-5 text-rose-400" />
-            <span className="text-sm font-semibold text-[#E07070]">Building Peace Together</span>
+          <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-xl mb-4 sm:mb-6">
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
+            <span className="text-xs sm:text-sm font-semibold text-[#E07070]">Building Peace Together</span>
           </div>
-          <h1 className="text-5xl md:text-7xl heading-premium text-[#f5f3ee] mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight">
             Our <span className="text-[#C8A75E]">Peace</span> Work
           </h1>
-          <p className="text-xl text-premium leading-relaxed max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed max-w-3xl mx-auto">
             From local dialogue circles to global collaborations, discover the initiatives that are
             building bridges of understanding across communities and traditions.
           </p>
@@ -90,7 +90,7 @@ export default function Peace() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl heading-premium text-[#f5f3ee] mb-4">Active Initiatives</h2>
+            <h2 className="text-2xl sm:text-4xl heading-premium text-[#f5f3ee] mb-4">Active Initiatives</h2>
             <div className="divider-premium max-w-xs mx-auto"></div>
           </div>
 
@@ -136,7 +136,7 @@ export default function Peace() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
-            <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
+            <h2 className="text-xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
               {wisdomData?.title || 'The Path from Wisdom to Action'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
@@ -189,7 +189,7 @@ export default function Peace() {
             <div className="pulse-glow inline-flex p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#27AE60] mb-4 sm:mb-6">
               <Sparkles className="w-7 h-7 sm:w-9 sm:h-9 text-[#f5f3ee]" />
             </div>
-            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
+            <h2 className="text-lg sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
               Join Our Peace Movement
             </h2>
             <p className="text-xs sm:text-lg md:text-xl text-premium mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
@@ -219,7 +219,7 @@ function InitiativeCard({ initiative }: { initiative: PeaceInitiative }) {
 
       <div className="flex flex-col sm:flex-row items-start justify-between mb-4 sm:mb-5 md:mb-6 gap-3">
 
-        <h3 className="text-2xl md:text-3xl heading-premium text-[#f5f3ee] 
+        <h3 className="text-xl md:text-3xl heading-premium text-[#f5f3ee] 
         group-hover:text-[#c8a75e] transition-colors 
         min-h-[3.5rem] flex items-start flex-1">
           {initiative.title}

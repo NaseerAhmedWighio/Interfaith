@@ -1,18 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Heart, Lightbulb, HandHeart, Flame, Globe as Globe2, BookOpen } from 'lucide-react'
+import { Flame } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 import { getCorePillars, getMissionContent } from '@/actions/database'
 import Pagination from '@/components/Pagination'
 
-const iconMap: Record<string, React.ReactNode> = {
-  Heart: <Heart className="w-8 h-8" />,
-  Lightbulb: <Lightbulb className="w-8 h-8" />,
-  HandHeart: <HandHeart className="w-8 h-8" />,
-  Flame: <Flame className="w-8 h-8" />,
-  Globe: <Globe2 className="w-8 h-8" />,
-  Globe2: <Globe2 className="w-8 h-8" />,
-  BookOpen: <BookOpen className="w-8 h-8" />,
+function resolveIcon(name: string | null | undefined, size = 'w-8 h-8') {
+  if (!name) return <Flame className={size} />
+  const Icon = LucideIcons[name as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }> | undefined
+  return Icon ? <Icon className={size} /> : <Flame className={size} />
 }
 
 export default function Mission() {
@@ -54,8 +51,8 @@ export default function Mission() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
-            {headerContent?.title || 'Our Mission for'}
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+            Our Mission for
             <span className="block text-[#C8A75E] mt-2">Interfaith Harmony</span>
           </h1>
 
@@ -68,7 +65,7 @@ export default function Mission() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
               Core Pillars of Our Work
             </h2>
             <div className="divider-premium max-w-xs mx-auto"></div>
@@ -78,7 +75,7 @@ export default function Mission() {
             {paginatedCards.map((card, index) => (
               <MissionCard
                 key={card.id || index}
-                icon={iconMap[card.icon] || <Flame className="w-8 h-8" />}
+                icon={resolveIcon(card.icon)}
                 title={card.title}
                 description={card.description}
                 color={card.color}
@@ -97,7 +94,7 @@ export default function Mission() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
-            <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
+            <h2 className="text-xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
               {sufiContent?.title || 'The Sufi Path to Interfaith Harmony'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
@@ -130,7 +127,7 @@ function MissionCard({ icon, title, description, color }: { icon: React.ReactNod
       <div className={`icon-circle mb-4 sm:mb-5 md:mb-6`} style={{ backgroundColor: color }}>
         <div className="text-[#f5f3ee] [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-7 sm:[&>svg]:h-7 md:[&>svg]:w-10 md:[&>svg]:h-10">{icon}</div>
       </div>
-      <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
+      <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
       </div>
       <p className="text-sm sm:text-base text-premium leading-relaxed">{description}</p>
     </div>

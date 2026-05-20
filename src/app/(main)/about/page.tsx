@@ -1,8 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Users, Heart, Globe as Globe2, BookHeart, Sparkles, Target } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 import Link from 'next/link'
+
+function resolveIcon(name: string | null | undefined, fallback: string = 'Heart'): React.ComponentType<{ className?: string }> {
+  if (!name) return LucideIcons[fallback as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>
+  const Icon = LucideIcons[name as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }> | undefined
+  return Icon || (LucideIcons[fallback as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>)
+}
 
 interface AboutContentItem {
   id: string
@@ -83,15 +89,6 @@ export default function AboutUs() {
 
   const valueColors = ['#E07070', '#C8A75E', '#D4A07B', '#27AE60', '#9B59B6', '#14B8A6']
 
-  const iconMap: Record<string, any> = {
-    Heart,
-    Globe: Globe2,
-    BookHeart,
-    Users,
-    Sparkles,
-    Target,
-  }
-
   return (
     <div>
       {loading ? (
@@ -106,13 +103,13 @@ export default function AboutUs() {
       <section className="section-premium pt-28 md:pt-36 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
         <div className="container mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-xl mb-4 sm:mb-6">
-            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-[#c8a75e]" />
+            <LucideIcons.Users className="w-4 h-4 sm:w-5 sm:h-5 text-[#c8a75e]" />
             <span className="text-xs sm:text-sm font-semibold text-[#C8A75E]">
               Who We Are
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
             About
             <span className="block text-[#C8A75E] mt-2">Interfaith Peace Bridge</span>
           </h1>
@@ -128,7 +125,7 @@ export default function AboutUs() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center mb-12 sm:mb-16 md:mb-20">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4 sm:px-0">{story?.title || 'Our Story'}</h2>
+              <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4 sm:px-0">{story?.title || 'Our Story'}</h2>
               <div className="divider-premium max-w-xs mb-6 sm:mb-8 mx-4 sm:mx-0"></div>
               <div className="space-y-4 sm:space-y-6 text-sm sm:text-base text-premium leading-relaxed px-4 sm:px-0">
                 {story?.content.split('\n\n').filter(Boolean).map((p, i) => (
@@ -145,9 +142,9 @@ export default function AboutUs() {
             <div className="relative">
               <div className="card-premium p-8 sm:p-10 md:p-12 text-center">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6 rounded-xl bg-[#C8A75E] flex items-center justify-center shadow-2xl">
-                  <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-[#f5f3ee]" />
+                  <LucideIcons.Heart className="w-10 h-10 sm:w-12 sm:h-12 text-[#f5f3ee]" />
                 </div>
-                <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{vision?.title || 'Our Vision'}</h3>
+                <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{vision?.title || 'Our Vision'}</h3>
                 {vision ? (
                   vision.content.split('\n\n').filter(Boolean).map((p, i) => (
                     <p key={i} className="text-sm sm:text-base text-premium leading-relaxed">{p}</p>
@@ -164,7 +161,7 @@ export default function AboutUs() {
           </div>
 
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">{valuesSection?.title || 'Our Core Values'}</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">{valuesSection?.title || 'Our Core Values'}</h2>
             <div className="divider-premium max-w-xs mx-auto mb-6 sm:mb-8"></div>
           </div>
 
@@ -172,7 +169,7 @@ export default function AboutUs() {
             {values.length > 0 ? values
               .sort((a, b) => a.orderIndex - b.orderIndex)
               .map((val, i) => {
-                const IconComp = iconMap[val.icon || 'Heart'] || Heart
+                const IconComp = resolveIcon(val.icon, 'Heart')
                 return (
                   <ValueCard
                     key={val.id}
@@ -184,12 +181,12 @@ export default function AboutUs() {
                 )
               }) : (
               <>
-                <ValueCard icon={<Heart className="w-10 h-10" />} title="Universal Love" description="We believe that love is the essence of all spiritual traditions and the foundation for lasting peace." color="#E07070" />
-                <ValueCard icon={<Globe2 className="w-10 h-10" />} title="Inclusivity" description="Every faith, every tradition, every seeker is welcomed and honored in our community." color="#C8A75E" />
-                <ValueCard icon={<BookHeart className="w-10 h-10" />} title="Sacred Wisdom" description="We draw from the deep wells of Sufi teachings while honoring the truth in all spiritual paths." color="#D4A07B" />
-                <ValueCard icon={<Users className="w-10 h-10" />} title="Community" description="Together we are stronger. We build meaningful connections that transcend superficial differences." color="#27AE60" />
-                <ValueCard icon={<Sparkles className="w-10 h-10" />} title="Transformation" description="We commit to inner growth and outer action, becoming agents of positive change in our world." color="#9B59B6" />
-                <ValueCard icon={<Target className="w-10 h-10" />} title="Authenticity" description="We practice what we teach, grounding our mission in genuine spiritual experience and integrity." color="#14B8A6" />
+                <ValueCard icon={<LucideIcons.Heart className="w-10 h-10" />} title="Universal Love" description="We believe that love is the essence of all spiritual traditions and the foundation for lasting peace." color="#E07070" />
+                <ValueCard icon={<LucideIcons.Globe2 className="w-10 h-10" />} title="Inclusivity" description="Every faith, every tradition, every seeker is welcomed and honored in our community." color="#C8A75E" />
+                <ValueCard icon={<LucideIcons.BookHeart className="w-10 h-10" />} title="Sacred Wisdom" description="We draw from the deep wells of Sufi teachings while honoring the truth in all spiritual paths." color="#D4A07B" />
+                <ValueCard icon={<LucideIcons.Users className="w-10 h-10" />} title="Community" description="Together we are stronger. We build meaningful connections that transcend superficial differences." color="#27AE60" />
+                <ValueCard icon={<LucideIcons.Sparkles className="w-10 h-10" />} title="Transformation" description="We commit to inner growth and outer action, becoming agents of positive change in our world." color="#9B59B6" />
+                <ValueCard icon={<LucideIcons.Target className="w-10 h-10" />} title="Authenticity" description="We practice what we teach, grounding our mission in genuine spiritual experience and integrity." color="#14B8A6" />
               </>
             )}
           </div>
@@ -199,7 +196,7 @@ export default function AboutUs() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Our Leadership</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Our Leadership</h2>
             <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
             <p className="text-base sm:text-lg md:text-xl text-premium max-w-3xl mx-auto px-4">
               Guided by scholars, spiritual teachers, and interfaith activists committed to our mission
@@ -242,7 +239,7 @@ export default function AboutUs() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Our Impact</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Our Impact</h2>
             <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
@@ -265,7 +262,7 @@ export default function AboutUs() {
 
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A] text-[#f5f3ee]">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
+          <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
             Join Us in Building Bridges
           </h2>
           <p className="text-base sm:text-lg md:text-xl opacity-90 leading-relaxed mb-6 sm:mb-8 px-4">
@@ -281,9 +278,145 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
+        <div className="container mx-auto max-w-2xl">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Contact Us</h2>
+            <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
+            <p className="text-sm sm:text-base text-premium max-w-xl mx-auto px-4">
+              Have a question, suggestion, or want to collaborate? Send us a message and we will get back to you.
+            </p>
+          </div>
+          <ContactForm />
+        </div>
+      </section>
       </>
       )}
     </div>
+  )
+}
+
+function ContactForm() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [subject, setSubject] = useState('')
+  const [message, setMessage] = useState('')
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSending(true)
+    setError('')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Failed to send message')
+      }
+      setSent(true)
+      setName('')
+      setEmail('')
+      setSubject('')
+      setMessage('')
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setSending(false)
+    }
+  }
+
+  if (sent) {
+    return (
+      <div className="text-center p-8 sm:p-12">
+        <LucideIcons.CheckCircle className="w-16 h-16 text-[#c8a75e] mx-auto mb-4" />
+        <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-2">Thank You!</h3>
+        <p className="text-sm sm:text-base text-premium mb-6">Your message has been sent. We will get back to you soon.</p>
+        <button onClick={() => setSent(false)} className="text-[#c8a75e] hover:text-[#d4b56d] text-sm underline transition-colors">
+          Send another message
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+      <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+        <div>
+          <label className="block text-xs sm:text-sm font-semibold text-[#f5f3ee] mb-2">Your Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            placeholder="Enter your name"
+            className="w-full px-4 py-3 bg-[#0b0f2a] border border-[#c8a75e]/30 rounded-xl text-[#f5f3ee] text-sm placeholder:text-[#aab0d6]/50 focus:outline-none focus:border-[#c8a75e] focus:ring-1 focus:ring-[#c8a75e]/30 transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-xs sm:text-sm font-semibold text-[#f5f3ee] mb-2">Your Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Enter your email"
+            className="w-full px-4 py-3 bg-[#0b0f2a] border border-[#c8a75e]/30 rounded-xl text-[#f5f3ee] text-sm placeholder:text-[#aab0d6]/50 focus:outline-none focus:border-[#c8a75e] focus:ring-1 focus:ring-[#c8a75e]/30 transition-all"
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-xs sm:text-sm font-semibold text-[#f5f3ee] mb-2">Subject</label>
+        <input
+          type="text"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          required
+          placeholder="What is this about?"
+          className="w-full px-4 py-3 bg-[#0b0f2a] border border-[#c8a75e]/30 rounded-xl text-[#f5f3ee] text-sm placeholder:text-[#aab0d6]/50 focus:outline-none focus:border-[#c8a75e] focus:ring-1 focus:ring-[#c8a75e]/30 transition-all"
+        />
+      </div>
+      <div>
+        <label className="block text-xs sm:text-sm font-semibold text-[#f5f3ee] mb-2">Message</label>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          required
+          rows={5}
+          placeholder="Write your message here..."
+          className="w-full px-4 py-3 bg-[#0b0f2a] border border-[#c8a75e]/30 rounded-xl text-[#f5f3ee] text-sm placeholder:text-[#aab0d6]/50 focus:outline-none focus:border-[#c8a75e] focus:ring-1 focus:ring-[#c8a75e]/30 transition-all resize-none"
+        />
+      </div>
+      {error && (
+        <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-400">
+          <LucideIcons.AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+      <button
+        type="submit"
+        disabled={sending}
+        className="w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[#c8a75e] to-[#d4b56d] text-[#0b0f2a] rounded-xl font-semibold hover:shadow-premium transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+      >
+        {sending ? (
+          <>
+            <LucideIcons.Loader2 className="w-4 h-4 animate-spin" />
+            Sending...
+          </>
+        ) : (
+          <>
+            <LucideIcons.Send className="w-4 h-4" />
+            Send Message
+          </>
+        )}
+      </button>
+    </form>
   )
 }
 
@@ -293,7 +426,7 @@ function ValueCard({ icon, title, description, color }: any) {
       <div className={`w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-5 md:mb-6 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl`} style={{ backgroundColor: color }}>
         <div className="text-[#f5f3ee] [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-9 sm:[&>svg]:h-9 md:[&>svg]:w-10 md:[&>svg]:h-10">{icon}</div>
       </div>
-      <h3 className="text-lg sm:text-xl heading-premium text-[#f5f3ee] mb-2 sm:mb-3">{title}</h3>
+      <h3 className="text-base sm:text-xl heading-premium text-[#f5f3ee] mb-2 sm:mb-3">{title}</h3>
       <p className="text-premium text-xs sm:text-sm leading-relaxed">{description}</p>
     </div>
   )
@@ -303,9 +436,9 @@ function LeaderCard({ name, role, description }: any) {
   return (
     <div className="card-premium p-6 sm:p-7 md:p-8 text-center">
       <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-5 md:mb-6 rounded-xl bg-[#6B7280] flex items-center justify-center">
-        <Users className="w-10 h-10 sm:w-12 sm:h-12 text-[#f5f3ee]" />
+        <LucideIcons.Users className="w-10 h-10 sm:w-12 sm:h-12 text-[#f5f3ee]" />
       </div>
-      <h3 className="text-lg sm:text-xl heading-premium text-[#f5f3ee] mb-2">{name}</h3>
+      <h3 className="text-base sm:text-xl heading-premium text-[#f5f3ee] mb-2">{name}</h3>
       <p className="text-xs sm:text-sm font-semibold text-[#c8a75e] mb-3 sm:mb-4">{role}</p>
       <p className="text-premium text-xs sm:text-sm leading-relaxed">{description}</p>
     </div>

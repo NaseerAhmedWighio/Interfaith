@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import * as LucideIcons from 'lucide-react'
 import { TrendingUp, Plus, Edit, Trash2, Search } from 'lucide-react'
+import BulkUpload from '@/components/admin/BulkUpload'
 import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
 
 interface SimilarityTheme {
@@ -11,8 +13,10 @@ interface SimilarityTheme {
   description: string
   slug: string
   icon: string
-  order_index: number
-  created_at: string
+  color: string | null
+  orderIndex: number
+  createdAt: string
+  _count?: { teachings: number }
 }
 
 export default function SimilarityThemesManagement() {
@@ -47,13 +51,9 @@ export default function SimilarityThemesManagement() {
   }
 
   async function deleteTheme(id: string) {
-    if (!confirm('Are you sure you want to delete this similarity theme?')) return
-
+    if (!confirm('Are you sure you want to delete this similarity theme? (Its related teachings will also be deleted)')) return
     try {
-      const response = await fetch(`/api/similarity-themes/${id}`, {
-        method: 'DELETE'
-      })
-
+      const response = await fetch(`/api/similarity-themes/${id}`, { method: 'DELETE' })
       if (response.ok) {
         setThemes(themes.filter(t => t.id !== id))
       }
@@ -68,7 +68,19 @@ export default function SimilarityThemesManagement() {
     t.description.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const sortedThemes = applySort(filteredThemes, sortConfig, 'title', 'created_at')
+  const sortedThemes = applySort(filteredThemes, sortConfig, 'title', 'createdAt')
+
+  function renderIcon(iconName: string | null, color: string | null) {
+    const Icon = iconName && LucideIcons[iconName as keyof typeof LucideIcons]
+      ? LucideIcons[iconName as keyof typeof LucideIcons] as React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+      : null
+    if (!Icon) return null
+    return (
+      <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: color || '#6B7280' }}>
+        <Icon className="w-6 h-6 text-[#f5f3ee]" />
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -86,22 +98,23 @@ export default function SimilarityThemesManagement() {
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl lg:text-3xl font-bold text-[#f5f3ee]">Similarity Themes</h1>
-          <p className="text-premium-light mt-1 text-sm lg:text-base">Manage interfaith similarity themes</p>
+          <p className="text-premium-light mt-1 text-sm lg:text-base">Manage interfaith similarity themes and their teachings</p>
         </div>
-        <Link
-          href="/admin/similarity-themes/new"
-          className="inline-flex items-center justify-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 bg-gradient-to-r from-[#c8a75e] to-[#d4b56d] text-[#0b0f2a] rounded-xl hover:shadow-premium transition-all font-medium text-sm lg:text-base whitespace-nowrap"
-        >
-          <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
-          Add Theme
-        </Link>
+          <div className="flex items-center gap-3">
+            <BulkUpload type="similarity-themes" onComplete={loadThemes} />
+            <Link
+              href="/admin/similarity-themes/new"
+              className="inline-flex items-center justify-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 bg-gradient-to-r from-[#c8a75e] to-[#d4b56d] text-[#0b0f2a] rounded-xl hover:shadow-premium transition-all font-medium text-sm lg:text-base whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
+              Add Theme
+            </Link>
+          </div>
       </div>
 
-      {/* Search & Sort */}
       <div className="glass-effect rounded-xl p-4 border border-[#c8a75e]/20">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
@@ -118,53 +131,55 @@ export default function SimilarityThemesManagement() {
         </div>
       </div>
 
-      {/* Themes Grid */}
       <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
         {sortedThemes.map((theme) => (
           <div key={theme.id} className="glass-effect rounded-xl p-6 border border-[#c8a75e]/20">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex flex-col items-start gap-4 flex-1">
-                  <div className="text-4xl">{theme.icon}</div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-xl font-semibold text-[#f5f3ee]">{theme.title}</h3>
-                      <span className="px-2 py-1 bg-[#0b0f2a]/20 rounded text-xs text-premium-light">
-                        #{theme.order_index}
-                      </span>
-                    </div>
-                    <p className="text-premium-light text-sm mb-2">Slug: /{theme.slug}</p>
-                    <p className="text-premium-light leading-relaxed">{theme.description}</p>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-start gap-4 flex-1">
+                {renderIcon(theme.icon, theme.color)}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-semibold text-[#f5f3ee] truncate">{theme.title}</h3>
+                    <span className="px-2 py-1 bg-[#0b0f2a]/20 rounded text-xs text-premium-light whitespace-nowrap">
+                      #{theme.orderIndex}
+                    </span>
+                  </div>
+                  <p className="text-premium-light text-xs mb-1">/{theme.slug}</p>
+                  <p className="text-premium-light text-sm leading-relaxed line-clamp-2">{theme.description}</p>
+                  <div className="flex items-center gap-3 mt-2 text-xs text-premium-light">
+                    <span>{theme._count?.teachings ?? 0} teachings</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={`/admin/similarity-themes/${theme.id}`}
-                    className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
-                  >
-                    <Edit className="w-4 h-4 text-[#c8a75e]" />
-                  </Link>
-                  <button
-                    onClick={() => deleteTheme(theme.id)}
-                    className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4 text-red-400" />
-                  </button>
-                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <Link
+                  href={`/admin/similarity-themes/${theme.id}`}
+                  className="p-2 hover:bg-[#c8a75e]/20 rounded-xl transition-colors"
+                >
+                  <Edit className="w-4 h-4 text-[#c8a75e]" />
+                </Link>
+                <button
+                  onClick={() => deleteTheme(theme.id)}
+                  className="p-2 hover:bg-red-500/20 rounded-xl transition-colors"
+                >
+                  <Trash2 className="w-4 h-4 text-red-400" />
+                </button>
               </div>
             </div>
-          ))}
-        </div>
-
-        {sortedThemes.length === 0 && (
-          <div className="glass-effect rounded-2xl p-12 text-center">
-            <TrendingUp className="w-16 h-16 text-premium-light mx-auto mb-4" />
-            <p className="text-premium-light">No similarity themes found</p>
           </div>
-        )}
+        ))}
+      </div>
 
-        <div className="mt-6 text-center text-premium-light">
-          Showing {sortedThemes.length} of {themes.length} themes
+      {sortedThemes.length === 0 && (
+        <div className="glass-effect rounded-2xl p-12 text-center">
+          <TrendingUp className="w-16 h-16 text-premium-light mx-auto mb-4" />
+          <p className="text-premium-light">No similarity themes found</p>
         </div>
+      )}
+
+      <div className="mt-6 text-center text-premium-light">
+        Showing {sortedThemes.length} of {themes.length} themes
+      </div>
     </div>
   )
 }

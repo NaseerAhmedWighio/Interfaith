@@ -80,50 +80,42 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
       title: '── Page Editors ──',
       href: '',
       icon: LayoutDashboard,
-      isDivider: true,
-      adminOnly: true
+      isDivider: true
     },
     {
       title: 'Mission Page',
       href: '/admin/pages/mission',
-      icon: BookOpen,
-      adminOnly: true
+      icon: BookOpen
     },
     {
       title: 'Teachings Page',
       href: '/admin/pages/teachings',
-      icon: BookOpen,
-      adminOnly: true
+      icon: BookOpen
     },
     {
       title: 'Sacred Texts Page',
       href: '/admin/pages/sacred-texts-explorer',
-      icon: FileText,
-      adminOnly: true
+      icon: FileText
     },
     {
       title: 'Truth Page',
       href: '/admin/pages/truth',
-      icon: Lightbulb,
-      adminOnly: true
+      icon: Lightbulb
     },
     {
       title: 'Traditions Page',
       href: '/admin/pages/traditions',
-      icon: Globe2,
-      adminOnly: true
+      icon: Globe2
     },
     {
       title: 'Peace Init. Page',
       href: '/admin/pages/peace-initiatives',
-      icon: Heart,
-      adminOnly: true
+      icon: Heart
     },
     {
       title: 'Peace Page',
       href: '/admin/peace',
-      icon: Heart,
-      adminOnly: true
+      icon: Heart
     },
     {
       title: '── Content Models ──',
@@ -139,8 +131,7 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
     {
       title: 'Similarity Themes',
       href: '/admin/similarity-themes',
-      icon: TrendingUp,
-      adminOnly: true
+      icon: TrendingUp
     },
     {
       title: 'Assessment Questions',
@@ -157,8 +148,7 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
     {
       title: 'Shareable Quotes',
       href: '/admin/shareable-quotes',
-      icon: Share2,
-      adminOnly: true
+      icon: Share2
     },
     {
       title: 'Movement Members',
@@ -175,20 +165,17 @@ const AdminLayout = memo(function AdminLayout({ children }: AdminLayoutProps) {
     {
       title: 'Sufi Cards',
       href: '/admin/sufi-cards',
-      icon: BookOpen,
-      adminOnly: true
+      icon: BookOpen
     },
     {
       title: 'Approach Cards',
       href: '/admin/approach-cards',
-      icon: Lightbulb,
-      adminOnly: true
+      icon: Lightbulb
     },
     {
       title: 'About Page',
       href: '/admin/pages/about',
-      icon: FileText,
-      adminOnly: true
+      icon: FileText
     }
   ]
 

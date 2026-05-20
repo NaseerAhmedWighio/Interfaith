@@ -240,7 +240,7 @@ export default function FaithAssessment() {
                 Your Results
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">{results.title}</h1>
+            <h1 className="text-2xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">{results.title}</h1>
           </div>
 
           {/* Account linking message for authenticated users */}
@@ -379,7 +379,7 @@ export default function FaithAssessment() {
                 Faith Assessment
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
               Heart & Faith
               <span className="block text-[#C8A75E] mt-2">Assessment</span>
             </h1>
@@ -455,7 +455,7 @@ export default function FaithAssessment() {
 
         {questions.length > 0 && currentQuestion < questions.length && (
           <div className="card-premium p-6 sm:p-8 md:p-10">
-            <h2 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-6 sm:mb-8 text-center leading-relaxed px-2">
+            <h2 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-6 sm:mb-8 text-center leading-relaxed px-2">
               {questions[currentQuestion].questionText}
             </h2>
 
@@ -520,7 +520,7 @@ function RecommendationCard({ icon, title, description, color }: any) {
       <div className={`w-14 h-14 sm:w-16 sm:h-16 mb-3 sm:mb-4 rounded-xl flex items-center justify-center shadow-xl`} style={{ backgroundColor: color }}>
         <div className="text-[#f5f3ee] [&>svg]:w-6 [&>svg]:h-6 sm:[&>svg]:w-7 sm:[&>svg]:h-7 md:[&>svg]:w-8 md:[&>svg]:h-8">{icon}</div>
       </div>
-      <h3 className="text-base sm:text-lg heading-premium text-[#f5f3ee] mb-2">{title}</h3>
+      <h3 className="text-sm sm:text-lg heading-premium text-[#f5f3ee] mb-2">{title}</h3>
       <p className="text-xs sm:text-sm text-premium leading-relaxed">{description}</p>
     </div>
   )

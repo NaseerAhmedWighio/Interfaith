@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Search, FileText } from 'lucide-react'
 import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
+import BulkUpload from '@/components/admin/BulkUpload'
 
 interface SacredText {
   id: string
@@ -107,6 +108,7 @@ export default function SacredTextsManagement() {
           <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
           Add Sacred Text
         </Link>
+        <BulkUpload type="sacred-texts" onComplete={loadSacredTexts} />
       </div>
 
       {/* Search & Sort */}

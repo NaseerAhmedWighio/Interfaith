@@ -50,7 +50,7 @@ export default function Traditions() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
             Honoring All Paths
             <span className="block gradient-text mt-2">to the Divine</span>
           </h1>
@@ -65,7 +65,7 @@ export default function Traditions() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
               Faith Traditions We Honor
             </h2>
             <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
@@ -98,7 +98,7 @@ export default function Traditions() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
-            <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
+            <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
               {unitySection?.title || 'Unity in Diversity'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">
@@ -130,7 +130,7 @@ export default function Traditions() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
+            <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
               Shared Values Across Traditions
             </h2>
             <div className="divider-premium max-w-xs mx-auto"></div>
@@ -197,7 +197,7 @@ function TraditionCard({ tradition }: { tradition: Tradition }) {
         {/* TITLE */}
         <h3
           className="
-            text-2xl sm:text-2xl md:text-3xl
+            text-xl sm:text-2xl md:text-3xl
             heading-premium
             text-[#f5f3ee]
             mb-4

@@ -1,0 +1,47 @@
+[
+  {
+    "title": "The Beatitudes - Sermon on the Mount",
+    "source": "Christianity, Gospel of Matthew",
+    "textContent": "Blessed are the poor in spirit, for theirs is the kingdom of heaven. Blessed are those who mourn, for they shall be comforted. Blessed are the meek, for they shall inherit the earth. Blessed are those who hunger and thirst for righteousness, for they shall be satisfied. Blessed are the merciful, for they shall obtain mercy. Blessed are the pure in heart, for they shall see God. Blessed are the peacemakers, for they shall be called children of God.",
+    "theme": "peace",
+    "context": "Jesus's central ethical teaching, delivered on a mountainside to his disciples and followers.",
+    "translation": "English Standard Version",
+    "traditionId": ""
+  },
+  {
+    "title": "The Unity of Humanity - Quranic Verse",
+    "source": "Islam, Quran 49:13",
+    "textContent": "O mankind, indeed We have created you from male and female and made you peoples and tribes that you may know one another. Indeed, the most noble of you in the sight of Allah is the most righteous of you. Indeed, Allah is Knowing and Acquainted.",
+    "theme": "unity",
+    "context": "A foundational Quranic verse emphasizing that human diversity is intentional and a means for mutual understanding, not division.",
+    "translation": "Saheeh International",
+    "traditionId": ""
+  },
+  {
+    "title": "The Golden Rule - Judaism",
+    "source": "Judaism, Talmud - Shabbat 31a",
+    "textContent": "A gentile came to Hillel and said: 'Convert me on condition that you teach me the whole Torah while I stand on one foot.' Hillel converted him and said: 'What is hateful to you, do not do to your fellow. That is the whole Torah; the rest is explanation. Go and learn it.'",
+    "theme": "compassion",
+    "context": "The story of Hillel the Elder, one of the most important Jewish sages, summarizing the essence of Torah in the Golden Rule.",
+    "translation": "Babylonian Talmud",
+    "traditionId": ""
+  },
+  {
+    "title": "The Heart Sutra - Buddhist Wisdom",
+    "source": "Buddhism, Prajnaparamita Heart Sutra",
+    "textContent": "Form is emptiness, emptiness is form. Emptiness is not other than form, form is not other than emptiness. Likewise, feeling, perception, formation, and consciousness are empty. All phenomena are marked with emptiness; they are not born, not destroyed, not defiled, not pure, not increasing, not decreasing.",
+    "theme": "wisdom",
+    "context": "One of the most important texts in Mahayana Buddhism, articulating the profound teaching of emptiness (sunyata).",
+    "translation": "Translated from Sanskrit",
+    "traditionId": ""
+  },
+  {
+    "title": "The Bhagavad Gita - On Duty and Devotion",
+    "source": "Hinduism, Bhagavad Gita 2:47",
+    "textContent": "You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself to be the cause of the results of your activities, nor be attached to inaction. Establish yourself in yoga, perform your duties without attachment, and remain balanced in success and failure.",
+    "theme": "wisdom",
+    "context": "Krishna's teaching to Arjuna on the battlefield of Kurukshetra, explaining the path of selfless action.",
+    "translation": "Translated from Sanskrit",
+    "traditionId": ""
+  }
+]

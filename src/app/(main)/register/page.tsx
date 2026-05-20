@@ -176,7 +176,7 @@ export default function RegisterPage() {
     <div className="min-h-screen pt-28 md:pt-36  pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 sacred-pattern">
       <div className="container mx-auto max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-4">
             Create Account
           </h1>
           <p className="text-sm sm:text-base text-premium">

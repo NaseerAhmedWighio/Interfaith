@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { MessageSquare, Lightbulb, ExternalLink, Pencil, X, Check } from 'lucide-react'
+import { MessageSquare, Lightbulb, ExternalLink, Pencil, X, Check, ArrowLeft } from 'lucide-react'
+import BulkUpload from '@/components/admin/BulkUpload'
 
 interface Misconception {
   id: string
@@ -25,37 +26,24 @@ export default function TruthPageEditor() {
   const [editTitle, setEditTitle] = useState('')
   const [editContent, setEditContent] = useState('')
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [mRes, tsRes] = await Promise.all([
-          fetch('/api/misconceptions'),
-          fetch('/api/truth-sections')
-        ])
-        if (mRes.ok) setMisconceptions(await mRes.json())
-        if (tsRes.ok) setTruthSections(await tsRes.json())
-      } catch (err) {
-        console.error('Error loading truth page data:', err)
-      } finally {
-        setLoading(false)
-      }
+  async function loadData() {
+    try {
+      const [mRes, tsRes] = await Promise.all([
+        fetch('/api/misconceptions'),
+        fetch('/api/truth-sections')
+      ])
+      if (mRes.ok) setMisconceptions(await mRes.json())
+      if (tsRes.ok) setTruthSections(await tsRes.json())
+    } catch (err) {
+      console.error('Error loading truth page data:', err)
+    } finally {
+      setLoading(false)
     }
-    load()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="relative w-16 h-16 mx-auto mb-4">
-            <div className="absolute inset-0 border-4 border-[#c8a75e]/20 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-transparent border-t-[#c8a75e] rounded-full animate-spin"></div>
-          </div>
-          <p className="text-lg text-premium-light">Loading Truth Page Editor...</p>
-        </div>
-      </div>
-    )
   }
+
+  useEffect(() => {
+    loadData()
+  }, [])
 
   const dispellingSection = truthSections.find(s => s.sectionKey === 'dispelling_misconceptions')
 
@@ -80,10 +68,17 @@ export default function TruthPageEditor() {
   return (
     <div className="space-y-6">
       <div>
+        <Link href="/admin" className="inline-flex items-center gap-2 text-premium-light hover:text-[#f5f3ee] transition-colors mb-4 text-sm">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Admin
+        </Link>
         <h1 className="text-2xl lg:text-3xl font-bold text-[#f5f3ee]">Truth Page Editor</h1>
         <p className="text-premium-light mt-1 text-sm lg:text-base">
           Manage all content for the Truth page
         </p>
+        <div className="mt-4">
+          <BulkUpload type="truth-sections" onComplete={loadData} />
+        </div>
       </div>
 
       <div className="grid gap-6">

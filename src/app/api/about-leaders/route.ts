@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/session'
+import { requireAuth, getCurrentUser } from '@/lib/session'
 import { checkPermission } from '@/lib/permissions'
 
 export async function GET() {
   try {
+    const currentUser = await getCurrentUser()
+    const whereClause: Record<string, any> = {}
+    if (!currentUser || currentUser.role === 'user') {
+      whereClause.status = 'published'
+    }
+
     const items = await prisma.aboutLeader.findMany({
+      where: whereClause,
       orderBy: { orderIndex: 'asc' },
     })
     return NextResponse.json(items)

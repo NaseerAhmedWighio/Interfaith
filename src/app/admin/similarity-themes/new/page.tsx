@@ -4,33 +4,31 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save } from 'lucide-react'
+import { IconPicker } from '@/components/admin/IconPicker'
 
 export default function NewSimilarityTheme() {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
-    theme: '',
+    title: '',
     description: '',
-    examples: [''],
-    orderIndex: 0
+    icon: 'Heart',
+    color: '#C8A75E',
+    slug: '',
+    orderIndex: 0,
   })
 
-  const addExample = () => {
-    setFormData({ ...formData, examples: [...formData.examples, ''] })
+  const generateSlug = (title: string) => {
+    return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   }
 
-  const removeExample = (index: number) => {
-    setFormData({
-      ...formData,
-      examples: formData.examples.filter((_, i) => i !== index)
-    })
-  }
-
-  const updateExample = (index: number, value: string) => {
-    const newExamples = [...formData.examples]
-    newExamples[index] = value
-    setFormData({ ...formData, examples: newExamples })
+  const handleTitleChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      title: value,
+      slug: prev.slug || generateSlug(value),
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,10 +40,7 @@ export default function NewSimilarityTheme() {
       const response = await fetch('/api/similarity-themes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          examples: formData.examples.filter(ex => ex.trim() !== '')
-        })
+        body: JSON.stringify(formData),
       })
 
       if (!response.ok) {
@@ -64,10 +59,7 @@ export default function NewSimilarityTheme() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link
-          href="/admin/similarity-themes"
-          className="p-2 hover:bg-[#c8a75e]/10 rounded-xl transition-colors"
-        >
+        <Link href="/admin/similarity-themes" className="p-2 hover:bg-[#c8a75e]/10 rounded-xl transition-colors">
           <ArrowLeft className="w-5 h-5 text-[#f5f3ee]" />
         </Link>
         <div>
@@ -84,72 +76,65 @@ export default function NewSimilarityTheme() {
         )}
 
         <div>
-          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
-            Theme *
-          </label>
+          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">Title *</label>
           <input
             type="text"
             required
-            value={formData.theme}
-            onChange={(e) => setFormData({ ...formData, theme: e.target.value })}
+            value={formData.title}
+            onChange={(e) => handleTitleChange(e.target.value)}
             className="w-full px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
-            placeholder="e.g., Golden Rule, Compassion, Unity"
+            placeholder="e.g., The Golden Rule"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
-            Description *
-          </label>
+          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">Description *</label>
           <textarea
             required
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={4}
             className="w-full px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
-            placeholder="Describe the similarity theme..."
+            placeholder="Describe this similarity theme..."
           />
         </div>
 
+        <IconPicker value={formData.icon} onChange={(icon) => setFormData({ ...formData, icon })} label="Icon" />
+
         <div>
-          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
-            Examples
-          </label>
-          <div className="space-y-3">
-            {formData.examples.map((example, index) => (
-              <div key={index} className="flex gap-2">
-                <input
-                  type="text"
-                  value={example}
-                  onChange={(e) => updateExample(index, e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
-                  placeholder="Enter an example..."
-                />
-                {formData.examples.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeExample(index)}
-                    className="px-4 py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl hover:bg-red-500/20 transition-all"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addExample}
-              className="px-4 py-2 bg-[#c8a75e]/10 border border-[#c8a75e]/20 text-[#c8a75e] rounded-xl hover:bg-[#c8a75e]/20 transition-all text-sm"
-            >
-              + Add Example
-            </button>
+          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">Color</label>
+          <div className="flex items-center gap-3">
+            <input
+              type="color"
+              value={formData.color}
+              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+              className="w-12 h-12 rounded-xl border border-[#c8a75e]/20 bg-transparent cursor-pointer"
+            />
+            <input
+              type="text"
+              value={formData.color}
+              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+              className="flex-1 px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all font-mono"
+              placeholder="#C8A75E"
+            />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
-            Order Index
-          </label>
+          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">Slug *</label>
+          <input
+            type="text"
+            required
+            value={formData.slug}
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+            className="w-full px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all font-mono"
+            placeholder="golden-rule"
+          />
+          <p className="text-xs text-premium-light mt-1">URL slug. Auto-generated from title.</p>
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">Order Index</label>
           <input
             type="number"
             value={formData.orderIndex}

@@ -3,9 +3,15 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, Heart, HeartHandshake, Sparkles, HandHeart, Users, Scale, Home } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 import { getSimilarityThemeBySlug, getTraditionSection } from '@/actions/database'
 import Pagination from '@/components/Pagination'
+
+function resolveIcon(name: string | null | undefined, fallback: string = 'BookOpen'): React.ComponentType<{ className?: string }> {
+  if (!name) return LucideIcons[fallback as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>
+  const Icon = LucideIcons[name as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }> | undefined
+  return Icon || (LucideIcons[fallback as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>)
+}
 
 interface SimilarityTheme {
   id: string
@@ -69,16 +75,7 @@ export default function SimilarityDetail() {
     setLoading(false)
   }
 
-  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-    Heart,
-    HeartHandshake,
-    Sparkles,
-    HandHeart,
-    Users,
-    Scale,
-    BookOpen,
-    Home,
-  }
+  const Icon = resolveIcon(theme?.icon ?? null, 'BookOpen')
 
   const colors: Record<string, string> = {
     'golden-rule': '#D4A07B',
@@ -121,7 +118,6 @@ export default function SimilarityDetail() {
     )
   }
 
-  const Icon = iconMap[theme.icon] || BookOpen
   const color = colors[theme.slug] || '#6B7280'
 
   return (
@@ -132,7 +128,7 @@ export default function SimilarityDetail() {
             href="/teachings"
             className="inline-flex items-center gap-2 text-[#c8a75e] hover:text-[#d4b56d] mb-6 sm:mb-8 group glass-effect px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium w-fit"
           >
-            <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+            <LucideIcons.ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Teachings</span>
           </Link>
 
@@ -199,12 +195,12 @@ export default function SimilarityDetail() {
 function TeachingCard({ teaching }: { teaching: TeachingWithTradition }) {
   return (
     <div className="card-premium p-5 sm:p-6 group relative flex flex-col h-full">
-      <div className="absolute top-0 left-0 right-0 h-1 sm:h-1.5 rounded-t-2xl opacity-50" style={{ backgroundColor: teaching.tradition.color }}></div>
+      <div className="absolute top-0 left-0 right-0 h-1 sm:h-1.5 rounded-t-2xl opacity-30" style={{ backgroundColor: '#C8A75E' }}></div>
 
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div
           className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[#f5f3ee] text-[10px] sm:text-xs font-semibold shadow-md"
-          style={{ backgroundColor: teaching.tradition.color }}
+          style={{ backgroundColor: '#C8A75E' }}
         >
           {teaching.tradition.name}
         </div>
@@ -216,7 +212,7 @@ function TeachingCard({ teaching }: { teaching: TeachingWithTradition }) {
 
       <div className="flex items-center gap-2 text-[11px] sm:text-xs text-[#aab0d6]/80 mb-3 sm:mb-4">
         <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#c8a75e] flex items-center justify-center shrink-0">
-          <BookOpen className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
+          <LucideIcons.BookOpen className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
         </div>
         <span className="font-semibold truncate">{teaching.source}</span>
       </div>

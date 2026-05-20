@@ -1,0 +1,66 @@
+[
+  {
+    "title": "Sacred Texts",
+    "description": "Explore how different faith traditions honor their sacred scriptures",
+    "icon": "BookOpen",
+    "slug": "sacred-texts",
+    "color": "#C8A75E",
+    "orderIndex": 1
+  },
+  {
+    "title": "Compassion & Love",
+    "description": "Comparative study of the golden rule and teachings on love across world religions",
+    "icon": "Heart",
+    "slug": "compassion-love",
+    "color": "#E88D67",
+    "orderIndex": 2
+  },
+  {
+    "title": "Prayer & Meditation",
+    "description": "Contemplative practices and devotional traditions from around the world",
+    "icon": "Prayer",
+    "slug": "prayer-meditation",
+    "color": "#6B8F71",
+    "orderIndex": 3
+  },
+  {
+    "title": "Creation & Cosmology",
+    "description": "How different faiths understand the origins of the universe and humanity",
+    "icon": "Globe",
+    "slug": "creation-cosmology",
+    "color": "#4A90D9",
+    "orderIndex": 4
+  },
+  {
+    "title": "Prophets & Messengers",
+    "description": "Comparative study of prophetic figures and divine messengers in various traditions",
+    "icon": "ScrollText",
+    "slug": "prophets-messengers",
+    "color": "#9B59B6",
+    "orderIndex": 5
+  },
+  {
+    "title": "Afterlife & Salvation",
+    "description": "Beliefs about the hereafter, resurrection, and spiritual liberation across faiths",
+    "icon": "Sun",
+    "slug": "afterlife-salvation",
+    "color": "#E67E22",
+    "orderIndex": 6
+  },
+  {
+    "title": "Ethics & Morality",
+    "description": "Shared ethical principles and moral guidelines across religious traditions",
+    "icon": "Scale",
+    "slug": "ethics-morality",
+    "color": "#2ECC71",
+    "orderIndex": 7
+  },
+  {
+    "title": "Community & Worship",
+    "description": "How faith communities gather, celebrate, and practice their traditions together",
+    "icon": "Users",
+    "slug": "community-worship",
+    "color": "#E74C3C",
+    "orderIndex": 8
+  }
+]

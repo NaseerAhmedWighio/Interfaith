@@ -105,7 +105,7 @@ export default function VerifyEmailPage() {
               <div className="pulse-glow inline-flex p-4 sm:p-5 rounded-xl bg-[#27AE60] mb-6">
                 <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-[#f5f3ee]" />
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">
+              <h1 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">
                 Email Verified!
               </h1>
               <p className="text-sm sm:text-base text-premium leading-relaxed mb-6">
@@ -121,7 +121,7 @@ export default function VerifyEmailPage() {
                 <div className="inline-flex p-4 sm:p-5 rounded-xl bg-[#c8a75e]/20 mb-4">
                   <Mail className="w-12 h-12 sm:w-14 sm:h-14 text-[#c8a75e]" />
                 </div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-2">
+                <h1 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-2">
                   Verify Your Email
                 </h1>
                 <p className="text-sm sm:text-base text-premium">

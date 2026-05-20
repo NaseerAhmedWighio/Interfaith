@@ -81,7 +81,7 @@ export default function SacredTexts() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
             Sacred Texts
             <span className="block text-[#C8A75E] mt-2">& Scriptures</span>
           </h1>
@@ -97,7 +97,7 @@ export default function SacredTexts() {
         <div className="container mx-auto max-w-6xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12 mb-12 sm:mb-16 md:mb-20 text-center">
             <Sparkles className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4 sm:mb-5 md:mb-6 text-amber-500" />
-            <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">One Truth, Many Languages</h2>
+            <h2 className="text-xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">One Truth, Many Languages</h2>
             <p className="text-base sm:text-lg md:text-xl text-premium leading-relaxed max-w-3xl mx-auto px-4">
               While each sacred text speaks in its own cultural and historical context, they all
               point to the same eternal truths: love, compassion, justice, humility, and the
@@ -106,7 +106,7 @@ export default function SacredTexts() {
           </div>
 
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Sacred Texts from World Traditions</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Sacred Texts from World Traditions</h2>
             <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
@@ -151,7 +151,7 @@ export default function SacredTexts() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Shared Themes Across Traditions</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Shared Themes Across Traditions</h2>
             <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
             <p className="text-base sm:text-lg md:text-xl text-premium max-w-3xl mx-auto px-4">
               Despite differences in language, culture, and historical context, sacred texts
@@ -199,7 +199,7 @@ export default function SacredTexts() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Sufi Perspective on Sacred Texts</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Sufi Perspective on Sacred Texts</h2>
             <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
@@ -224,7 +224,7 @@ export default function SacredTexts() {
               </div>
             </div>
             <div className="card-premium p-6 sm:p-8 md:p-10">
-              <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-4 sm:mb-5 md:mb-6 text-center">Levels of Understanding</h3>
+              <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-4 sm:mb-5 md:mb-6 text-center">Levels of Understanding</h3>
               <div className="space-y-4 sm:space-y-5 md:space-y-6">
                 <LevelItem
                   level="Shariah"
@@ -251,7 +251,7 @@ export default function SacredTexts() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Study Resources</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">Study Resources</h2>
             <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
@@ -278,7 +278,7 @@ export default function SacredTexts() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A] text-[#f5f3ee]">
         <div className="container mx-auto max-w-4xl text-center">
           <BookOpen className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4 sm:mb-5 md:mb-6 opacity-80" />
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
+          <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
             &quot;All the sacred books are branches
             <span className="block mt-2">of the one tree of life.&quot;</span>
           </h2>
@@ -306,7 +306,7 @@ function SacredTextCard({ text }: { text: SacredText }) {
       <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 mb-4 sm:mb-5 md:mb-6 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl" style={{ backgroundColor: color }}>
         <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 text-[#f5f3ee]" />
       </div>
-      <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-2">{text.title}</h3>
+      <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-2">{text.title}</h3>
       {text.tradition && (
         <p className="text-xs sm:text-sm font-semibold text-[#c8a75e] mb-3 sm:mb-4">{text.tradition.name}</p>
       )}
@@ -323,7 +323,7 @@ function SacredTextCard({ text }: { text: SacredText }) {
 function ThemeCard({ title, examples }: any) {
   return (
     <div className="tradition-card p-5 sm:p-6">
-      <h3 className="text-lg sm:text-xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 text-center">{title}</h3>
+      <h3 className="text-base sm:text-xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 text-center">{title}</h3>
       <div className="space-y-3 sm:space-y-4">
         {examples.map((example: string, index: number) => (
           <p key={index} className="text-xs sm:text-sm text-premium italic leading-relaxed border-l-2 border-[#c8a75e] pl-3 sm:pl-4">
@@ -350,7 +350,7 @@ function LevelItem({ level, description }: any) {
 function ResourceCard({ title, description, features }: any) {
   return (
     <div className="card-premium p-6 sm:p-7 md:p-8">
-      <h3 className="text-lg sm:text-xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
+      <h3 className="text-base sm:text-xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
       <p className="text-sm sm:text-base text-premium mb-4 sm:mb-5 md:mb-6 leading-relaxed">{description}</p>
       <ul className="space-y-2">
         {features.map((feature: string, index: number) => (

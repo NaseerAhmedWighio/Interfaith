@@ -107,7 +107,7 @@ export default function Truth() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
             Revealing Truth,
             <span className="block text-[#C8A75E] mt-2">Dispelling Darkness</span>
           </h1>
@@ -122,7 +122,7 @@ export default function Truth() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
               Common Misconceptions & Their Truths
             </h2>
             <div className="divider-premium max-w-xs mx-auto mb-3 sm:mb-4"></div>
@@ -253,7 +253,7 @@ export default function Truth() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-4xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
-            <h2 className="text-2xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
+            <h2 className="text-xl sm:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 text-center px-4">
               {dispellingSection?.title || 'Why Dispelling Misconceptions Matters'}
             </h2>
             <div className="space-y-4 sm:space-y-5 md:space-y-6 text-sm sm:text-base text-premium leading-relaxed">

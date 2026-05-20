@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Search } from 'lucide-react'
 import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
+import BulkUpload from '@/components/admin/BulkUpload'
 
 interface Tradition {
   id: string
@@ -99,6 +100,7 @@ export default function TraditionsManagement() {
           <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
           Add Tradition
         </Link>
+        <BulkUpload type="traditions" onComplete={loadTraditions} />
       </div>
 
       {/* Search & Sort */}

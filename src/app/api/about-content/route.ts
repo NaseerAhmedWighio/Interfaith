@@ -9,7 +9,7 @@ export async function GET() {
 
     let whereClause = {}
 
-    if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'moderator')) {
+    if (!currentUser || currentUser.role === 'user') {
       whereClause = { status: 'published' }
     }
 

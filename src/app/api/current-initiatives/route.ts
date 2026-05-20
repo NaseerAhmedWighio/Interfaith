@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/session'
+import { requireAuth, getCurrentUser } from '@/lib/session'
 import { checkPermission } from '@/lib/permissions'
 
 export async function GET() {
   try {
-    const items = await prisma.currentInitiative.findMany({ orderBy: { orderIndex: 'asc' } })
+    const currentUser = await getCurrentUser()
+    const whereClause: Record<string, any> = {}
+    if (!currentUser || currentUser.role === 'user') {
+      whereClause.status = 'published'
+    }
+
+    const items = await prisma.currentInitiative.findMany({ where: whereClause, orderBy: { orderIndex: 'asc' } })
     return NextResponse.json(items)
   } catch {
     return NextResponse.json({ error: 'Failed to fetch current initiatives' }, { status: 500 })

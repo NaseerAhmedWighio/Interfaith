@@ -36,7 +36,7 @@ export default function SacredTextsExplorer() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
   const [currentPage, setCurrentPage] = useState(1)
 
-  const ITEMS_PER_PAGE = viewMode === 'list' ? 4 : 6
+  const ITEMS_PER_PAGE = 6
 
   const themes = [
     { value: 'all', label: 'All Themes', icon: Globe },
@@ -114,7 +114,7 @@ export default function SacredTextsExplorer() {
           <div className="flex justify-center mb-4 sm:mb-5 md:mb-6">
             <BookOpen className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-gradient-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-5 md:mb-6 px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-5 md:mb-6 px-4">
             <span className="text-gradient-primary">Sacred Texts</span> Explorer
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-premium-light max-w-3xl mx-auto leading-relaxed px-4">
@@ -266,7 +266,7 @@ function ListCard({ text }: { text: SacredText }) {
             </span>
           </div>
 
-          <h3 className="text-2xl font-bold text-[#f5f3ee] mb-4">{text.title}</h3>
+          <h3 className="text-xl font-bold text-[#f5f3ee] mb-4">{text.title}</h3>
 
           <blockquote className="text-premium-light leading-relaxed mb-4 italic text-lg">
             &ldquo;{text.textContent}&rdquo;
@@ -306,7 +306,7 @@ function TextCard({ text }: { text: SacredText }) {
         </span>
       </div>
 
-      <h3 className="text-xl font-bold text-[#f5f3ee] mb-3">{text.title}</h3>
+      <h3 className="text-lg font-bold text-[#f5f3ee] mb-3">{text.title}</h3>
 
       <blockquote className="text-premium-light leading-relaxed mb-4 italic">
         &ldquo;{text.textContent}&rdquo;

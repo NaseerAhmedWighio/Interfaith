@@ -102,7 +102,7 @@ export default function Navigation() {
             <MobileNavLink href="/traditions" active={isActive('/traditions')} onClick={closeMobileMenu}>
               Traditions
             </MobileNavLink>
-            <MobileNavLink href="/peace-initiatives" active={isActive('/peace-initiatives')} onClick={closeMobileMenu}>
+            <MobileNavLink href="/peace" active={isActive('/peace')} onClick={closeMobileMenu}>
               Peace Work
             </MobileNavLink>
             <MobileNavLink href="/share-quotes" active={isActive('/share-quotes')} onClick={closeMobileMenu}>

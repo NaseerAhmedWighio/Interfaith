@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Plus, Edit, Trash2, BookOpen, Save, X, Sparkles } from 'lucide-react'
+import { IconPicker } from '@/components/admin/IconPicker'
 
 interface SufiCard {
   id: string
@@ -215,13 +216,16 @@ export default function SufiCardsManagement() {
             <textarea value={addForm.quote} onChange={e => setAddForm(p => ({ ...p, quote: e.target.value }))}
               placeholder="Quote (optional)"
               className="w-full p-3 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm min-h-[60px] resize-none focus:outline-none focus:border-[#c8a75e]/40" />
-            <div className="flex gap-4">
-              <input value={addForm.icon} onChange={e => setAddForm(p => ({ ...p, icon: e.target.value }))}
-                placeholder="Icon (optional)"
-                className="flex-1 p-2.5 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
-              <input value={addForm.color} onChange={e => setAddForm(p => ({ ...p, color: e.target.value }))}
-                placeholder="Color (optional)"
-                className="flex-1 p-2.5 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
+            <IconPicker value={addForm.icon} onChange={v => setAddForm(p => ({ ...p, icon: v }))} />
+            <div>
+              <label className="block text-xs font-bold text-[#aab0d6] mb-1 uppercase tracking-wider">Color</label>
+              <div className="flex items-center gap-3">
+                <input type="color" value={addForm.color || '#c8a75e'} onChange={e => setAddForm(p => ({ ...p, color: e.target.value }))}
+                  className="w-12 h-10 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 cursor-pointer" />
+                <input value={addForm.color} onChange={e => setAddForm(p => ({ ...p, color: e.target.value }))}
+                  placeholder="#hex"
+                  className="flex-1 p-2.5 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
+              </div>
             </div>
           </div>
           <div className="flex gap-2 mt-4">
@@ -261,13 +265,16 @@ export default function SufiCardsManagement() {
                 <textarea value={editForm.quote} onChange={e => setEditForm(p => ({ ...p, quote: e.target.value }))}
                   placeholder="Quote (optional)"
                   className="w-full p-3 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm min-h-[60px] resize-none focus:outline-none focus:border-[#c8a75e]/40" />
-                <div className="flex gap-4">
-                  <input value={editForm.icon} onChange={e => setEditForm(p => ({ ...p, icon: e.target.value }))}
-                    placeholder="Icon (optional)"
-                    className="flex-1 p-2.5 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
-                  <input value={editForm.color} onChange={e => setEditForm(p => ({ ...p, color: e.target.value }))}
-                    placeholder="Color (optional)"
-                    className="flex-1 p-2.5 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
+                <IconPicker value={editForm.icon} onChange={v => setEditForm(p => ({ ...p, icon: v }))} />
+                <div>
+                  <label className="block text-xs font-bold text-[#aab0d6] mb-1 uppercase tracking-wider">Color</label>
+                  <div className="flex items-center gap-3">
+                    <input type="color" value={editForm.color || '#c8a75e'} onChange={e => setEditForm(p => ({ ...p, color: e.target.value }))}
+                      className="w-12 h-10 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 cursor-pointer" />
+                    <input value={editForm.color} onChange={e => setEditForm(p => ({ ...p, color: e.target.value }))}
+                      placeholder="#hex"
+                      className="flex-1 p-2.5 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10 text-[#f5f3ee] text-sm focus:outline-none focus:border-[#c8a75e]/40" />
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleSave(c.id)} className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#c8a75e] text-[#0b0f2a] rounded-xl text-sm font-medium hover:bg-[#d4b56d] transition-colors">

@@ -302,6 +302,12 @@ export default function ContentReviewPage() {
   const [loading, setLoading] = useState(true)
   const [pendingContent, setPendingContent] = useState<PendingContent | null>(null)
   const [selectedTab, setSelectedTab] = useState<'pending_moderator' | 'pending_admin'>('pending_moderator')
+
+  useEffect(() => {
+    if (currentUser?.role === 'admin') {
+      setSelectedTab('pending_admin')
+    }
+  }, [currentUser])
   const [processingId, setProcessingId] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
@@ -926,16 +932,6 @@ export default function ContentReviewPage() {
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-3 md:gap-4 mb-6">
-        <button
-          onClick={() => setSelectedTab('pending_moderator')}
-          className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-            selectedTab === 'pending_moderator'
-              ? 'bg-gradient-to-r from-[#c8a75e] to-[#d4b56d] text-[#0b0f2a]'
-              : 'bg-[#0b0f2a]/50 border border-[#c8a75e]/20 text-premium-light hover:bg-[#0b0f2a]/70'
-          }`}
-        >
-          Pending Moderator Review
-        </button>
         {currentUser?.role === 'admin' && (
           <button
             onClick={() => setSelectedTab('pending_admin')}
@@ -948,6 +944,16 @@ export default function ContentReviewPage() {
             Pending Admin Review
           </button>
         )}
+        <button
+          onClick={() => setSelectedTab('pending_moderator')}
+          className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+            selectedTab === 'pending_moderator'
+              ? 'bg-gradient-to-r from-[#c8a75e] to-[#d4b56d] text-[#0b0f2a]'
+              : 'bg-[#0b0f2a]/50 border border-[#c8a75e]/20 text-premium-light hover:bg-[#0b0f2a]/70'
+          }`}
+        >
+          Pending Moderator Review
+        </button>
       </div>
 
       {/* Content List */}

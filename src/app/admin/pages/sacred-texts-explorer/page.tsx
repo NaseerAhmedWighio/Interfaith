@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { FileText, ExternalLink } from 'lucide-react'
+import { FileText, ExternalLink, ArrowLeft } from 'lucide-react'
 
 interface SacredText {
   id: string
@@ -50,6 +50,10 @@ export default function SacredTextsExplorerEditor() {
   return (
     <div className="space-y-6">
       <div>
+        <Link href="/admin" className="inline-flex items-center gap-2 text-premium-light hover:text-[#f5f3ee] transition-colors mb-4 text-sm">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Admin
+        </Link>
         <h1 className="text-2xl lg:text-3xl font-bold text-[#f5f3ee]">Sacred Texts Explorer Editor</h1>
         <p className="text-premium-light mt-1 text-sm lg:text-base">
           Manage all content for the Sacred Texts Explorer page

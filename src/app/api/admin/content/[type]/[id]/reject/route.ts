@@ -28,6 +28,7 @@ const FIND_MODEL = {
   approach_content: (id: string) => prisma.approachContent.findUnique({ where: { id } }),
   sufi_cards: (id: string) => prisma.sufiCard.findUnique({ where: { id } }),
   approach_cards: (id: string) => prisma.approachCard.findUnique({ where: { id } }),
+  similarity_teachings: (id: string) => prisma.similarityTeaching.findUnique({ where: { id } }),
 }
 
 const UPDATE_MODEL = {
@@ -56,6 +57,7 @@ const UPDATE_MODEL = {
   approach_content: (id: string, data: any) => prisma.approachContent.update({ where: { id }, data }),
   sufi_cards: (id: string, data: any) => prisma.sufiCard.update({ where: { id }, data }),
   approach_cards: (id: string, data: any) => prisma.approachCard.update({ where: { id }, data }),
+  similarity_teachings: (id: string, data: any) => prisma.similarityTeaching.update({ where: { id }, data }),
 }
 
 type ContentType = keyof typeof FIND_MODEL

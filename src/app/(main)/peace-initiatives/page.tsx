@@ -49,37 +49,37 @@ export default function PeaceInitiatives() {
 
   return (
     <div>
-      <section className="section-premium pt-28 md:pt-36 pb-20 px-6">
+      <section className="section-premium pt-28 md:pt-36 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center space-x-2 glass-effect px-6 py-3 rounded-xl mb-6">
-            <Heart className="w-5 h-5 text-rose-500" />
+          <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-xl mb-4 sm:mb-6">
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" />
             <span className="text-sm font-semibold text-[#E07070]">
               Building Peace Together
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl heading-premium text-[#f5f3ee] mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight">
             Peace
             <span className="block text-[#C8A75E] mt-2">Initiatives</span>
           </h1>
 
-          <p className="text-xl text-premium leading-relaxed max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed max-w-3xl mx-auto">
             Active programs and collaborative projects bringing people of all faiths together
             to create lasting peace in communities around the world.
           </p>
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-[#0B0F2A]">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl heading-premium text-[#f5f3ee] mb-4">Our Current Initiatives</h2>
-            <div className="divider-premium max-w-xs mx-auto mb-12"></div>
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">Our Current Initiatives</h2>
+            <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
             {paginatedInitiatives.length > 0 ? paginatedInitiatives.map((item, index) => {
-              const icons = [<Globe2 key="g" className="w-8 h-8" />, <Users key="u" className="w-8 h-8" />, <Sparkles key="s" className="w-8 h-8" />, <HandHeart key="h" className="w-8 h-8" />]
+              const icons = [<Globe2 key="g" className="w-6 h-6 sm:w-8 sm:h-8" />, <Users key="u" className="w-6 h-6 sm:w-8 sm:h-8" />, <Sparkles key="s" className="w-6 h-6 sm:w-8 sm:h-8" />, <HandHeart key="h" className="w-6 h-6 sm:w-8 sm:h-8" />]
               const colors = ['#C8A75E', '#27AE60', '#9B59B6', '#D4A07B']
               const colorMap: Record<string, string> = { gold: '#C8A75E', green: '#27AE60', purple: '#9B59B6', orange: '#D4A07B' }
               return (
@@ -107,9 +107,9 @@ export default function PeaceInitiatives() {
             </div>
           )}
 
-          <div className="card-premium p-12 text-center">
-            <h3 className="text-3xl heading-premium text-[#f5f3ee] mb-6">2026 Impact Goals</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12 text-center">
+            <h3 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6">2026 Impact Goals</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
               {impactGoals.length > 0
                 ? impactGoals.map((goal) => (
                     <ImpactGoal key={goal.id} number={goal.number} label={goal.label} />
@@ -127,14 +127,14 @@ export default function PeaceInitiatives() {
         </div>
       </section>
 
-      <section className="py-20 px-6 sacred-pattern">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl heading-premium text-[#f5f3ee] mb-4">Featured Programs</h2>
-            <div className="divider-premium max-w-xs mx-auto mb-12"></div>
+            <div className="text-center mb-8 sm:mb-10 md:mb-14">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">Featured Programs</h2>
+            <div className="divider-premium max-w-xs mx-auto mb-8 sm:mb-12"></div>
           </div>
 
-          <div className="space-y-12">
+          <div className="space-y-8 sm:space-y-12">
             {featuredPrograms.map((program) => (
               <ProgramCard
                 key={program.id}
@@ -156,10 +156,10 @@ export default function PeaceInitiatives() {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-[#0B0F2A]">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl heading-premium text-[#f5f3ee] mb-4">Regional Initiatives</h2>
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">Regional Initiatives</h2>
             <div className="divider-premium max-w-xs mx-auto mb-12"></div>
           </div>
 
@@ -169,7 +169,7 @@ export default function PeaceInitiatives() {
                 key={item.id}
                 region={item.region}
                 initiatives={item.initiatives}
-                icon={<MapPin className="w-8 h-8" />}
+                icon={<MapPin className="w-6 h-6 sm:w-8 sm:h-8" />}
               />
             ))}
             {regionalInitiatives.length === 0 && (
@@ -181,17 +181,17 @@ export default function PeaceInitiatives() {
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-[#0B0F2A]">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-[#0B0F2A]">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-10 md:gap-16 items-center">
             <div>
-              <h2 className="text-4xl heading-premium text-[#f5f3ee] mb-6">Get Involved</h2>
+              <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6">Get Involved</h2>
               <div className="divider-premium max-w-xs mb-8"></div>
-              <p className="text-md md:text-lg lg:text-xl text-premium leading-relaxed mb-8">
+              <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed mb-6 sm:mb-8">
                 Every initiative needs dedicated people like you. Whether you have 2 hours a month
                 or want to launch a program in your community, there&apos;s a place for you.
               </p>
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {getInvolvedItems.length > 0
                   ? getInvolvedItems.map((item) => (
                       <WayToHelp
@@ -212,17 +212,17 @@ export default function PeaceInitiatives() {
             </div>
             <div className="card-premium p-6 md:p-8 lg:p-10">
               <div className="text-center mb-8">
-                <Calendar className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 mx-auto mb-4 text-[#c8a75e]" />
-                <h3 className="text-xl md:text-2xl heading-premium text-[#f5f3ee] mb-2">Upcoming Events</h3>
+                <Calendar className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-[#c8a75e]" />
+                <h3 className="text-base sm:text-lg md:text-xl heading-premium text-[#f5f3ee] mb-2">Upcoming Events</h3>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <EventItem date="May 15" title="Global Dialogue: Climate Justice" format="Virtual - Global" />
                 <EventItem date="Jun 1-3" title="Youth Leadership Retreat" format="Barcelona, Spain" />
                 <EventItem date="Jun 21" title="Summer Solstice Service Day" format="Worldwide - 150+ cities" />
                 <EventItem date="Jul 10" title="Facilitator Training Program Starts" format="Online - 12 weeks" />
               </div>
               <div className="flex mt-8">
-                <Link href="/peace-initiatives" className="btn-primary w-full justify-center text-center">
+                <Link href="/peace" className="btn-primary w-full justify-center text-center">
                   View All Events
                 </Link>
               </div>
@@ -236,14 +236,14 @@ export default function PeaceInitiatives() {
 
 function InitiativeCard({ title, category, description, impact, nextEvent, color, icon }: any) {
   return (
-    <div className="card-premium p-8">
-      <div className={`w-14 h-14 mb-6 rounded-xl flex items-center justify-center shadow-xl`} style={{ backgroundColor: color }}>
+    <div className="card-premium p-5 sm:p-6 md:p-7">
+      <div className={`w-12 h-12 sm:w-14 sm:h-14 mb-4 sm:mb-5 md:mb-6 rounded-xl flex items-center justify-center shadow-xl`} style={{ backgroundColor: color }}>
         <div className="text-[#f5f3ee]">{icon}</div>
       </div>
       <div className="inline-block px-4 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-xl mb-4">
         {category}
       </div>
-      <h3 className="text-2xl heading-premium text-[#f5f3ee] mb-4">{title}</h3>
+      <h3 className="text-xl heading-premium text-[#f5f3ee] mb-4">{title}</h3>
       <p className="text-premium leading-relaxed mb-6">{description}</p>
       <div className="space-y-3 pt-6 border-t border-[#aab0d6]/20">
         {impact && (
@@ -266,7 +266,7 @@ function InitiativeCard({ title, category, description, impact, nextEvent, color
 function ImpactGoal({ number, label }: any) {
   return (
     <div>
-      <div className="text-3xl md:text-5xl font-bold text-[#C8A75E] mb-2">{number}</div>
+      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C8A75E] mb-2">{number}</div>
       <div className="text-[10px] md:text-sm text-[#aab0d6]/80 font-semibold uppercase tracking-wider">{label}</div>
     </div>
   )
@@ -275,11 +275,11 @@ function ImpactGoal({ number, label }: any) {
 function ProgramCard({ title, description, details, testimonial }: any) {
   const features = Array.isArray(details?.features) ? details.features : []
   return (
-    <div className="tradition-card p-5 md:p-8 lg:p-10">
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="tradition-card p-5 md:p-6 lg:p-8">
+      <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
         <div className="md:col-span-2">
-          <h3 className="text-xl md:text-3xl heading-premium text-[#f5f3ee] mb-4">{title}</h3>
-          <p className="md:text-premium leading-relaxed mb-6 text-sm">{description}</p>
+          <h3 className="text-base sm:text-lg md:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
+          <p className="md:text-premium leading-relaxed mb-4 sm:mb-6 text-sm">{description}</p>
           <div className="grid md:grid-cols-2 gap-4">
             {features.map((detail: string, index: number) => (
               <div key={index} className="flex items-start text-sm text-premium">
@@ -302,10 +302,10 @@ function ProgramCard({ title, description, details, testimonial }: any) {
 function RegionCard({ region, initiatives, icon }: any) {
   const items = Array.isArray(initiatives) ? initiatives : []
   return (
-    <div className="card-premium p-3 md:p-6">
-      <div className="flex items-center space-x-3 mb-6">
+    <div className="card-premium p-3 sm:p-5 md:p-6">
+      <div className="flex items-center space-x-3 mb-4 sm:mb-6">
         <div className="text-[#c8a75e]">{icon}</div>
-        <h3 className="text-xl heading-premium text-[#f5f3ee]">{region}</h3>
+        <h3 className="text-lg heading-premium text-[#f5f3ee]">{region}</h3>
       </div>
       <ul className="space-y-2">
         {items.map((item: any, index: number) => {
@@ -324,11 +324,11 @@ function RegionCard({ region, initiatives, icon }: any) {
 
 function WayToHelp({ title, description }: any) {
   return (
-    <div className="flex items-start space-x-4">
+    <div className="flex items-start space-x-3 sm:space-x-4">
       <div className="w-2 h-2 bg-[#c8a75e] rounded-full mt-2 flex-shrink-0"></div>
       <div>
-        <h5 className="font-bold text-[#f5f3ee] mb-2">{title}</h5>
-        <p className="text-premium leading-relaxed">{description}</p>
+        <h5 className="font-bold text-[#f5f3ee] mb-1 sm:mb-2">{title}</h5>
+        <p className="text-sm sm:text-base text-premium leading-relaxed">{description}</p>
       </div>
     </div>
   )
@@ -336,13 +336,13 @@ function WayToHelp({ title, description }: any) {
 
 function EventItem({ date, title, format }: any) {
   return (
-    <div className="flex items-start space-x-4 pb-4 border-b border-[#aab0d6]/20 last:border-0 last:pb-0">
+    <div className="flex items-start space-x-3 sm:space-x-4 pb-3 sm:pb-4 border-b border-[#aab0d6]/20 last:border-0 last:pb-0">
       <div className="text-center flex-shrink-0">
-        <div className="text-lg md:text-2xl font-bold text-[#c8a75e]">{date}</div>
+        <div className="text-base sm:text-lg md:text-xl font-bold text-[#c8a75e]">{date}</div>
       </div>
       <div>
-        <h4 className="font-bold text-md md:text-lg text-[#f5f3ee] mb-1">{title}</h4>
-        <p className="text-sm text-premium">{format}</p>
+        <h4 className="font-bold text-sm sm:text-base md:text-lg text-[#f5f3ee] mb-1">{title}</h4>
+        <p className="text-xs sm:text-sm text-premium">{format}</p>
       </div>
     </div>
   )

@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Christianity",
+    "description": "Christianity is a monotheistic religion based on the life and teachings of Jesus of Nazareth. It is the world's largest religion, with approximately 2.4 billion followers. Centered on the belief that Jesus is the Son of God and the savior of humanity, Christianity emphasizes love, forgiveness, and redemption through faith in Christ.",
+    "coreValues": ["Love", "Compassion", "Forgiveness", "Faith", "Service"]
+  },
+  {
+    "name": "Islam",
+    "description": "Islam is a monotheistic religion founded on the teachings of Prophet Muhammad (peace be upon him) and the Quran. With approximately 1.9 billion followers, Islam emphasizes submission to the will of God (Allah), prayer, charity, fasting, and pilgrimage. The faith is built on principles of peace, justice, and compassion.",
+    "coreValues": ["Peace", "Justice", "Compassion", "Charity", "Knowledge"]
+  },
+  {
+    "name": "Judaism",
+    "description": "Judaism is one of the oldest monotheistic religions, dating back over 3,500 years. It is rooted in the covenant between God and Abraham and expanded through the revelation at Mount Sinai. Jewish tradition emphasizes ethical living, community, study of Torah, and the pursuit of justice and righteousness.",
+    "coreValues": ["Justice", "Learning", "Community", "Compassion", "Peace"]
+  },
+  {
+    "name": "Hinduism",
+    "description": "Hinduism is one of the world's oldest religions, with roots dating back thousands of years in the Indian subcontinent. It is a diverse system of thought with beliefs spanning monotheism, polytheism, and non-theism. Central concepts include dharma (duty), karma (action), and moksha (liberation).",
+    "coreValues": ["Dharma", "Compassion", "Truth", "Non-violence", "Spiritual Practice"]
+  },
+  {
+    "name": "Buddhism",
+    "description": "Buddhism was founded by Siddhartha Gautama (the Buddha) in the 5th century BCE in present-day Nepal and India. The tradition centers on the Four Noble Truths and the Eightfold Path, offering a way to transcend suffering and attain enlightenment. Buddhism emphasizes mindfulness, compassion, and non-attachment.",
+    "coreValues": ["Compassion", "Mindfulness", "Non-violence", "Wisdom", "Inner Peace"]
+  }
+]

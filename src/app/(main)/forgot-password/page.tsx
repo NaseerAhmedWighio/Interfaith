@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
             <div className="pulse-glow inline-flex p-4 sm:p-5 rounded-xl bg-[#27AE60] mb-6">
               <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-[#f5f3ee]" />
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">
+            <h1 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-4">
               Check Your Email
             </h1>
             <p className="text-sm sm:text-base text-premium leading-relaxed mb-6">
@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen pt-28 md:pt-36 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 sacred-pattern">
       <div className="container mx-auto max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-4">
             Reset Password
           </h1>
           <p className="text-sm sm:text-base text-premium">

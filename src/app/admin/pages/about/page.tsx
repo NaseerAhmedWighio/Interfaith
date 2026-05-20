@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { FileText, Heart, Users, Pencil, X, Check, Plus, Edit, Trash2, Save, Eye, Globe, BookHeart, Sparkles, Target } from 'lucide-react'
+import Link from 'next/link'
+import { FileText, Heart, Users, Pencil, X, Check, Plus, Edit, Trash2, Save, Eye, Globe, BookHeart, Sparkles, Target, ArrowLeft } from 'lucide-react'
+import { IconPicker } from '@/components/admin/IconPicker'
 
 const VALUE_ICON_MAP: Record<string, React.ElementType> = {
   Heart, Globe, BookHeart, Users, Sparkles, Target,
@@ -145,6 +147,10 @@ export default function AboutPageEditor() {
   return (
     <div className="space-y-6">
       <div>
+        <Link href="/admin" className="inline-flex items-center gap-2 text-premium-light hover:text-[#f5f3ee] transition-colors mb-4 text-sm">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Admin
+        </Link>
         <h1 className="text-2xl lg:text-3xl font-bold text-[#f5f3ee]">About Page Editor</h1>
         <p className="text-premium-light mt-1 text-sm lg:text-base">Manage all content for the About page</p>
       </div>
@@ -283,11 +289,7 @@ export default function AboutPageEditor() {
                     className="w-full px-3 py-2 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] text-sm" />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="block text-[10px] font-bold text-[#aab0d6] mb-1 uppercase">Icon</label>
-                  <select value={valueAddForm.icon} onChange={e => setValueAddForm({ ...valueAddForm, icon: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] text-sm">
-                    {['Heart','Globe','BookHeart','Users','Sparkles','Target'].map(o => <option key={o} value={o}>{o}</option>)}
-                  </select>
+                  <IconPicker value={valueAddForm.icon} onChange={v => setValueAddForm({ ...valueAddForm, icon: v })} />
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold text-[#aab0d6] mb-1 uppercase">Color</label>
@@ -331,11 +333,7 @@ export default function AboutPageEditor() {
                             className="w-full px-3 py-2 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] text-sm" />
                         </div>
                         <div className="col-span-2 sm:col-span-1">
-                          <label className="block text-[10px] font-bold text-[#aab0d6] mb-1 uppercase">Icon</label>
-                          <select value={valueEditForm.icon} onChange={e => setValueEditForm({ ...valueEditForm, icon: e.target.value })}
-                            className="w-full px-3 py-2 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] text-sm">
-                            {['Heart','Globe','BookHeart','Users','Sparkles','Target'].map(o => <option key={o} value={o}>{o}</option>)}
-                          </select>
+                          <IconPicker value={valueEditForm.icon} onChange={v => setValueEditForm({ ...valueEditForm, icon: v })} />
                         </div>
                         <div>
                           <label className="block text-[10px] font-bold text-[#aab0d6] mb-1 uppercase">Color</label>

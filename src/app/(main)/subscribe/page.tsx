@@ -118,7 +118,7 @@ export default function Subscribe() {
             <div className="pulse-glow inline-flex p-4 sm:p-5 md:p-6 rounded-xl bg-[#C8A75E] mb-6 sm:mb-8">
               <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-[#0B0F2A]" />
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
               You're Subscribed!
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed mb-6 sm:mb-8 px-4">
@@ -187,7 +187,7 @@ export default function Subscribe() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
             Subscribe to Our
             <span className="block gradient-text mt-2">Newsletter</span>
           </h1>
@@ -224,7 +224,7 @@ export default function Subscribe() {
 
           <div className="grid md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4 sm:px-0">
+              <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4 sm:px-0">
                 Join 25,000+ Subscribers
               </h2>
               <div className="divider-premium max-w-xs mb-6 sm:mb-8 mx-4 sm:mx-0"></div>
@@ -263,7 +263,7 @@ export default function Subscribe() {
                   <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-xl bg-[#C8A75E] flex items-center justify-center shadow-xl">
                     <Mail className="w-7 h-7 sm:w-8 sm:h-8 text-[#f5f3ee]" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-2">
+                  <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-2">
                     Subscribe Now
                   </h3>
                   <p className="text-premium text-xs sm:text-sm">Free forever. Delivered with love.</p>
@@ -400,7 +400,7 @@ export default function Subscribe() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
+            <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
               What's Inside Each Newsletter?
             </h2>
             <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
@@ -457,7 +457,7 @@ export default function Subscribe() {
 
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#0b0f2a] via-[#141a3a] to-[#1c1f4a] text-[#f5f3ee]">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
+          <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
             Start Your Journey of Discovery Today
           </h2>
           <p className="text-base sm:text-lg md:text-xl opacity-90 leading-relaxed mb-6 sm:mb-8 px-4">
@@ -478,7 +478,7 @@ function BenefitCard({ icon, title, description, gradient }: any) {
       <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-5 md:mb-6 rounded-xl bg-[#C8A75E] flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl">
         <div className="text-[#0B0F2A]">{icon}</div>
       </div>
-      <h3 className="text-lg sm:text-xl heading-premium text-[#f5f3ee] mb-2 sm:mb-3">{title}</h3>
+      <h3 className="text-base sm:text-xl heading-premium text-[#f5f3ee] mb-2 sm:mb-3">{title}</h3>
       <p className="text-premium text-xs sm:text-sm leading-relaxed">{description}</p>
     </div>
   )
@@ -499,7 +499,7 @@ function ContentCard({ icon, title, items, gradient }: any) {
       <div className="w-12 h-12 sm:w-14 sm:h-14 mb-4 sm:mb-5 md:mb-6 rounded-xl bg-[#C8A75E] flex items-center justify-center shadow-xl">
         <div className="text-[#0B0F2A] [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-9 sm:[&>svg]:h-9 md:[&>svg]:w-10 md:[&>svg]:h-10">{icon}</div>
       </div>
-      <h3 className="text-lg sm:text-xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
+      <h3 className="text-base sm:text-xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">{title}</h3>
       <ul className="space-y-2">
         {items.map((item: string, index: number) => (
           <li key={index} className="flex items-start text-xs sm:text-sm text-premium">

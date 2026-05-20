@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/session'
+import { requireAuth, getCurrentUser } from '@/lib/session'
 import { checkPermission } from '@/lib/permissions'
 
 export async function GET(request: NextRequest) {
   try {
+    const currentUser = await getCurrentUser()
     const { searchParams } = new URL(request.url)
     const sectionType = searchParams.get('sectionType')
 
-    const where = sectionType ? { sectionType } : {}
+    const whereClause: Record<string, any> = {}
+    if (!currentUser || currentUser.role === 'user') {
+      whereClause.status = 'published'
+    }
+    if (sectionType) {
+      whereClause.sectionType = sectionType
+    }
 
     const cards = await prisma.approachCard.findMany({
-      where,
+      where: whereClause,
       orderBy: { orderIndex: 'asc' },
     })
 

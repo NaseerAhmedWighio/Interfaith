@@ -767,6 +767,120 @@ Grassroots Empowerment — We train local leaders to facilitate interfaith work 
     return cards
   })
 
+  console.log('\n--- Similarity Themes ---')
+
+  await seedTable('similarityTheme', async () => {
+    const themes = [
+      { title: 'The Golden Rule', description: 'Nearly every faith tradition teaches some form of the Golden Rule: treat others as you would wish to be treated. This universal ethic forms the foundation of compassionate living.', icon: 'Heart', color: '#D4A07B', slug: 'golden-rule', orderIndex: 1 },
+      { title: 'Compassion & Mercy', description: 'Compassion for all beings and mercy toward those who struggle are central values across world religions, calling us to respond to suffering with kindness.', icon: 'HeartHandshake', color: '#E07070', slug: 'compassion-mercy', orderIndex: 2 },
+      { title: 'Prayer & Meditation', description: 'All major faiths practice forms of prayer, meditation, or contemplation to connect with the Divine, cultivate inner peace, and align with sacred purpose.', icon: 'Sparkles', color: '#9B59B6', slug: 'prayer-meditation', orderIndex: 3 },
+      { title: 'Charity & Service', description: 'Serving others and giving to those in need are universal religious obligations, reflecting our interconnection and shared humanity.', icon: 'HandHeart', color: '#27AE60', slug: 'charity-service', orderIndex: 4 },
+      { title: 'Love & Unity', description: 'Love as the highest spiritual principle and recognition of fundamental human unity transcend religious boundaries.', icon: 'Users', color: '#C8A75E', slug: 'love-unity', orderIndex: 5 },
+      { title: 'Justice & Righteousness', description: 'Standing for justice, defending the oppressed, and living righteously are commanded across traditions.', icon: 'Scale', color: '#5B7FDB', slug: 'justice-righteousness', orderIndex: 6 },
+      { title: 'Humility & Wisdom', description: 'Cultivating humility before the Divine and seeking wisdom over mere knowledge are universal spiritual values.', icon: 'BookOpen', color: '#D4A07B', slug: 'humility-wisdom', orderIndex: 7 },
+      { title: 'Sacred Hospitality', description: 'Welcoming strangers and showing generous hospitality reflect divine grace and human dignity in many traditions.', icon: 'Home', color: '#10B981', slug: 'sacred-hospitality', orderIndex: 8 },
+    ]
+    await prisma.similarityTheme.createMany({ data: themes })
+    return themes
+  })
+
+  console.log('\n--- Similarity Teachings ---')
+
+  const existingTeachingCount = await prisma.similarityTeaching.count()
+  if (existingTeachingCount === 0) {
+    const traditionMap = new Map<string, string>()
+    const traditions = await prisma.tradition.findMany({ select: { id: true, name: true } })
+    for (const t of traditions) traditionMap.set(t.name, t.id)
+
+    const themeMap = new Map<string, string>()
+    const themes = await prisma.similarityTheme.findMany({ select: { id: true, slug: true } })
+    for (const t of themes) themeMap.set(t.slug, t.id)
+
+    const teachingData: { themeSlug: string; traditionName: string; teaching: string; source: string; context: string }[] = [
+      // Golden Rule
+      { themeSlug: 'golden-rule', traditionName: 'Christianity', teaching: 'Do to others as you would have them do to you.', source: 'Luke 6:31 (Bible)', context: 'Jesus teaches this as the essence of the Law and the Prophets, summarizing ethical living in one principle.' },
+      { themeSlug: 'golden-rule', traditionName: 'Islam', teaching: 'None of you truly believes until he loves for his brother what he loves for himself.', source: 'Hadith 13, An-Nawawi\'s Forty Hadith', context: 'Prophet Muhammad establishes empathy and concern for others as essential to faith.' },
+      { themeSlug: 'golden-rule', traditionName: 'Judaism', teaching: 'What is hateful to you, do not do to your neighbor. This is the whole Torah; the rest is commentary.', source: 'Talmud, Shabbat 31a', context: 'Rabbi Hillel summarizes the entire Jewish law in this negative formulation of reciprocity.' },
+      { themeSlug: 'golden-rule', traditionName: 'Hinduism', teaching: 'One should never do something to others that one would regard as an injury to one\'s own self. In brief, this is dharma. Anything else is succumbing to desire.', source: 'Mahabharata 13.114.8', context: 'This teaching connects ethical reciprocity to dharma (righteous duty) and self-mastery.' },
+      { themeSlug: 'golden-rule', traditionName: 'Buddhism', teaching: 'Hurt not others in ways that you yourself would find hurtful.', source: 'Udana-Varga 5:18', context: 'Buddha teaches this as part of right conduct, emphasizing the elimination of harm.' },
+      { themeSlug: 'golden-rule', traditionName: 'Confucianism', teaching: 'Do not impose on others what you yourself do not desire.', source: 'Analects 15:23', context: 'Confucius identifies reciprocity (shu) as a fundamental principle for harmonious living.' },
+      { themeSlug: 'golden-rule', traditionName: 'Sikhism', teaching: 'I am a stranger to no one; and no one is a stranger to me. Indeed, I am a friend to all.', source: 'Guru Granth Sahib, pg. 1299', context: 'Guru Nanak teaches universal kinship, seeing all people as equals deserving respect.' },
+      { themeSlug: 'golden-rule', traditionName: 'Jainism', teaching: 'One should treat all beings as one would like to be treated.', source: 'Sutrakritanga 1.11.33', context: 'This principle extends to all living beings, reflecting Jainism\'s profound commitment to ahimsa.' },
+      { themeSlug: 'golden-rule', traditionName: 'Taoism', teaching: 'Regard your neighbor\'s gain as your own gain, and your neighbor\'s loss as your own loss.', source: 'T\'ai Shang Kan Ying P\'ien', context: 'Taoist teaching emphasizes empathic identification with others\' fortunes.' },
+      { themeSlug: 'golden-rule', traditionName: 'Zoroastrianism', teaching: 'Do not do unto others whatever is injurious to yourself.', source: 'Shayast-na-Shayast 13:29', context: 'This ancient teaching predates many formulations and connects to Zoroastrian ethics of truth and righteousness.' },
+      // Compassion & Mercy
+      { themeSlug: 'compassion-mercy', traditionName: 'Islam', teaching: 'In the name of Allah, the Most Compassionate, the Most Merciful.', source: 'Opening of every Quranic chapter', context: 'These divine attributes begin every chapter of the Quran, emphasizing that mercy and compassion define God\'s nature.' },
+      { themeSlug: 'compassion-mercy', traditionName: 'Buddhism', teaching: 'May all beings be happy. May all beings be free from suffering.', source: 'Metta Sutta (Loving-Kindness Discourse)', context: 'The practice of metta (loving-kindness) extends compassion unconditionally to all sentient beings.' },
+      { themeSlug: 'compassion-mercy', traditionName: 'Christianity', teaching: 'Blessed are the merciful, for they will be shown mercy.', source: 'Matthew 5:7 (Bible)', context: 'Jesus teaches that showing mercy to others opens us to receive divine mercy.' },
+      { themeSlug: 'compassion-mercy', traditionName: 'Judaism', teaching: 'The Lord is gracious and merciful, slow to anger and abounding in steadfast love.', source: 'Psalm 145:8', context: 'God\'s mercy and compassion are celebrated throughout Jewish scripture and prayer.' },
+      { themeSlug: 'compassion-mercy', traditionName: 'Hinduism', teaching: 'Compassion for all living beings is the highest dharma.', source: 'Various Puranas', context: 'Karuna (compassion) and ahimsa (non-violence) are foundational Hindu values.' },
+      { themeSlug: 'compassion-mercy', traditionName: 'Jainism', teaching: 'Compassion and right conduct are the foundation of Jain teaching.', source: 'Tattvartha Sutra', context: 'Jainism\'s radical commitment to non-violence flows from profound compassion for all life.' },
+      { themeSlug: 'compassion-mercy', traditionName: 'Sikhism', teaching: 'Be merciful, so that you may receive mercy. In the realm of grace, the Divine is merciful.', source: 'Guru Granth Sahib', context: 'Sikh teaching emphasizes divine mercy and calls adherents to embody mercy toward all.' },
+      // Prayer & Meditation
+      { themeSlug: 'prayer-meditation', traditionName: 'Islam', teaching: 'Prayer is the pillar of religion and the key to Paradise.', source: 'Hadith collections', context: 'Muslims pray five times daily, orienting their entire day toward remembrance of Allah.' },
+      { themeSlug: 'prayer-meditation', traditionName: 'Christianity', teaching: 'Pray without ceasing.', source: '1 Thessalonians 5:17', context: 'Christians are called to maintain continuous communion with God through prayer.' },
+      { themeSlug: 'prayer-meditation', traditionName: 'Judaism', teaching: 'Prayer should be recited three times daily.', source: 'Talmud, Berakhot', context: 'Jewish tradition structures the day around morning, afternoon, and evening prayers.' },
+      { themeSlug: 'prayer-meditation', traditionName: 'Buddhism', teaching: 'Meditation brings wisdom; lack of meditation leaves ignorance.', source: 'Dhammapada', context: 'Buddhist meditation practices cultivate mindfulness, concentration, and insight into reality.' },
+      { themeSlug: 'prayer-meditation', traditionName: 'Hinduism', teaching: 'Yoga is the journey of the self, through the self, to the self.', source: 'Bhagavad Gita', context: 'Hindu practices of meditation and yoga unite the individual soul with ultimate reality.' },
+      { themeSlug: 'prayer-meditation', traditionName: 'Sikhism', teaching: 'Meditate on the Name of the Lord, even for a moment; nothing else will go with you.', source: 'Guru Granth Sahib', context: 'Naam Simran (meditation on God\'s name) is central to Sikh spiritual practice.' },
+      { themeSlug: 'prayer-meditation', traditionName: 'Bahá\'í Faith', teaching: 'The obligatory prayers are binding and have been revealed in three forms.', source: 'Kitáb-i-Aqdas', context: 'Bahá\'ís choose among three daily obligatory prayers, maintaining regular spiritual connection.' },
+      // Charity & Service
+      { themeSlug: 'charity-service', traditionName: 'Islam', teaching: 'Those who spend their wealth in charity day and night, secretly and openly - their reward is with their Lord.', source: 'Quran 2:274', context: 'Zakat (charity) is a pillar of Islam, requiring 2.5% of wealth given to those in need.' },
+      { themeSlug: 'charity-service', traditionName: 'Christianity', teaching: 'Truly I tell you, whatever you did for one of the least of these, you did for me.', source: 'Matthew 25:40', context: 'Jesus identifies himself with the poor and vulnerable, making service to them sacred duty.' },
+      { themeSlug: 'charity-service', traditionName: 'Judaism', teaching: 'Tzedakah (charity) is equal in importance to all other commandments combined.', source: 'Talmud, Baba Batra 9a', context: 'Giving to those in need is not optional kindness but religious obligation in Judaism.' },
+      { themeSlug: 'charity-service', traditionName: 'Sikhism', teaching: 'Those who have loved, have obtained the Lord. They do seva (selfless service) and practice compassion.', source: 'Guru Granth Sahib', context: 'Seva (selfless service) is a cornerstone of Sikh practice, exemplified by the langar (free kitchen).' },
+      { themeSlug: 'charity-service', traditionName: 'Buddhism', teaching: 'Generosity brings happiness at every stage of its expression.', source: 'Buddha\'s teachings', context: 'Dana (generosity) is the first of the Buddhist perfections, purifying the heart and supporting others.' },
+      { themeSlug: 'charity-service', traditionName: 'Hinduism', teaching: 'Charity given to a worthy person simply because it is right to give, without anything expected in return, is sattvic charity.', source: 'Bhagavad Gita 17:20', context: 'Selfless giving without expectation of reward is the highest form of charity.' },
+      { themeSlug: 'charity-service', traditionName: 'Bahá\'í Faith', teaching: 'It is not for him to pride himself who loveth his own country, but rather for him who loveth the whole world.', source: 'Bahá\'u\'lláh', context: 'Bahá\'ís are called to universal service and working for the betterment of humanity.' },
+      // Love & Unity
+      { themeSlug: 'love-unity', traditionName: 'Christianity', teaching: 'God is love, and whoever abides in love abides in God.', source: '1 John 4:16', context: 'Love is understood as God\'s essential nature and the defining mark of Christian life.' },
+      { themeSlug: 'love-unity', traditionName: 'Islam', teaching: 'O mankind, indeed We have created you from male and female and made you peoples and tribes that you may know one another.', source: 'Quran 49:13', context: 'Human diversity is divinely intended for mutual understanding and unity, not division.' },
+      { themeSlug: 'love-unity', traditionName: 'Judaism', teaching: 'Love your neighbor as yourself.', source: 'Leviticus 19:18', context: 'This commandment is considered foundational to Jewish ethics and spiritual life.' },
+      { themeSlug: 'love-unity', traditionName: 'Hinduism', teaching: 'The wise see that there is One Spirit within all beings.', source: 'Bhagavad Gita', context: 'Recognition of divine unity within all creation leads to universal love and compassion.' },
+      { themeSlug: 'love-unity', traditionName: 'Buddhism', teaching: 'Hatred is never appeased by hatred. Hatred is appeased by love alone.', source: 'Dhammapada 1:5', context: 'Buddha teaches that only love and compassion can truly overcome enmity and division.' },
+      { themeSlug: 'love-unity', traditionName: 'Bahá\'í Faith', teaching: 'The earth is but one country, and mankind its citizens.', source: 'Bahá\'u\'lláh', context: 'Bahá\'í Faith teaches the unity of humanity and works toward global peace and cooperation.' },
+      { themeSlug: 'love-unity', traditionName: 'Sikhism', teaching: 'Recognize the Divine Light within all, and do not ask about caste or social class.', source: 'Guru Granth Sahib', context: 'All humans are equal before God, united by divine presence regardless of worldly differences.' },
+      // Justice & Righteousness
+      { themeSlug: 'justice-righteousness', traditionName: 'Judaism', teaching: 'Justice, justice shall you pursue.', source: 'Deuteronomy 16:20', context: 'The repetition emphasizes that both the ends and means of justice must be just.' },
+      { themeSlug: 'justice-righteousness', traditionName: 'Islam', teaching: 'O you who believe! Stand out firmly for justice, as witnesses to Allah, even if it be against yourselves.', source: 'Quran 4:135', context: 'Muslims are commanded to uphold justice even when it contradicts self-interest.' },
+      { themeSlug: 'justice-righteousness', traditionName: 'Christianity', teaching: 'He has shown you what is good. And what does the Lord require of you? To act justly, love mercy, and walk humbly with your God.', source: 'Micah 6:8', context: 'The prophet summarizes true religion as justice, mercy, and humble relationship with God.' },
+      { themeSlug: 'justice-righteousness', traditionName: 'Hinduism', teaching: 'Dharma protects those who protect it.', source: 'Manusmriti', context: 'Upholding dharma (righteousness/duty) creates cosmic and social order that sustains all.' },
+      { themeSlug: 'justice-righteousness', traditionName: 'Buddhism', teaching: 'A person who practices the Dharma is protected by the Dharma.', source: 'Buddhist teaching', context: 'Living according to righteous principles creates protection and well-being.' },
+      { themeSlug: 'justice-righteousness', traditionName: 'Sikhism', teaching: 'Where there is greed, sin, and vice, righteousness does not dwell there.', source: 'Guru Granth Sahib', context: 'Living righteously requires rejecting greed and corruption in favor of honest conduct.' },
+      { themeSlug: 'justice-righteousness', traditionName: 'Bahá\'í Faith', teaching: 'The best beloved of all things in My sight is Justice.', source: 'Bahá\'u\'lláh', context: 'Justice is elevated as the supreme virtue and foundation for establishing peace.' },
+      // Humility & Wisdom
+      { themeSlug: 'humility-wisdom', traditionName: 'Christianity', teaching: 'God opposes the proud but shows favor to the humble.', source: 'James 4:6', context: 'Humility opens the heart to receive divine grace and wisdom.' },
+      { themeSlug: 'humility-wisdom', traditionName: 'Taoism', teaching: 'Those who know do not speak; those who speak do not know.', source: 'Tao Te Ching, Chapter 56', context: 'True wisdom recognizes the limits of words and the value of quiet understanding.' },
+      { themeSlug: 'humility-wisdom', traditionName: 'Confucianism', teaching: 'Real knowledge is to know the extent of one\'s ignorance.', source: 'Confucius, Analects', context: 'Wisdom begins with humble recognition of how much we don\'t know.' },
+      { themeSlug: 'humility-wisdom', traditionName: 'Islam', teaching: 'The servants of the Most Merciful are those who walk upon the earth in humility.', source: 'Quran 25:63', context: 'Humility in conduct reflects submission to God and respect for creation.' },
+      { themeSlug: 'humility-wisdom', traditionName: 'Buddhism', teaching: 'If you think you know everything, you have learned nothing.', source: 'Buddhist teaching', context: 'The beginner\'s mind, free from arrogance, remains open to wisdom and insight.' },
+      { themeSlug: 'humility-wisdom', traditionName: 'Judaism', teaching: 'Who is wise? One who learns from every person.', source: 'Pirkei Avot 4:1', context: 'Humility to learn from all people, regardless of status, characterizes true wisdom.' },
+      { themeSlug: 'humility-wisdom', traditionName: 'Hinduism', teaching: 'Humility is the ornament of wisdom.', source: 'Tirukkural', context: 'True spiritual wisdom manifests in humble, egoless conduct.' },
+      // Sacred Hospitality
+      { themeSlug: 'sacred-hospitality', traditionName: 'Christianity', teaching: 'Do not forget to show hospitality to strangers, for by so doing some have shown hospitality to angels without knowing it.', source: 'Hebrews 13:2', context: 'Welcoming strangers may be encountering the divine in disguise.' },
+      { themeSlug: 'sacred-hospitality', traditionName: 'Islam', teaching: 'Whoever believes in Allah and the Last Day should honor his guest.', source: 'Hadith', context: 'Hospitality is a mark of true faith and reflects God\'s generosity to humanity.' },
+      { themeSlug: 'sacred-hospitality', traditionName: 'Judaism', teaching: 'Hospitality to wayfarers is greater than welcoming the Divine Presence.', source: 'Talmud, Shabbat 127a', context: 'Abraham\'s example of interrupting prayer to welcome strangers shows hospitality\'s importance.' },
+      { themeSlug: 'sacred-hospitality', traditionName: 'Hinduism', teaching: 'The guest is God (Atithi Devo Bhava).', source: 'Taittiriya Upanishad', context: 'Treating guests with honor and care is treating the divine with reverence.' },
+      { themeSlug: 'sacred-hospitality', traditionName: 'Sikhism', teaching: 'The Guru\'s Langar feeds all who come, regardless of caste, creed, or status.', source: 'Sikh tradition', context: 'The free community kitchen exemplifies radical hospitality and equality before God.' },
+      { themeSlug: 'sacred-hospitality', traditionName: 'Buddhism', teaching: 'Welcoming all beings with kindness opens the path to enlightenment.', source: 'Buddhist teaching', context: 'Generosity and hospitality purify the heart and express universal compassion.' },
+      { themeSlug: 'sacred-hospitality', traditionName: 'Native American Spirituality', teaching: 'All who enter are family; the stranger is sacred.', source: 'Various tribal teachings', context: 'Many Native traditions view hospitality as sacred duty, honoring the divine in each visitor.' },
+    ]
+
+    const records = teachingData.map((t, i) => ({
+      themeId: themeMap.get(t.themeSlug)!,
+      traditionId: traditionMap.get(t.traditionName)!,
+      teaching: t.teaching,
+      source: t.source,
+      context: t.context,
+      orderIndex: i,
+    }))
+
+    await prisma.similarityTeaching.createMany({ data: records })
+    console.log(`✅ similarityTeaching: ${records.length} records created`)
+  } else {
+    console.log(`⏭️  similarityTeaching: ${existingTeachingCount} existing records — skipping`)
+  }
+
   console.log('\n🎉 Seeding completed!')
 }
 

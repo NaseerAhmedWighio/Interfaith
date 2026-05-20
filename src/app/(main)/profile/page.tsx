@@ -257,7 +257,7 @@ export default function ProfilePage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#f5f3ee] mb-2">My Profile</h1>
+        <h1 className="text-2xl md:text-4xl font-bold text-[#f5f3ee] mb-2">My Profile</h1>
         <p className="text-premium-light">Manage your account information</p>
       </div>
 
@@ -284,7 +284,7 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              <h2 className="text-xl font-bold text-[#f5f3ee] mb-1">{user.fullName}</h2>
+              <h2 className="text-lg font-bold text-[#f5f3ee] mb-1">{user.fullName}</h2>
               <p className="text-sm text-premium-light mb-3">{user.email}</p>
 
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#c8a75e]/20 text-[#c8a75e] rounded-full text-sm font-semibold">
@@ -304,7 +304,7 @@ export default function ProfilePage() {
           {/* Role Request Card */}
           {user.role !== 'admin' && (
             <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20 mt-6">
-              <h3 className="text-lg font-bold text-[#f5f3ee] mb-4 flex items-center gap-2">
+              <h3 className="text-base font-bold text-[#f5f3ee] mb-4 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-[#c8a75e]" />
                 Role Upgrade
               </h3>
@@ -436,7 +436,7 @@ export default function ProfilePage() {
         {/* Edit Form */}
         <div className="md:col-span-2">
           <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20">
-            <h3 className="text-xl font-bold text-[#f5f3ee] mb-6">Edit Profile</h3>
+            <h3 className="text-lg font-bold text-[#f5f3ee] mb-6">Edit Profile</h3>
 
             {message && (
               <div
@@ -546,7 +546,7 @@ export default function ProfilePage() {
 
           {/* Change Password Section */}
           <div className="glass-effect rounded-2xl p-6 border border-[#c8a75e]/20 mt-6">
-            <h3 className="text-xl font-bold text-[#f5f3ee] mb-6 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-[#f5f3ee] mb-6 flex items-center gap-2">
               <Lock className="w-5 h-5 text-[#c8a75e]" />
               Change Password
             </h3>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Edit, Trash2, Search, BookOpen } from 'lucide-react'
 import ContentSort, { applySort, loadSortSetting, type SortConfig } from '@/components/admin/ContentSort'
+import BulkUpload from '@/components/admin/BulkUpload'
 
 interface Teaching {
   id: string
@@ -104,6 +105,7 @@ export default function TeachingsManagement() {
           <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
           Add Teaching
         </Link>
+        <BulkUpload type="teachings" onComplete={loadTeachings} />
       </div>
 
       {/* Search & Sort */}

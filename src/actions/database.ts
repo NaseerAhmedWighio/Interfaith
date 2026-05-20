@@ -179,11 +179,12 @@ export async function getSimilarityThemeBySlug(slug: string) {
       where: { slug, status: 'published' },
       include: {
         teachings: {
+          orderBy: { orderIndex: 'asc' },
           include: {
             tradition: {
               select: {
                 id: true,
-                name: true
+                name: true,
               }
             }
           }

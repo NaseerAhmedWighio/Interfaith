@@ -163,7 +163,7 @@ export default function JoinMovement() {
             <div className="pulse-glow inline-flex p-4 sm:p-5 md:p-6 rounded-xl bg-[#27AE60] mb-6 sm:mb-8">
               <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-[#f5f3ee]" />
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4">
               Welcome to the Movement!
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed mb-6 sm:mb-8 px-4">
@@ -261,7 +261,7 @@ export default function JoinMovement() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
             Be Part of
             <span className="block gradient-text mt-2">Something Greater</span>
           </h1>
@@ -329,7 +329,7 @@ export default function JoinMovement() {
         <div className="container mx-auto max-w-3xl">
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
             <div className="text-center mb-8 sm:mb-10 md:mb-12">
-              <h2 className="text-xl sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
+              <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
                 Ready to Join?
               </h2>
               <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
@@ -529,7 +529,7 @@ export default function JoinMovement() {
 
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#0b0f2a] via-[#141a3a] to-[#1c1f4a] text-[#f5f3ee]">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-tight px-4">
+          <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-tight px-4">
             Together, We Create a World of Peace
           </h2>
           <p className="text-sm sm:text-base md:text-lg opacity-90 leading-relaxed px-4">
@@ -560,7 +560,7 @@ function BenefitCard({ icon, title, description, gradient }: any) {
       <div className={`w-14 h-14 sm:w-16 sm:h-16 mb-4 sm:mb-5 md:mb-6 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl`}>
         <div className="text-[#f5f3ee] [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-9 sm:[&>svg]:h-9 md:[&>svg]:w-10 md:[&>svg]:h-10">{icon}</div>
       </div>
-      <h3 className="text-xl sm:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 group-hover:text-[#c8a75e] transition-colors">
+      <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 group-hover:text-[#c8a75e] transition-colors">
         {title}
       </h3>
       <p className="text-sm sm:text-base text-premium leading-relaxed">{description}</p>

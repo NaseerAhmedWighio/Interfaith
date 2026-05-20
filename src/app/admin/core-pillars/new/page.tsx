@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save } from 'lucide-react'
+import { IconPicker } from '@/components/admin/IconPicker'
 
 export default function NewCorePillar() {
   const router = useRouter()
@@ -93,30 +94,27 @@ export default function NewCorePillar() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
-              Icon
-            </label>
-            <input
-              type="text"
-              value={formData.icon}
-              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
-              placeholder="e.g., Globe, Heart, Handshake"
-            />
-          </div>
+          <IconPicker value={formData.icon} onChange={(v) => setFormData({ ...formData, icon: v })} />
 
           <div>
             <label className="block text-sm font-bold text-[#aab0d6] mb-2 uppercase tracking-wider">
               Color
             </label>
-            <input
-              type="text"
-              value={formData.color}
-              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
-              placeholder="e.g., #c8a75e"
-            />
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={formData.color || '#c8a75e'}
+                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                className="w-14 h-11 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 cursor-pointer"
+              />
+              <input
+                type="text"
+                value={formData.color}
+                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                className="flex-1 px-4 py-3 rounded-xl bg-[#0b0f2a]/60 border border-[#c8a75e]/20 text-[#f5f3ee] placeholder-[#aab0d6]/50 focus:border-[#c8a75e] focus:ring-2 focus:ring-[#c8a75e]/30 focus:bg-[#0b0f2a]/80 transition-all"
+                placeholder="e.g., #c8a75e"
+              />
+            </div>
           </div>
         </div>
 

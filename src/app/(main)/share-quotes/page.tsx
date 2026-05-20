@@ -205,7 +205,7 @@ export default function ShareQuotes() {
           <div className="flex justify-center mb-4 sm:mb-5 md:mb-6">
             <Share2 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-gradient-primary animate-float" />
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-5 md:mb-6 px-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-5 md:mb-6 px-4">
             <span className="text-gradient-primary">Share</span> Sacred Wisdom
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-premium-light max-w-3xl mx-auto leading-relaxed px-4">
@@ -297,7 +297,7 @@ export default function ShareQuotes() {
                 </div>
 
                 <div className="glass-effect rounded-xl p-4 sm:p-5 md:p-6">
-                  <h3 className="text-base sm:text-lg font-semibold text-[#f5f3ee] mb-3 sm:mb-4">Share this quote</h3>
+                  <h3 className="text-sm sm:text-lg font-semibold text-[#f5f3ee] mb-3 sm:mb-4">Share this quote</h3>
 
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 mb-4 sm:mb-5 md:mb-6">
                     <button
@@ -355,7 +355,7 @@ export default function ShareQuotes() {
                 </div>
 
                 <div className="glass-effect rounded-xl p-4 sm:p-5 md:p-6">
-                  <h3 className="text-base sm:text-lg font-semibold text-[#f5f3ee] mb-2 sm:mb-3">About this teaching</h3>
+                  <h3 className="text-sm sm:text-lg font-semibold text-[#f5f3ee] mb-2 sm:mb-3">About this teaching</h3>
                   <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm md:text-base text-premium-light">
                     <p><span className="text-[#f5f3ee] font-medium">Title:</span> {selectedQuote.sacredText.title}</p>
                     <p><span className="text-[#f5f3ee] font-medium">Source:</span> {selectedQuote.sacredText.source}</p>

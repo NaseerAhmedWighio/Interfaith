@@ -1,9 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowRight, Flame, Heart, Lightbulb, HandHeart, Globe as Globe2, BookOpen } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 import Link from 'next/link'
 import { getTraditions, getTeachings } from '@/actions/database'
+
+function resolveIconNode(name: string | null | undefined, className: string, fallback: string = 'Heart') {
+  if (!name) return <LucideIcons.Heart className={className} />
+  const Icon = LucideIcons[name as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }> | undefined
+  return Icon ? <Icon className={className} /> : <LucideIcons.Heart className={className} />
+}
 
 interface Tradition {
   id: string
@@ -21,15 +27,6 @@ interface CorePillar {
   description: string
   icon: string
   color: string
-}
-
-const iconMap: Record<string, React.ReactNode> = {
-  Heart: <Heart className="w-10 h-10" />,
-  Lightbulb: <Lightbulb className="w-10 h-10" />,
-  HandHeart: <HandHeart className="w-10 h-10" />,
-  Flame: <Flame className="w-10 h-10" />,
-  Globe2: <Globe2 className="w-10 h-10" />,
-  BookOpen: <BookOpen className="w-10 h-10" />,
 }
 
 export default function Home() {
@@ -71,14 +68,14 @@ export default function Home() {
           <div className="text-center max-w-5xl mx-auto">
             <div className="floating-accent mb-5 sm:mb-6 md:mb-7">
               <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-xl shadow-premium">
-                <Flame className="w-4 h-4 sm:w-4 sm:h-4 text-[#d4a07b] animate-pulse" />
+                <LucideIcons.Flame className="w-4 h-4 sm:w-4 sm:h-4 text-[#d4a07b] animate-pulse" />
                 <span className="text-xs sm:text-sm font-bold text-[#C8A75E]">
                   Bearer of Sufi Wisdom
                 </span>
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl heading-premium text-[#f5f3ee] mb-5 sm:mb-6 md:mb-7 leading-[1.15] px-2">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl heading-premium text-[#f5f3ee] mb-5 sm:mb-6 md:mb-7 leading-[1.15] px-2">
               Uniting Hearts Through
               <span className="block gradient-text mt-2 sm:mt-2.5 md:mt-3 animate-gradient">Divine Love & Understanding</span>
             </h1>
@@ -90,12 +87,12 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-10 sm:mb-12 md:mb-14 px-4">
               <Link href="/assessment" className="btn-primary text-sm sm:text-base px-6 sm:px-7 md:px-8 py-3 sm:py-3 inline-flex items-center justify-center shadow-premium">
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <LucideIcons.Heart className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <span>Take Faith Assessment</span>
               </Link>
               <Link href="/join" className="btn-secondary text-sm sm:text-base px-6 sm:px-7 md:px-8 py-3 sm:py-3 inline-flex items-center justify-center">
                 <span>Join the Movement</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+                <LucideIcons.ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Link>
             </div>
 
@@ -112,7 +109,7 @@ export default function Home() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 sacred-pattern">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">
+            <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4">
               Our Sacred Mission
             </h2>
             <div className="divider-premium max-w-xs mx-auto mb-3 sm:mb-4"></div>
@@ -126,7 +123,7 @@ export default function Home() {
               corePillars.map((pillar) => (
                 <MissionCard
                   key={pillar.id}
-                  icon={iconMap[pillar.icon] || <Heart className="w-10 h-10" />}
+                  icon={resolveIconNode(pillar.icon, 'w-10 h-10', 'Heart')}
                   title={pillar.title}
                   description={pillar.description}
                   gradient={pillar.color ? `from-[${pillar.color}] to-[${pillar.color}]` : ''}
@@ -134,12 +131,12 @@ export default function Home() {
               ))
             ) : (
               <>
-                <MissionCard icon={<Heart className="w-10 h-10" />} title="Eliminate Hatred" description="Through divine love and understanding, we dissolve the barriers of prejudice and fear that separate hearts." gradient="from-[#e07070] to-[#e74c3c]" />
-                <MissionCard icon={<Lightbulb className="w-10 h-10" />} title="Dispel Misconceptions" description="Illuminate truth by addressing falsehoods and revealing the authentic beauty of each tradition." gradient="from-[#d4a07b] to-[#d4a07b]" />
-                <MissionCard icon={<HandHeart className="w-10 h-10" />} title="Foster Unity" description="Discover the universal thread of compassion, mercy, and love woven through all spiritual paths." gradient="from-[#c8a75e] to-[#d4b56d]" />
-                <MissionCard icon={<Flame className="w-10 h-10" />} title="Sufi Teachings" description="Share the timeless wisdom of Sufism, the path of divine love that embraces all of humanity." gradient="from-[#d4a07b] to-[#e07070]" />
-                <MissionCard icon={<Globe2 className="w-10 h-10" />} title="Global Peace" description="Build bridges of understanding that span cultures, languages, and traditions worldwide." gradient="from-[#27ae60] to-[#16a085]" />
-                <MissionCard icon={<BookOpen className="w-10 h-10" />} title="Sacred Knowledge" description="Preserve and share the profound wisdom that guides seekers toward truth and enlightenment." gradient="from-[#9b59b6] to-[#c8b4e8]" />
+                <MissionCard icon={<LucideIcons.Heart className="w-10 h-10" />} title="Eliminate Hatred" description="Through divine love and understanding, we dissolve the barriers of prejudice and fear that separate hearts." gradient="from-[#e07070] to-[#e74c3c]" />
+                <MissionCard icon={<LucideIcons.Lightbulb className="w-10 h-10" />} title="Dispel Misconceptions" description="Illuminate truth by addressing falsehoods and revealing the authentic beauty of each tradition." gradient="from-[#d4a07b] to-[#d4a07b]" />
+                <MissionCard icon={<LucideIcons.HandHeart className="w-10 h-10" />} title="Foster Unity" description="Discover the universal thread of compassion, mercy, and love woven through all spiritual paths." gradient="from-[#c8a75e] to-[#d4b56d]" />
+                <MissionCard icon={<LucideIcons.Flame className="w-10 h-10" />} title="Sufi Teachings" description="Share the timeless wisdom of Sufism, the path of divine love that embraces all of humanity." gradient="from-[#d4a07b] to-[#e07070]" />
+                <MissionCard icon={<LucideIcons.Globe className="w-10 h-10" />} title="Global Peace" description="Build bridges of understanding that span cultures, languages, and traditions worldwide." gradient="from-[#27ae60] to-[#16a085]" />
+                <MissionCard icon={<LucideIcons.BookOpen className="w-10 h-10" />} title="Sacred Knowledge" description="Preserve and share the profound wisdom that guides seekers toward truth and enlightenment." gradient="from-[#9b59b6] to-[#c8b4e8]" />
               </>
             )}
           </div>
@@ -150,9 +147,9 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl">
           <div className="gradient-border p-6 sm:p-7 md:p-9 lg:p-10 text-center">
             <div className="pulse-glow inline-flex p-3 sm:p-3.5 rounded-xl bg-[#C8A75E] mb-4 sm:mb-5">
-              <Heart className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 text-[#0b0f2a]" />
+              <LucideIcons.Heart className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 text-[#0b0f2a]" />
             </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl heading-premium text-[#f5f3ee] mb-4 sm:mb-5 px-4">
+            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl heading-premium text-[#f5f3ee] mb-4 sm:mb-5 px-4">
               Join the Movement for Peace
             </h2>
             <p className="text-sm sm:text-base md:text-lg text-premium mb-6 sm:mb-7 max-w-2xl mx-auto leading-relaxed px-4">
@@ -162,7 +159,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <Link href="/join" className="btn-primary text-sm sm:text-base px-6 sm:px-7 md:px-8 py-3 inline-flex items-center justify-center">
                 <span>Join the Movement</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+                <LucideIcons.ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Link>
               <Link href="/mission" className="btn-secondary text-sm sm:text-base px-6 sm:px-7 md:px-8 py-3">
                 Learn More
@@ -192,7 +189,7 @@ function MissionCard({ icon, title, description, gradient }: any) {
       <div className="icon-circle mb-4 sm:mb-5 group-hover:shadow-2xl">
         <div className="text-[#0B0F2A] [&>svg]:w-7 [&>svg]:h-7 sm:[&>svg]:w-8 sm:[&>svg]:h-8 md:[&>svg]:w-9 md:[&>svg]:h-9">{icon}</div>
       </div>
-      <h3 className="text-lg sm:text-xl md:text-2xl heading-premium text-[#f5f3ee] mb-2.5 sm:mb-3">{title}</h3>
+      <h3 className="text-base sm:text-xl md:text-2xl heading-premium text-[#f5f3ee] mb-2.5 sm:mb-3">{title}</h3>
       <p className="text-sm sm:text-base text-premium leading-relaxed">{description}</p>
     </div>
   )

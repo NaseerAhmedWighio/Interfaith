@@ -28,6 +28,7 @@ const CONTENT_MODELS = {
   approach_content: prisma.approachContent,
   sufi_cards: prisma.sufiCard,
   approach_cards: prisma.approachCard,
+  similarity_teachings: prisma.similarityTeaching,
 } as const
 
 const CONTENT_MODEL_LOOKUP: Record<string, any> = {
@@ -56,6 +57,7 @@ const CONTENT_MODEL_LOOKUP: Record<string, any> = {
   approach_content: prisma.approachContent,
   sufi_cards: prisma.sufiCard,
   approach_cards: prisma.approachCard,
+  similarity_teachings: prisma.similarityTeaching,
 }
 
 export async function GET(request: NextRequest) {
@@ -88,7 +90,7 @@ export async function GET(request: NextRequest) {
       statusFilter = ['pending_moderator', 'pending_admin']
     }
 
-    const [traditions, teachings, misconceptions, sacredTexts, peaceInitiatives, similarityThemes, shareableQuotes, corePillars, missionContent, wisdomToAction, impactGoals, featuredPrograms, regionalInitiatives, getInvolved, currentInitiatives, aboutContent, aboutValues, aboutLeaders, teachingSections, truthSections, traditionSections, sufiContent, approachContent, sufiCards, approachCards, pendingEdits] = await Promise.all([
+    const [traditions, teachings, misconceptions, sacredTexts, peaceInitiatives, similarityThemes, shareableQuotes, corePillars, missionContent, wisdomToAction, impactGoals, featuredPrograms, regionalInitiatives, getInvolved, currentInitiatives, aboutContent, aboutValues, aboutLeaders, teachingSections, truthSections, traditionSections, sufiContent, approachContent, sufiCards, approachCards, similarityTeachings, pendingEdits] = await Promise.all([
       prisma.tradition.findMany({
         where: { status: { in: statusFilter } },
         orderBy: { createdAt: 'desc' },
@@ -225,6 +227,10 @@ export async function GET(request: NextRequest) {
         where: { status: { in: statusFilter } },
         orderBy: { createdAt: 'desc' },
       }),
+      prisma.similarityTeaching.findMany({
+        where: { status: { in: statusFilter } },
+        orderBy: { createdAt: 'desc' },
+      }),
       prisma.pendingEdit.findMany({
         where: { status: { in: statusFilter } },
         include: {
@@ -276,6 +282,7 @@ export async function GET(request: NextRequest) {
       approachContent: approachContent.map(item => ({ ...item, type: 'approach_content' })),
       sufiCards: sufiCards.map(item => ({ ...item, type: 'sufi_cards' })),
       approachCards: approachCards.map(item => ({ ...item, type: 'approach_cards' })),
+      similarityTeachings: similarityTeachings.map(item => ({ ...item, type: 'similarity_teachings' })),
       pendingEdits: pendingEditsWithOriginals,
     }
 

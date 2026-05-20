@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { TrendingUp, Heart, Globe2, Users, Pencil, Trash2, Plus, X, Check } from 'lucide-react'
+import Link from 'next/link'
+import { TrendingUp, Heart, Globe2, Users, Pencil, Trash2, Plus, X, Check, ArrowLeft } from 'lucide-react'
 
 interface ImpactGoal {
   id: string
@@ -582,6 +583,10 @@ export default function PeaceInitiativesPageEditor() {
   return (
     <div className="space-y-6">
       <div>
+        <Link href="/admin" className="inline-flex items-center gap-2 text-premium-light hover:text-[#f5f3ee] transition-colors mb-4 text-sm">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Admin
+        </Link>
         <h1 className="text-2xl lg:text-3xl font-bold text-[#f5f3ee]">Peace Initiatives Page Editor</h1>
         <p className="text-premium-light mt-1 text-sm lg:text-base">
           Manage all content for the Peace Initiatives page
@@ -613,7 +618,16 @@ export default function PeaceInitiativesPageEditor() {
                   <div className="mt-2">{renderField('Description', ciEditForm.description, v => setCiEditForm(p => ({ ...p, description: v })), true)}</div>
                   <div className="mt-2">{renderField('Stats', ciEditForm.stats, v => setCiEditForm(p => ({ ...p, stats: v })))}</div>
                   <div className="mt-2">{renderField('Event', ciEditForm.event, v => setCiEditForm(p => ({ ...p, event: v })))}</div>
-                  <div className="mt-2">{renderField('Icon Color', ciEditForm.iconColor, v => setCiEditForm(p => ({ ...p, iconColor: v })))}</div>
+                  <div className="mt-2">
+                    <label className="block text-xs text-premium-light mb-1">Icon Color</label>
+                    <div className="flex items-center gap-3">
+                      <input type="color" value={ciEditForm.iconColor || '#c8a75e'} onChange={e => setCiEditForm(p => ({ ...p, iconColor: e.target.value }))}
+                        className="w-12 h-9 rounded-xl bg-[#0b0f2a]/40 border border-[#c8a75e]/20 cursor-pointer" />
+                      <input type="text" value={ciEditForm.iconColor} onChange={e => setCiEditForm(p => ({ ...p, iconColor: e.target.value }))}
+                        className="flex-1 px-3 py-2 text-sm bg-[#0b0f2a]/40 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light/50 focus:outline-none focus:border-[#c8a75e]/50"
+                        placeholder="#hex" />
+                    </div>
+                  </div>
                   {renderEditActions(() => handleCiSave(item.id), handleCiCancelEdit, ciSaving)}
                 </div>
               ) : (
@@ -638,7 +652,16 @@ export default function PeaceInitiativesPageEditor() {
                 <div className="mt-2">{renderField('Description', ciAddForm.description, v => setCiAddForm(p => ({ ...p, description: v })), true)}</div>
                 <div className="mt-2">{renderField('Stats', ciAddForm.stats, v => setCiAddForm(p => ({ ...p, stats: v })))}</div>
                 <div className="mt-2">{renderField('Event', ciAddForm.event, v => setCiAddForm(p => ({ ...p, event: v })))}</div>
-                <div className="mt-2">{renderField('Icon Color', ciAddForm.iconColor, v => setCiAddForm(p => ({ ...p, iconColor: v })))}</div>
+                <div className="mt-2">
+                  <label className="block text-xs text-premium-light mb-1">Icon Color</label>
+                  <div className="flex items-center gap-3">
+                    <input type="color" value={ciAddForm.iconColor || '#c8a75e'} onChange={e => setCiAddForm(p => ({ ...p, iconColor: e.target.value }))}
+                      className="w-12 h-9 rounded-xl bg-[#0b0f2a]/40 border border-[#c8a75e]/20 cursor-pointer" />
+                    <input type="text" value={ciAddForm.iconColor} onChange={e => setCiAddForm(p => ({ ...p, iconColor: e.target.value }))}
+                      className="flex-1 px-3 py-2 text-sm bg-[#0b0f2a]/40 border border-[#c8a75e]/20 rounded-xl text-[#f5f3ee] placeholder-premium-light/50 focus:outline-none focus:border-[#c8a75e]/50"
+                      placeholder="#hex" />
+                  </div>
+                </div>
                 {renderEditActions(handleCiAdd, handleCiCancelAdd, ciSaving)}
               </div>
             </div>

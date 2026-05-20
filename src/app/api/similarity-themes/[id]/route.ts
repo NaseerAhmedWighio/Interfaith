@@ -28,7 +28,10 @@ export async function GET(
             email: true,
           },
         },
-      }
+        _count: {
+          select: { teachings: true },
+        },
+      },
     })
 
     if (!similarityTheme) {
@@ -38,7 +41,6 @@ export async function GET(
       )
     }
 
-    // If not authenticated or not admin/moderator, only show published content
     if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'moderator')) {
       if (similarityTheme.status !== 'published') {
         return NextResponse.json(
@@ -66,7 +68,6 @@ export async function PUT(
     const user = await requireAuth()
     const { id } = await params
 
-    // Check update permission
     const hasPermission = await checkPermission(user.id, 'similarity_themes', 'update')
     if (!hasPermission) {
       return NextResponse.json(
@@ -76,33 +77,42 @@ export async function PUT(
     }
 
     const body = await request.json()
-    const { title, description, icon, slug, orderIndex } = body
+    const { title, description, icon, color, slug, orderIndex } = body
 
-    // Get user's role to determine action
     const userWithRole = await prisma.user.findUnique({
       where: { id: user.id },
       select: { role: true },
     })
 
     if (userWithRole?.role === 'admin') {
-      // Admin updates directly
       const similarityTheme = await prisma.similarityTheme.update({
         where: { id },
-        data: { title, description, icon, slug, orderIndex, status: 'published', lastModifiedBy: user.id },
-        include: { creator: { select: { id: true, fullName: true, email: true } }, modifier: { select: { id: true, fullName: true, email: true } } }
+        data: {
+          title,
+          description,
+          icon,
+          color: color || null,
+          slug,
+          orderIndex,
+          status: 'published',
+          lastModifiedBy: user.id,
+        },
+        include: {
+          creator: { select: { id: true, fullName: true, email: true } },
+          modifier: { select: { id: true, fullName: true, email: true } },
+        },
       })
       return NextResponse.json(similarityTheme)
     }
 
-    // Editor/moderator: create pending edit instead of updating directly
     const pendingEdit = await prisma.pendingEdit.create({
       data: {
         contentType: 'similarity_themes',
         contentId: id,
-        changes: { title, description, icon, slug, orderIndex },
+        changes: { title, description, icon, color, slug, orderIndex },
         status: userWithRole?.role === 'editor' ? 'pending_moderator' : 'pending_admin',
         createdBy: user.id,
-      }
+      },
     })
 
     return NextResponse.json({ message: 'Edit submitted for review', pendingEdit })
@@ -131,7 +141,6 @@ export async function DELETE(
     const user = await requireAuth()
     const { id } = await params
 
-    // Check delete permission
     const hasPermission = await checkPermission(user.id, 'similarity_themes', 'delete')
     if (!hasPermission) {
       return NextResponse.json(
@@ -141,7 +150,7 @@ export async function DELETE(
     }
 
     await prisma.similarityTheme.delete({
-      where: { id }
+      where: { id },
     })
 
     return NextResponse.json({ success: true })
