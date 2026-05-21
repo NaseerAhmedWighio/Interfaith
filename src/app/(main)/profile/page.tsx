@@ -465,29 +465,29 @@ export default function ProfilePage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10">
                   <span className="text-xs text-premium-light">Overall Score</span>
-                  <span className="text-sm font-bold text-green-400">{assessmentResult.overall_score || 0} pts</span>
+                  <span className="text-sm font-bold text-green-400">{assessmentResult.overallScore || 0} pts</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-[#0b0f2a]/30 border border-[#c8a75e]/10">
                   <span className="text-xs text-premium-light">Category</span>
                   <span className="px-2 py-0.5 bg-[#c8a75e]/20 text-[#c8a75e] rounded-lg text-xs font-medium capitalize">
-                    {(assessmentResult.result_category || '').replace(/_/g, ' ')}
+                    {(assessmentResult.resultCategory || '').replace(/_/g, ' ')}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-center">
-                    <p className="text-xs text-emerald-400 font-bold">{assessmentResult.peace_score || 0}</p>
+                    <p className="text-xs text-emerald-400 font-bold">{assessmentResult.peaceScore || 0}</p>
                     <p className="text-[10px] text-premium-light">Peace</p>
                   </div>
                   <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-center">
-                    <p className="text-xs text-blue-400 font-bold">{assessmentResult.tolerance_score || 0}</p>
+                    <p className="text-xs text-blue-400 font-bold">{assessmentResult.toleranceScore || 0}</p>
                     <p className="text-[10px] text-premium-light">Tolerance</p>
                   </div>
                   <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20 text-center">
-                    <p className="text-xs text-rose-400 font-bold">{assessmentResult.compassion_score || 0}</p>
+                    <p className="text-xs text-rose-400 font-bold">{assessmentResult.compassionScore || 0}</p>
                     <p className="text-[10px] text-premium-light">Compassion</p>
                   </div>
                   <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 text-center">
-                    <p className="text-xs text-violet-400 font-bold">{assessmentResult.understanding_score || 0}</p>
+                    <p className="text-xs text-violet-400 font-bold">{assessmentResult.understandingScore || 0}</p>
                     <p className="text-[10px] text-premium-light">Understanding</p>
                   </div>
                 </div>

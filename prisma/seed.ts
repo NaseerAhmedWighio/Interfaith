@@ -999,8 +999,10 @@ Grassroots Empowerment — We train local leaders to facilitate interfaith work 
     { pageKey: 'subscribe', sectionKey: 'subscribers_heading', title: 'Join 25,000+ Subscribers', content: null, orderIndex: 4 },
     { pageKey: 'subscribe', sectionKey: 'newsletter_heading', title: 'What\'s Inside Each Newsletter?', content: null, orderIndex: 5 },
     { pageKey: 'subscribe', sectionKey: 'newsletter_subtitle', title: null, content: 'Free forever. Delivered with love.', orderIndex: 6 },
-    { pageKey: 'subscribe', sectionKey: 'footer_heading', title: 'Start Your Journey of Discovery Today', content: null, orderIndex: 7 },
-    { pageKey: 'subscribe', sectionKey: 'footer_subtitle', title: null, content: 'Join thousands of seekers receiving wisdom, inspiration, and community in their inbox.', orderIndex: 8 },
+    { pageKey: 'subscribe', sectionKey: 'form_heading', title: 'Subscribe Now', content: null, orderIndex: 7 },
+    { pageKey: 'subscribe', sectionKey: 'form_subtitle', title: null, content: 'Free forever. Delivered with love.', orderIndex: 8 },
+    { pageKey: 'subscribe', sectionKey: 'footer_heading', title: 'Start Your Journey of Discovery Today', content: null, orderIndex: 9 },
+    { pageKey: 'subscribe', sectionKey: 'footer_subtitle', title: null, content: 'Join thousands of seekers receiving wisdom, inspiration, and community in their inbox.', orderIndex: 10 },
     // Founder
     { pageKey: 'founder', sectionKey: 'hero_badge', title: 'Our Founder', content: null, orderIndex: 0 },
     { pageKey: 'founder', sectionKey: 'hero_heading_1', title: 'Our', content: null, orderIndex: 1 },

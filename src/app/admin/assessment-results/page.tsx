@@ -6,14 +6,14 @@ import { BarChart3, Calendar, TrendingUp } from 'lucide-react'
 
 interface AssessmentResult {
   id: string
-  session_id: string | null
-  peace_score: number | null
-  tolerance_score: number | null
-  compassion_score: number | null
-  understanding_score: number | null
-  overall_score: number | null
-  result_category: string | null
-  created_at: string
+  sessionId: string | null
+  peaceScore: number | null
+  toleranceScore: number | null
+  compassionScore: number | null
+  understandingScore: number | null
+  overallScore: number | null
+  resultCategory: string | null
+  createdAt: string
   country: string | null
   user?: {
     id: string
@@ -59,11 +59,11 @@ export default function AssessmentResultsManagement() {
     if (data.length === 0) return
 
     const totals = data.reduce((acc, r) => ({
-      peace: acc.peace + (r.peace_score || 0),
-      tolerance: acc.tolerance + (r.tolerance_score || 0),
-      compassion: acc.compassion + (r.compassion_score || 0),
-      understanding: acc.understanding + (r.understanding_score || 0),
-      overall: acc.overall + (r.overall_score || 0)
+      peace: acc.peace + (r.peaceScore || 0),
+      tolerance: acc.tolerance + (r.toleranceScore || 0),
+      compassion: acc.compassion + (r.compassionScore || 0),
+      understanding: acc.understanding + (r.understandingScore || 0),
+      overall: acc.overall + (r.overallScore || 0)
     }), { peace: 0, tolerance: 0, compassion: 0, understanding: 0, overall: 0 })
 
     setStats({
@@ -76,7 +76,7 @@ export default function AssessmentResultsManagement() {
   }
 
   const categoryCounts = results.reduce((acc, r) => {
-    const category = r.result_category || 'uncategorized'
+    const category = r.resultCategory || 'uncategorized'
     acc[category] = (acc[category] || 0) + 1
     return acc
   }, {} as Record<string, number>)
@@ -175,32 +175,32 @@ export default function AssessmentResultsManagement() {
                       <div className="text-[#f5f3ee] text-sm">{result.country || <span className="text-premium-light italic">-</span>}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-premium-light text-sm font-mono">{result.session_id ? result.session_id.slice(0, 8) + '...' : 'N/A'}</div>
+                      <div className="text-premium-light text-sm font-mono">{result.sessionId ? result.sessionId.slice(0, 8) + '...' : 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-[#f5f3ee]">{result.peace_score ?? 'N/A'}</div>
+                      <div className="text-[#f5f3ee]">{result.peaceScore ?? 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-[#f5f3ee]">{result.tolerance_score ?? 'N/A'}</div>
+                      <div className="text-[#f5f3ee]">{result.toleranceScore ?? 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-[#f5f3ee]">{result.compassion_score ?? 'N/A'}</div>
+                      <div className="text-[#f5f3ee]">{result.compassionScore ?? 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-[#f5f3ee]">{result.understanding_score ?? 'N/A'}</div>
+                      <div className="text-[#f5f3ee]">{result.understandingScore ?? 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-green-400 font-semibold">{result.overall_score ?? 'N/A'}</div>
+                      <div className="text-green-400 font-semibold">{result.overallScore ?? 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-3 py-1 bg-[#c8a75e]/20 text-[#c8a75e] rounded-xl text-sm capitalize">
-                        {result.result_category || 'N/A'}
+                        {result.resultCategory || 'N/A'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-premium-light text-sm">
                         <Calendar className="w-4 h-4" />
-                        {result.created_at ? new Date(result.created_at).toLocaleDateString() : 'N/A'}
+                        {result.createdAt ? new Date(result.createdAt).toLocaleDateString() : 'N/A'}
                       </div>
                     </td>
                   </tr>

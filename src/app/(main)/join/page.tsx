@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react'
 import { Heart, Globe as Globe2, Users, Send, CheckCircle, Sparkles, BookOpen, Handshake } from 'lucide-react'
 import { createMovementMember } from '@/actions/database'
 
+interface PageContent {
+  pageKey: string
+  sectionKey: string
+  title: string | null
+  content: string | null
+}
+
 interface FormData {
   fullName: string
   email: string
@@ -41,6 +48,24 @@ export default function JoinMovement() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [pageContent, setPageContent] = useState<PageContent[]>([])
+
+  // Fetch CMS content
+  useEffect(() => {
+    fetch('/api/page-content?pageKey=join')
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setPageContent(data) })
+      .catch(() => {})
+  }, [])
+
+  const heroBadge = pageContent.find(p => p.sectionKey === 'hero_badge')?.title || 'Join Us Today'
+  const heroHeading1 = pageContent.find(p => p.sectionKey === 'hero_heading_1')?.title || 'Be Part of'
+  const heroHeading2 = pageContent.find(p => p.sectionKey === 'hero_heading_2')?.title || 'Something Greater'
+  const heroSubtitle = pageContent.find(p => p.sectionKey === 'hero_subtitle')?.content || ''
+  const readyHeading = pageContent.find(p => p.sectionKey === 'ready_heading')?.title || 'Ready to Join?'
+  const readySubtitle = pageContent.find(p => p.sectionKey === 'ready_subtitle')?.content || ''
+  const footerHeading = pageContent.find(p => p.sectionKey === 'footer_heading')?.title || 'Together, We Create a World of Peace'
+  const footerSubtitle = pageContent.find(p => p.sectionKey === 'footer_subtitle')?.content || ''
 
   // Check if user is logged in
   useEffect(() => {
@@ -257,18 +282,17 @@ export default function JoinMovement() {
           <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-xl mb-4 sm:mb-6">
             <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" />
             <span className="text-xs sm:text-sm font-semibold text-[#E07070]">
-              Join Us Today
+              {heroBadge}
             </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
-            Be Part of
-            <span className="block gradient-text mt-2">Something Greater</span>
+            {heroHeading1}
+            <span className="block gradient-text mt-2">{heroHeading2}</span>
           </h1>
 
           <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed max-w-3xl mx-auto px-4">
-            Join thousands of people from every faith tradition working together to build
-            a world of understanding, compassion, and peace.
+            {heroSubtitle}
           </p>
         </div>
       </section>
@@ -330,11 +354,11 @@ export default function JoinMovement() {
           <div className="card-premium p-6 sm:p-8 md:p-10 lg:p-12">
             <div className="text-center mb-8 sm:mb-10 md:mb-12">
               <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
-                Ready to Join?
+                {readyHeading}
               </h2>
               <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
               <p className="text-sm sm:text-base md:text-lg text-premium px-4">
-                Fill out the form below to become part of our global interfaith family.
+                {readySubtitle}
               </p>
             </div>
 
@@ -530,11 +554,10 @@ export default function JoinMovement() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#0b0f2a] via-[#141a3a] to-[#1c1f4a] text-[#f5f3ee]">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-tight px-4">
-            Together, We Create a World of Peace
+            {footerHeading}
           </h2>
           <p className="text-sm sm:text-base md:text-lg opacity-90 leading-relaxed px-4">
-            Every person who joins our movement adds another thread to the tapestry of global
-            interfaith harmony. Your voice, your compassion, and your commitment matter.
+            {footerSubtitle}
           </p>
         </div>
       </section>

@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react'
 import { Mail, Bell, Sparkles, BookOpen, Heart, Globe as Globe2, CheckCircle, Send } from 'lucide-react'
 import { createNewsletterSubscriber } from '@/actions/database'
 
+interface PageContent {
+  pageKey: string
+  sectionKey: string
+  title: string | null
+  content: string | null
+}
+
 interface SubscriptionFormData {
   email: string
   name: string
@@ -33,6 +40,26 @@ export default function Subscribe() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [pageContent, setPageContent] = useState<PageContent[]>([])
+
+  // Fetch CMS content
+  useEffect(() => {
+    fetch('/api/page-content?pageKey=subscribe')
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setPageContent(data) })
+      .catch(() => {})
+  }, [])
+
+  const heroBadge = pageContent.find(p => p.sectionKey === 'hero_badge')?.title || 'Stay Connected'
+  const heroHeading1 = pageContent.find(p => p.sectionKey === 'hero_heading_1')?.title || 'Subscribe to Our'
+  const heroHeading2 = pageContent.find(p => p.sectionKey === 'hero_heading_2')?.title || 'Newsletter'
+  const heroSubtitle = pageContent.find(p => p.sectionKey === 'hero_subtitle')?.content || ''
+  const subscribersHeading = pageContent.find(p => p.sectionKey === 'subscribers_heading')?.title || 'Join 25,000+ Subscribers'
+  const formHeading = pageContent.find(p => p.sectionKey === 'form_heading')?.title || 'Subscribe Now'
+  const formSubtitle = pageContent.find(p => p.sectionKey === 'form_subtitle')?.content || 'Free forever. Delivered with love.'
+  const newsletterHeading = pageContent.find(p => p.sectionKey === 'newsletter_heading')?.title || "What's Inside Each Newsletter?"
+  const footerHeading = pageContent.find(p => p.sectionKey === 'footer_heading')?.title || 'Start Your Journey of Discovery Today'
+  const footerSubtitle = pageContent.find(p => p.sectionKey === 'footer_subtitle')?.content || ''
 
   // Check if user is logged in
   useEffect(() => {
@@ -183,18 +210,17 @@ export default function Subscribe() {
           <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-xl mb-4 sm:mb-6">
             <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#c8a75e]" />
             <span className="text-xs sm:text-sm font-semibold text-[#C8A75E]">
-              Stay Connected
+              {heroBadge}
             </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
-            Subscribe to Our
-            <span className="block gradient-text mt-2">Newsletter</span>
+            {heroHeading1}
+            <span className="block gradient-text mt-2">{heroHeading2}</span>
           </h1>
 
           <p className="text-sm sm:text-base md:text-lg text-premium leading-relaxed max-w-3xl mx-auto px-4">
-            Receive inspiring content, sacred wisdom, and updates on interfaith peace initiatives
-            delivered directly to your inbox.
+            {heroSubtitle}
           </p>
         </div>
       </section>
@@ -225,7 +251,7 @@ export default function Subscribe() {
           <div className="grid md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-center">
             <div className="order-2 md:order-1">
               <h2 className="text-lg sm:text-2xl md:text-3xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 px-4 sm:px-0">
-                Join 25,000+ Subscribers
+                {subscribersHeading}
               </h2>
               <div className="divider-premium max-w-xs mb-6 sm:mb-8 mx-4 sm:mx-0"></div>
 
@@ -264,9 +290,9 @@ export default function Subscribe() {
                     <Mail className="w-7 h-7 sm:w-8 sm:h-8 text-[#f5f3ee]" />
                   </div>
                   <h3 className="text-lg sm:text-2xl heading-premium text-[#f5f3ee] mb-2">
-                    Subscribe Now
+                    {formHeading}
                   </h3>
-                  <p className="text-premium text-xs sm:text-sm">Free forever. Delivered with love.</p>
+                  <p className="text-premium text-xs sm:text-sm">{formSubtitle}</p>
                 </div>
 
                 {/* Login prompt for guests */}
@@ -401,7 +427,7 @@ export default function Subscribe() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <h2 className="text-xl sm:text-3xl md:text-4xl heading-premium text-[#f5f3ee] mb-3 sm:mb-4 px-4">
-              What's Inside Each Newsletter?
+              {newsletterHeading}
             </h2>
             <div className="divider-premium max-w-xs mx-auto mb-4 sm:mb-6"></div>
           </div>
@@ -458,10 +484,10 @@ export default function Subscribe() {
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-[#0b0f2a] via-[#141a3a] to-[#1c1f4a] text-[#f5f3ee]">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
-            Start Your Journey of Discovery Today
+            {footerHeading}
           </h2>
           <p className="text-base sm:text-lg md:text-xl opacity-90 leading-relaxed mb-6 sm:mb-8 px-4">
-            Join thousands of seekers receiving wisdom, inspiration, and community in their inbox.
+            {footerSubtitle}
           </p>
           <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="btn-primary text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-[#c8a75e] text-[#0b0f2a] hover:text-[#c8a75e] hover:bg-[#c8a75e]/10">
             Subscribe Now

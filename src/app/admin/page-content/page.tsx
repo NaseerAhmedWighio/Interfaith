@@ -13,6 +13,9 @@ const PAGES: { label: string; href: string; pageKey: string }[] = [
   { label: 'Peace', href: '/admin/peace', pageKey: 'peace' },
   { label: 'Peace Initiatives', href: '/admin/pages/peace-initiatives', pageKey: 'peace-initiatives' },
   { label: 'Contact Us', href: '/admin/pages/contact-us', pageKey: 'contact-us' },
+  { label: 'Join Movement', href: '/admin/pages/join', pageKey: 'join' },
+  { label: 'Subscribe', href: '/admin/pages/subscribe', pageKey: 'subscribe' },
+  { label: 'Assessment', href: '/admin/pages/assessment', pageKey: 'assessment' },
 ]
 
 export default function PageContentOverview() {

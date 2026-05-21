@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react'
 import { Heart, Sparkles, CheckCircle, Target } from 'lucide-react'
 import { getAssessmentQuestions, saveAssessmentResult } from '@/actions/database'
 
+interface PageContent {
+  pageKey: string
+  sectionKey: string
+  title: string | null
+  content: string | null
+}
+
 interface Question {
   id: string
   questionText: string
@@ -35,6 +42,20 @@ export default function FaithAssessment() {
   const [existingResult, setExistingResult] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [country, setCountry] = useState('')
+  const [pageContent, setPageContent] = useState<PageContent[]>([])
+
+  // Fetch CMS content
+  useEffect(() => {
+    fetch('/api/page-content?pageKey=assessment')
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setPageContent(data) })
+      .catch(() => {})
+  }, [])
+
+  const heroBadge = pageContent.find(p => p.sectionKey === 'hero_badge')?.title || 'Faith Assessment'
+  const heroHeading1 = pageContent.find(p => p.sectionKey === 'hero_heading_1')?.title || 'Heart & Faith'
+  const heroHeading2 = pageContent.find(p => p.sectionKey === 'hero_heading_2')?.title || 'Assessment'
+  const heroSubtitle = pageContent.find(p => p.sectionKey === 'hero_subtitle')?.content || ''
 
   // Check if user is logged in — redirect to login if not
   useEffect(() => {
@@ -233,15 +254,15 @@ export default function FaithAssessment() {
         needs_reflection: '#D4A07B',
       }
       setResults({
-        peace_score: existingResult.peace_score || 0,
-        tolerance_score: existingResult.tolerance_score || 0,
-        compassion_score: existingResult.compassion_score || 0,
-        understanding_score: existingResult.understanding_score || 0,
-        overall_score: existingResult.overall_score || 0,
-        percentage: existingResult.overall_score ? Math.round((existingResult.overall_score / (20 * 5)) * 100) : 0,
-        result_category: existingResult.result_category || '',
-        title: catMap[existingResult.result_category as string] || 'Assessment Result',
-        color: colorMap[existingResult.result_category as string] || '#C8A75E',
+        peace_score: existingResult.peaceScore || 0,
+        tolerance_score: existingResult.toleranceScore || 0,
+        compassion_score: existingResult.compassionScore || 0,
+        understanding_score: existingResult.understandingScore || 0,
+        overall_score: existingResult.overallScore || 0,
+        percentage: existingResult.overallScore ? Math.round((existingResult.overallScore / (20 * 5)) * 100) : 0,
+        result_category: existingResult.resultCategory || '',
+        title: catMap[existingResult.resultCategory as string] || 'Assessment Result',
+        color: colorMap[existingResult.resultCategory as string] || '#C8A75E',
         max_peace_score: 25,
         max_tolerance_score: 25,
         max_compassion_score: 25,
@@ -426,16 +447,15 @@ export default function FaithAssessment() {
             <div className="inline-flex items-center space-x-2 glass-effect px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-4 sm:mb-6">
               <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" />
               <span className="text-xs sm:text-sm font-semibold text-[#E07070]">
-                Faith Assessment
+                {heroBadge}
               </span>
             </div>
             <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl heading-premium text-[#f5f3ee] mb-4 sm:mb-6 leading-tight px-4">
-              Heart & Faith
-              <span className="block text-[#C8A75E] mt-2">Assessment</span>
+              {heroHeading1}
+              <span className="block text-[#C8A75E] mt-2">{heroHeading2}</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-premium leading-relaxed max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-              A thoughtful journey of self-reflection to understand your relationship with interfaith
-              peace, tolerance, and compassion. Answer honestly for meaningful insights.
+              {heroSubtitle}
             </p>
             <div className="glass-effect p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl max-w-2xl mx-auto">
               <div className="flex items-start space-x-3 sm:space-x-4 text-left">
