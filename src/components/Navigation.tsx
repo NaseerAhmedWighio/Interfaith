@@ -32,7 +32,7 @@ export default function Navigation() {
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ease-in-out ${
-      isScrolled
+      isScrolled || mobileMenuOpen
         ? 'bg-[#0B0F2A]/95 backdrop-blur-2xl border-b border-[#C8A75E]/20 shadow-xl'
         : 'bg-[#0B0F2A]/0'
     }`}>
@@ -118,7 +118,7 @@ export default function Navigation() {
 
         {/* Mobile Flyout Menu */}
         {mobileMenuOpen && (
-          <div className={`lg:hidden space-y-2 animate-fadeIn transition-all duration-300 ease-in-out ${
+          <div className={`lg:hidden space-y-2 animate-fadeIn transition-all duration-300 ease-in-out bg-[#0B0F2A]/95 backdrop-blur-2xl rounded-xl p-3 border border-[#C8A75E]/20 shadow-xl ${
             isScrolled ? 'pb-2' : 'pb-4'
           }`}>
             <MobileNavLink href="/mission" active={isActive('/mission')} onClick={closeMobileMenu}>
