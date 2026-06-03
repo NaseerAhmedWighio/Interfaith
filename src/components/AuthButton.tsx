@@ -109,7 +109,7 @@ export default function AuthButton() {
     return (
       <Link
         href="/login"
-        className="btn-primary px-6 py-2.5 text-sm font-semibold"
+        className="btn-primary px-3 py-2 md:px-6 md:py-2.5 text-[10px] md:text-sm font-semibold"
       >
         Login
       </Link>
