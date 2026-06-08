@@ -20,6 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/join', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/login', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/register', priority: 0.3, changeFrequency: 'yearly' as const },
+    { path: '/search', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/resources/interfaith-glossary', priority: 0.8, changeFrequency: 'weekly' as const },
   ]
 
   const entries = staticPages.map(({ path, priority, changeFrequency }) => ({

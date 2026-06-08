@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
+    google: 'google16ee278a46bf3b9b',
   },
   icons: {
     icon: '/logo.png',
@@ -69,11 +69,48 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const siteLogo = `${siteUrl}/logo.png`
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        name: siteName,
+        url: siteUrl,
+        description: siteDescription,
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'Organization',
+        name: siteName,
+        url: siteUrl,
+        logo: siteLogo,
+        description: siteDescription,
+        sameAs: [
+          `${siteUrl}/about`,
+          `${siteUrl}/mission`,
+        ],
+      },
+    ],
+  }
+
   return (
     <html lang="en">
       <body suppressHydrationWarning>
         <GoogleAnalytics />
         <GoogleTagManager />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
       </body>
     </html>
